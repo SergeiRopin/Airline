@@ -44,8 +44,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Flight.cs" />
+    <Compile Include="FlightClass.cs" />
+    <Compile Include="Passenger.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sex.cs" />
+    <Compile Include="Ticket.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
