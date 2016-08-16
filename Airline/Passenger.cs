@@ -28,5 +28,10 @@ namespace Airline
             Sex = sex;
             Ticket = ticket;
         }
+
+        public override string ToString()
+        {
+            return $"Passenger info";
+        }
     }
 }
