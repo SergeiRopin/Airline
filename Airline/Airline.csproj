@@ -43,14 +43,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AirlineFactory.cs" />
+    <Compile Include="AirlineEnums\Gate.cs" />
+    <Compile Include="AirlineEnums\Terminal.cs" />
+    <Compile Include="AirlineLogic.cs" />
     <Compile Include="Flight.cs" />
-    <Compile Include="FlightClass.cs" />
-    <Compile Include="FlightStatus.cs" />
+    <Compile Include="AirlineEnums\SeatClass.cs" />
+    <Compile Include="AirlineEnums\FlightStatus.cs" />
     <Compile Include="Passenger.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sex.cs" />
+    <Compile Include="AirlineEnums\Sex.cs" />
     <Compile Include="Ticket.cs" />
   </ItemGroup>
   <ItemGroup>

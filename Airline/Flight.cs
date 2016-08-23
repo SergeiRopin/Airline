@@ -8,21 +8,25 @@ namespace Airline
 {
     class Flight
     {
-        public int Number { get; private set; }
-        public string City { get; private set; }
-        public string Terminal { get; private set; }
-        public string Gate { get; private set; }
+        public string Number { get; private set; }
+        public string CityFrom { get; private set; }
+        public string CityTo { get; private set; }
+        public Terminal Terminal { get; private set; }
+        public Gate Gate { get; private set; }
         public FlightStatus Status { get; private set; }
+        public DateTime DateTime { get; private set; }
         public List<Passenger> PassengersList { get; private set; }
 
-        public Flight(int number, string city, string terminal, string gate, FlightStatus status, List<Passenger> passengerslist)
+        public Flight(string number, string cityFrom, string cityTo, Terminal terminal, Gate gate, FlightStatus status, DateTime dateTime,  List<Passenger> passengersList)
         {
             Number = number;
-            City = city;
+            CityFrom = cityFrom;
+            CityTo = cityTo;
             Terminal = terminal;
             Gate = gate;
             Status = status;
-            PassengersList = passengerslist;
+            DateTime = dateTime;
+            PassengersList = passengersList;
         }
 
         public override string ToString()

@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Airline
 {
-    class AirlineFactory
+    enum SeatClass
     {
-
+        Economy,
+        Business
     }
 }

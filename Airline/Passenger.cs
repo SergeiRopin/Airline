@@ -12,12 +12,11 @@ namespace Airline
         public string LastName { get; private set; }
         public string Nationality { get; private set; }
         public string Passport { get; private set; }
-        public string Birthday { get; private set; }
+        public DateTime Birthday { get; private set; }
         public Sex Sex { get; private set; }
         public Ticket Ticket { get; private set; }
 
-        //Ticket ticket = new Ticket();
-        public Passenger(string firstName, string lastName, string nationality, string passport, string birthday,
+        public Passenger(string firstName, string lastName, string nationality, string passport, DateTime birthday,
             Sex sex, Ticket ticket)
         {
             FirstName = firstName;

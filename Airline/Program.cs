@@ -33,6 +33,7 @@ namespace Airline
                         switch (index)
                         {
                             case 1:
+                                // DisplayFlights();
                                 //EditFlight();
                                 break;
 

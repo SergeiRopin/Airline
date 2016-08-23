@@ -8,15 +8,13 @@ namespace Airline
 {
     class Ticket
     {
-        public FlightClass FlightClass { get; private set; }
-        public double Price { get; private set; }
+        public SeatClass SeatClass { get; private set; }
+        public decimal Price { get; private set; }
 
-        public Ticket(FlightClass flightClass, double price)
+        public Ticket(SeatClass seatClass, decimal price)
         {
-            FlightClass = flightClass;
+            SeatClass = seatClass;
             Price = price;
         }
-
-        public Ticket() { }
     }
 }
