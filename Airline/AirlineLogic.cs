@@ -31,10 +31,10 @@ namespace Airline
             };
             List<Passenger> odessaPassengers = new List<Passenger>
             {
-                new Passenger("Anton", "", "Russia", "OP8952365", new DateTime(1965, 05, 13), Sex.Male, new Ticket(SeatClass.Economy, 230M)),
-                new Passenger("Oleg", "Garmash", "Ukraine", "NE4153652", new DateTime(1936, 11, 11), Sex.Male, new Ticket(SeatClass.Business, 550M)),
-                new Passenger("Sarah", "Andersen", "USA", "TR15513665", new DateTime(1995, 08, 29), Sex.Female, new Ticket(SeatClass.Economy, 330M)),
-                new Passenger("Taras", "Gus", "Turkey", "ER525123", new DateTime(19553, 02, 22), Sex.Female, new Ticket(SeatClass.Economy, 340M))
+                //new Passenger("Anton", "", "Russia", "OP8952365", new DateTime(1965, 05, 13), Sex.Male, new Ticket(SeatClass.Economy, 230M)),
+                //new Passenger("Oleg", "Garmash", "Ukraine", "NE4153652", new DateTime(1936, 11, 11), Sex.Male, new Ticket(SeatClass.Business, 550M)),
+                //new Passenger("Sarah", "Andersen", "USA", "TR15513665", new DateTime(1995, 08, 29), Sex.Female, new Ticket(SeatClass.Economy, 330M)),
+                //new Passenger("Taras", "Gus", "Turkey", "ER525123", new DateTime(19553, 02, 22), Sex.Female, new Ticket(SeatClass.Economy, 340M))
             };
 
             Flight istanbul = new Flight("PC 753", "Kharkiv", "Istanbul", Terminal.A, Gate.A1, FlightStatus.DeparturedAt, new DateTime(year, month, day, 03, 20, 00), istanbulPassengers);
