@@ -27,17 +27,20 @@ namespace Airline
                 new Passenger("Andrei", "Ivanov", "Russia", "OP8952365", new DateTime(1965, 05, 13), Sex.Male, new Ticket(SeatClass.Economy, 230M)),
                 new Passenger("Oleg", "Garmash", "Ukraine", "NE4153652", new DateTime(1936, 11, 11), Sex.Male, new Ticket(SeatClass.Business, 550M)),
                 new Passenger("Sarah", "Andersen", "USA", "TR15513665", new DateTime(1995, 08, 29), Sex.Female, new Ticket(SeatClass.Economy, 330M)),
-                new Passenger("Taras", "Gus", "Turkey", "ER525123", new DateTime(19553, 02, 22), Sex.Female, new Ticket(SeatClass.Economy, 340M))
+                new Passenger("Taras", "Gus", "Turkey", "ER525123", new DateTime(1955, 02, 22), Sex.Female, new Ticket(SeatClass.Economy, 340M))
             };
             List<Passenger> odessaPassengers = new List<Passenger>
             {
-                //new Passenger("Anton", "", "Russia", "OP8952365", new DateTime(1965, 05, 13), Sex.Male, new Ticket(SeatClass.Economy, 230M)),
-                //new Passenger("Oleg", "Garmash", "Ukraine", "NE4153652", new DateTime(1936, 11, 11), Sex.Male, new Ticket(SeatClass.Business, 550M)),
-                //new Passenger("Sarah", "Andersen", "USA", "TR15513665", new DateTime(1995, 08, 29), Sex.Female, new Ticket(SeatClass.Economy, 330M)),
-                //new Passenger("Taras", "Gus", "Turkey", "ER525123", new DateTime(19553, 02, 22), Sex.Female, new Ticket(SeatClass.Economy, 340M))
+                new Passenger("Alexander", "Oleinyk", "Moldova", "IK25365885", new DateTime(1993, 03, 12), Sex.Male, new Ticket(SeatClass.Economy, 130M)),
+                new Passenger("Artem", "Karpenko", "Ukraine", "AS2519698", new DateTime(1991, 02, 25), Sex.Male, new Ticket(SeatClass.Economy, 150M)),
+                new Passenger("Yurii", "Vashuk", "Ukraine", "RT1234567", new DateTime(1966, 08, 23), Sex.Male, new Ticket(SeatClass.Business, 300M)),
+                new Passenger("Ivan", "Klimov", "USA", "AD1586947", new DateTime(1987, 06, 15), Sex.Male, new Ticket(SeatClass.Economy, 130M))
             };
 
             Flight istanbul = new Flight("PC 753", "Kharkiv", "Istanbul", Terminal.A, Gate.A1, FlightStatus.DeparturedAt, new DateTime(year, month, day, 03, 20, 00), istanbulPassengers);
+            Flight warshaw = new Flight("EY 8470", "Warshaw", "Kharkiv", Terminal.A, Gate.A3, FlightStatus.InFlight, new DateTime(year, month, day, 15, 00, 00), warsawPassengers);
+            Flight odessa = new Flight("PS 026", "Odessa", "Kharkiv", Terminal.A, Gate.A1, FlightStatus.ExpectedAt, new DateTime(year, month, day, 23, 15, 00), warsawPassengers);
+
         }
     }
 }
