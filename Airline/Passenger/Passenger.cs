@@ -28,10 +28,8 @@ namespace Airline
             Ticket = ticket;
         }
 
-        public override string ToString()
-        {
-            return $@"Name: {FirstName} {LastName}, Nationality: {Nationality}, Passport: {Passport}, " + 
+        public override string ToString() =>
+            $@"Name: {FirstName} {LastName}, Nationality: {Nationality}, Passport: {Passport}, " +
                 $"Birthday: {Birthday.ToShortDateString()}, Sex: {Sex}, " + Ticket;
-        }
     }
 }

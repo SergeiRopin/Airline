@@ -43,13 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Airport.cs" />
     <Compile Include="AuxiliaryMethods.cs" />
     <Compile Include="Flight\ArrivalDeparture.cs" />
     <Compile Include="Flight\Gate.cs" />
     <Compile Include="Flight\Terminal.cs" />
-    <Compile Include="AirlineLogic.cs" />
+    <Compile Include="AirlineManager.cs" />
     <Compile Include="Flight\Flight.cs" />
-    <Compile Include="MenuCaller.cs" />
+    <Compile Include="MenuManager.cs" />
     <Compile Include="Passenger\SeatClass.cs" />
     <Compile Include="Flight\FlightStatus.cs" />
     <Compile Include="Passenger\Passenger.cs" />

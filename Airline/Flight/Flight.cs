@@ -19,8 +19,8 @@ namespace Airline
         public DateTime DateTime { get; private set; }
         public List<Passenger> PassengersList { get; private set; }
 
-        public Flight(ArrivalDeparture arrivalDeparture, string number, string cityFrom, string cityTo, string airline, 
-            Terminal terminal, Gate gate, FlightStatus status, DateTime dateTime,  List<Passenger> passengersList)
+        public Flight(ArrivalDeparture arrivalDeparture, string number, string cityFrom, string cityTo, string airline,
+            Terminal terminal, Gate gate, FlightStatus status, DateTime dateTime, List<Passenger> passengersList)
         {
             ArrivalDeparture = arrivalDeparture;
             Number = number;
@@ -34,9 +34,7 @@ namespace Airline
             PassengersList = passengersList;
         }
 
-        public override string ToString()
-        {
-            return $"Flight number: {Number}, From: {CityFrom}, To: {CityTo}, Airline: {Airline}, Terminal: {Terminal}, Gate: {Gate}, Status: {Status}, Time: {DateTime}";
-        }
+        public override string ToString() =>
+            $"Flight number: {Number}, From: {CityFrom}, To: {CityTo}, Airline: {Airline}, Terminal: {Terminal}, Gate: {Gate}, Status: {Status}, Time: {DateTime}";
     }
 }

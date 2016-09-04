@@ -6,23 +6,23 @@ using System.Threading.Tasks;
 
 namespace Airline
 {
-    class MenuCaller
+    class MenuManager
     {
+        public MenuItemHandler MenuItemHandler { get; set; }
         public MenuHandler MenuHandler { get; set; }
-        public ExceptionsHandler ExceptionsHandler { get; set; }
         
         public void CallMenuItem()
         {
-            if (MenuHandler != null)
-                MenuHandler();
+            if (MenuItemHandler != null)
+                MenuItemHandler();
         }
 
         public void HandleExceptions()
         {
             try
             {
-                if (ExceptionsHandler != null)
-                    ExceptionsHandler();
+                if (MenuHandler != null)
+                    MenuHandler();
             }
             catch (KeyNotFoundException)
             {
