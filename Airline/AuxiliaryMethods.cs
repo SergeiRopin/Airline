@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Airline
 {
-    class AuxiliaryClass
+    class AuxiliaryMethods
     {
         public static void PrintColorText(string text, ConsoleColor consoleColor)
         {

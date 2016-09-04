@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuxiliaryClass.cs" />
+    <Compile Include="AuxiliaryMethods.cs" />
     <Compile Include="Flight\ArrivalDeparture.cs" />
     <Compile Include="Flight\Gate.cs" />
     <Compile Include="Flight\Terminal.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,11 @@ namespace Airline
         {
             SeatClass = seatClass;
             Price = price;
+        }
+
+        public override string ToString()
+        {
+            return $"Ticket price: {Price.ToString("C", CultureInfo.GetCultureInfo("en-US"))}, Seat: {SeatClass}";
         }
     }
 }

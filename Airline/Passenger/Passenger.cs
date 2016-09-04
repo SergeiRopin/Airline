@@ -30,7 +30,8 @@ namespace Airline
 
         public override string ToString()
         {
-            return $"Passenger info";
+            return $@"Name: {FirstName} {LastName}, Nationality: {Nationality}, Passport: {Passport}, " + 
+                $"Birthday: {Birthday.ToShortDateString()}, Sex: {Sex}, " + Ticket;
         }
     }
 }
