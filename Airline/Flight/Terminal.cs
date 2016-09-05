@@ -8,7 +8,7 @@ namespace Airline
 {
     enum Terminal
     {
-        A,
+        A = 1,
         B
     }
 }

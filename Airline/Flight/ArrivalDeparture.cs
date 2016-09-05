@@ -8,7 +8,7 @@ namespace Airline
 {
     enum ArrivalDeparture
     {        
-        Arrival,
+        Arrival = 1,
         Departure
     }
 }

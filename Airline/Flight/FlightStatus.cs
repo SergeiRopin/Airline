@@ -8,7 +8,7 @@ namespace Airline
 {
     enum FlightStatus
     {
-        CheckIn,
+        CheckIn = 1,
         GateClosed,
         Arrived,
         DeparturedAt,
@@ -16,6 +16,7 @@ namespace Airline
         Canceled,
         ExpectedAt,
         Delayed,
-        InFlight
+        InFlight,
+        Boarding
     }
 }

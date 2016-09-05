@@ -8,11 +8,9 @@ namespace Airline
 {
     enum Gate
     {
-        A1,
+        A1 = 1,
         A2,
         A3,
-        A4,
-        A5,
-        A6
+        A4
     }
 }
