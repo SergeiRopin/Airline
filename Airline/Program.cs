@@ -29,8 +29,8 @@ namespace Airline
                 3. View all flight’s passengers;
                 4. Search passengers;
                 5. Search flights with lower price;
-                6. Edit flights;
-                7. Edit passengers.");
+                6. Add, delete, edit flights;
+                7. Add, delete, edit passengers.");
 
                 Console.Write("Your choise: ");
 
@@ -53,7 +53,9 @@ namespace Airline
                         { 2, airlineManager.SearchFlight },
                         { 3, airlineManager.ViewPassengers },
                         { 4, airlineManager.SearchPassengers },
-                        //{ 5, airlineManager.SearchLowerPrice },
+                        { 5, airlineManager.SearchLowerPrice },
+                        { 6, airlineManager.EditFlights },
+                        //{ 7, airlineManager }
                     };
             _menuManager.MenuItemHandler = menuItems[index];
             _menuManager.CallMenuItem();

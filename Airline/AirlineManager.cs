@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -296,34 +297,118 @@ namespace Airline
         /// <summary>
         /// Search all flights with the price of economy ticket lower than user input
         /// </summary>
-        //public void SearchLowerPrice()
-        //{
-        //    do
-        //    {
-        //        Console.Clear();
-        //        AuxiliaryMethods.PrintColorText("\n******** SEARCH FLIGHTS WITH THE LOWER PRICE MENU ********", ConsoleColor.DarkCyan);
+        public void SearchLowerPrice()
+        {
+            do
+            {
+                Console.Clear();
+                AuxiliaryMethods.PrintColorText("\n******** SEARCH FLIGHTS WITH THE LOWER PRICE MENU ********", ConsoleColor.DarkCyan);
 
-        //        Console.WriteLine("\nPlease enter a limit of the flight price (dollars): ");
-        //        decimal priceLimit = decimal.Parse(Console.ReadLine());
-        //        AuxiliaryMethods.PrintColorText("\nResults of the search: ", ConsoleColor.DarkCyan);
+                Console.Write($"\nPlease enter a limit of the flight price (dollars): $");
+                decimal priceLimit = decimal.Parse(Console.ReadLine());
+                AuxiliaryMethods.PrintColorText("\nResults of the search: ", ConsoleColor.DarkCyan);
 
-        //        int temp = 0;
-        //        foreach (var flight in _airport.GetFlights())
-        //        {
-                    
-        //            if (Decimal.Equals(priceLimit, flight.))
-        //            {
-        //                Console.WriteLine(flight);
-        //                temp++;
-        //            }
-        //        }
-        //        if (temp == 0)
-        //            Console.WriteLine(_noMatchesMessage);
+                HashSet<Flight> economyFlights = new HashSet<Flight>();
+                int temp = 0;
+                foreach (var flight in _airport.GetFlights())
+                {
+                    foreach (var passenger in flight.PassengersList)
+                    {
+                        if (priceLimit >= passenger.Ticket.Price)
+                        {
+                            bool isAdded = economyFlights.Add(flight);
+                            if (isAdded)
+                            {
+                                Console.WriteLine($@"{flight}, ");
+                                Console.WriteLine($"{passenger.Ticket}\n");
+                            }
+                            temp++;
+                        }
+                    }
+                }
+                if (temp == 0)
+                    Console.WriteLine(_noMatchesMessage);
 
-        //        AuxiliaryMethods.PrintColorText(_returnToMain, ConsoleColor.DarkGreen);
-        //    }
-        //    while (Console.ReadKey().Key != ConsoleKey.Backspace);
+                AuxiliaryMethods.PrintColorText(_returnToMain, ConsoleColor.DarkGreen);
+            }
+            while (Console.ReadKey().Key != ConsoleKey.Backspace);
+        }
 
-        //}
+        /// <summary>
+        /// Allows add, delete and edit flights information
+        /// </summary>
+        public void EditFlights()
+        {
+            do
+            {
+                Console.Clear();
+                AuxiliaryMethods.PrintColorText("\n******** EDIT FLIGHTS MENU ********", ConsoleColor.DarkCyan);
+                Console.WriteLine(@"Please choose one of the following items (enter a menu number):
+
+                1. Add flight;
+                2. Delete flight;
+                3. Edit flight.");
+
+                Console.Write("Your choise: ");
+
+                _menuManager.MenuHandler = ManageEditFlightsMenu;
+                _menuManager.HandleExceptions();
+
+                AuxiliaryMethods.PrintColorText(_returnToMain, ConsoleColor.DarkGreen);
+            }
+            while (Console.ReadKey().Key != ConsoleKey.Backspace);
+
+        }
+
+        private void ManageEditFlightsMenu()
+        {
+            int index = (int)uint.Parse(Console.ReadLine());
+            IDictionary<int, MenuItemHandler> menuItems = new Dictionary<int, MenuItemHandler>
+            {
+                { 1, AddFlight },
+                { 2, DeleteFlight },
+                { 3, EditFlight }
+            };
+            _menuManager.MenuItemHandler = menuItems[index];
+            _menuManager.CallMenuItem();
+        }
+
+        private void AddFlight()
+        {
+            ArrivalDeparture arrivalDeparture = default(ArrivalDeparture);
+            do
+            {
+                Console.Write("\nEnter is a flight Arrival or Departure: ");
+                arrivalDeparture = (ArrivalDeparture)Enum.Parse(typeof(ArrivalDeparture), Console.ReadLine(), true);
+            } while (arrivalDeparture == ArrivalDeparture.Arrival | arrivalDeparture == ArrivalDeparture.Arrival | arrivalDeparture.ToString() == "skip");
+
+            Console.Write("Enter a number of the flight: ");
+            string number = Console.ReadLine();
+
+            Console.Write("Enter a city of departure: ");
+            string cityFrom = Console.ReadLine();
+
+            Console.Write("Enter a city of destination: ");
+            string cityTo = Console.ReadLine();
+
+            Console.Write("Enter an airline: ");
+            string airline = Console.ReadLine();
+
+            Console.Write("Enter a terminal of the flight (\"A\", \"B\"): ");
+            string terminal = Console.ReadLine();
+
+
+            //_airport.AddFlight(new Flight(arrivalDeparture, number, cityFrom, cityTo, airline, terminal, gate, status, dateTime, passengersList));
+        }
+
+        private void DeleteFlight()
+        {
+
+        }
+
+        private void EditFlight()
+        {
+
+        }
     }
 }

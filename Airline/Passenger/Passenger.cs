@@ -19,10 +19,10 @@ namespace Airline
         public Passenger(string firstName, string lastName, string nationality, string passport, DateTime birthday,
             Sex sex, Ticket ticket)
         {
-            FirstName = firstName;
-            LastName = lastName;
-            Nationality = nationality;
-            Passport = passport;
+            FirstName = firstName.ToUpper();
+            LastName = lastName.ToUpper();
+            Nationality = nationality.ToUpper();
+            Passport = passport.ToUpper();
             Birthday = birthday;
             Sex = sex;
             Ticket = ticket;

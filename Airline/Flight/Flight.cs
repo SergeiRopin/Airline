@@ -23,10 +23,10 @@ namespace Airline
             Terminal terminal, Gate gate, FlightStatus status, DateTime dateTime, List<Passenger> passengersList)
         {
             ArrivalDeparture = arrivalDeparture;
-            Number = number;
-            CityFrom = cityFrom;
-            CityTo = cityTo;
-            Airline = airline;
+            Number = number.ToUpper();
+            CityFrom = cityFrom.ToUpper();
+            CityTo = cityTo.ToUpper();
+            Airline = airline.ToUpper();
             Terminal = terminal;
             Gate = gate;
             Status = status;
