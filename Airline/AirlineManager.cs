@@ -15,7 +15,7 @@ namespace Airline
         Airport _airport = new Airport();
 
         private string _noMatchesMessage = "No matches found!";
-        private string _returnToMain = "\nPress \"Backpace\" to return to the main menu; press any key to search another flight";
+        private string _returnToMain = "\nPress \"Space\" to return to the main menu; press any key to search another flight";
 
         /// <summary>
         /// View all available flights
@@ -69,7 +69,7 @@ namespace Airline
 
                 AuxiliaryMethods.PrintColorText(_returnToMain, ConsoleColor.DarkGreen);
             }
-            while (Console.ReadKey().Key != ConsoleKey.Backspace);
+            while (Console.ReadKey().Key != ConsoleKey.Spacebar);
         }
 
         private void ManageSearchFlightMenu()
@@ -201,7 +201,7 @@ namespace Airline
 
                 AuxiliaryMethods.PrintColorText(_returnToMain, ConsoleColor.DarkGreen);
             }
-            while (Console.ReadKey().Key != ConsoleKey.Backspace);
+            while (Console.ReadKey().Key != ConsoleKey.Spacebar);
         }
 
         /// <summary>
@@ -226,7 +226,7 @@ namespace Airline
 
                 AuxiliaryMethods.PrintColorText(_returnToMain, ConsoleColor.DarkGreen);
             }
-            while (Console.ReadKey().Key != ConsoleKey.Backspace);
+            while (Console.ReadKey().Key != ConsoleKey.Spacebar);
         }
 
         private void ManageSearchPassengersMenu()
@@ -331,7 +331,7 @@ namespace Airline
 
                 AuxiliaryMethods.PrintColorText(_returnToMain, ConsoleColor.DarkGreen);
             }
-            while (Console.ReadKey().Key != ConsoleKey.Backspace);
+            while (Console.ReadKey().Key != ConsoleKey.Spacebar);
         }
 
         /// <summary>
@@ -356,7 +356,7 @@ namespace Airline
 
                 AuxiliaryMethods.PrintColorText(_returnToMain, ConsoleColor.DarkGreen);
             }
-            while (Console.ReadKey().Key != ConsoleKey.Backspace);
+            while (Console.ReadKey().Key != ConsoleKey.Spacebar);
 
         }
 
@@ -373,49 +373,46 @@ namespace Airline
             _menuManager.CallMenuItem();
         }
 
-        private void SetFlightInfo()
+        private void SetFlightInfo(out string number, out ArrivalDeparture arrivalDeparture, out string cityFrom, out string cityTo, out string airline,
+            out Terminal terminal, out Gate gate, out FlightStatus status, out DateTime flightTime)
         {
             Console.Write("\nEnter a number of the flight: ");
-            string number = Console.ReadLine();
+            number = Console.ReadLine();
 
             Console.WriteLine();
             Console.WriteLine(@"Enter a flight type. Choose a number from the following list:
-
                 1. Arrival,
                 2. Departure");
             Console.Write("Please enter a number: ");
-            ArrivalDeparture arrivalDeparture = (ArrivalDeparture)Enum.Parse(typeof(ArrivalDeparture), Console.ReadLine(), true);
+            arrivalDeparture = (ArrivalDeparture)Enum.Parse(typeof(ArrivalDeparture), Console.ReadLine(), true);
 
             Console.Write("\nEnter a city of departure: ");
-            string cityFrom = Console.ReadLine();
+            cityFrom = Console.ReadLine();
 
             Console.Write("\nEnter a city of destination: ");
-            string cityTo = Console.ReadLine();
+            cityTo = Console.ReadLine();
 
             Console.Write("\nEnter an airline: ");
-            string airline = Console.ReadLine();
+            airline = Console.ReadLine();
 
             Console.WriteLine();
             Console.WriteLine(@"Enter a terminal of the flight. Choose a number from the following list:
-
                 1. A,
                 2. B");
             Console.Write("Please enter a number: ");
-            Terminal terminal = (Terminal)Enum.Parse(typeof(Terminal), Console.ReadLine(), true);
+            terminal = (Terminal)Enum.Parse(typeof(Terminal), Console.ReadLine(), true);
 
             Console.WriteLine();
             Console.WriteLine(@"Enter a gate of the flight. Choose a number from the following list:
-
                 1. A1,
                 2. A2,
                 3. A3,
                 4. A4");
             Console.Write("Please enter a number: ");
-            Gate gate = (Gate)Enum.Parse(typeof(Gate), Console.ReadLine(), true);
+            gate = (Gate)Enum.Parse(typeof(Gate), Console.ReadLine(), true);
 
             Console.WriteLine();
             Console.WriteLine(@"Enter a flight status. Choose a number from the following list:
-
                 1. CheckIn,
                 2. GateClosed,
                 3. Arrived,
@@ -427,16 +424,35 @@ namespace Airline
                 9. InFlight,
                 10. Boarding.");
             Console.Write("Please enter a number: ");
-            FlightStatus status = (FlightStatus)Enum.Parse(typeof(FlightStatus), Console.ReadLine());
+            status = (FlightStatus)Enum.Parse(typeof(FlightStatus), Console.ReadLine());
+
+            Console.WriteLine("\nEnter a new Time in the following format: ");
+            Console.Write("\nYear: ");
+            int year = (int)uint.Parse(Console.ReadLine());
+            Console.Write("Month (from 01 to 12): ");
+            int month = (int)uint.Parse(Console.ReadLine());
+            Console.Write("Day (from 01 to 31): ");
+            int day = (int)uint.Parse(Console.ReadLine());
+            Console.Write("Hours (from 0 to 23): ");
+            int hours = (int)uint.Parse(Console.ReadLine());
+            Console.Write("Minutes (from 0 to 59): ");
+            int minutes = (int)uint.Parse(Console.ReadLine());
+            flightTime = new DateTime(year, month, day, hours, minutes, 00);
         }
 
         private void AddFlight()
         {
             Console.Clear();
             AuxiliaryMethods.PrintColorText("\n******** ADD A NEW FLIGHT MENU ********", ConsoleColor.DarkCyan);
-            SetFlightInfo();
+            ArrivalDeparture arrivalDeparture;
+            string number, cityFrom, cityTo, airline;
+            Terminal terminal;
+            Gate gate;
+            FlightStatus status;
+            DateTime flightTime;
+            SetFlightInfo(out number, out arrivalDeparture, out cityFrom, out cityTo, out airline, out terminal, out gate, out status, out flightTime);
 
-            //_airport.AddFlight(new Flight(arrivalDeparture, number, cityFrom, cityTo, airline, terminal, gate, status, dateTime, passengersList));
+            _airport.AddFlight(new Flight(arrivalDeparture, number, cityFrom, cityTo, airline, terminal, gate, status, flightTime, new List<Passenger>()));
         }
 
         private void DeleteFlight()
