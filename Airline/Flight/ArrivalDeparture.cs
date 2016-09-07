@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace Airline
 {
     enum ArrivalDeparture
-    {        
-        Arrival = 1,
+    {
+        Arrival,
         Departure
     }
 }

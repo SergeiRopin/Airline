@@ -26,11 +26,11 @@ namespace Airline
             }
             catch (KeyNotFoundException)
             {
-                AuxiliaryMethods.PrintColorText("\nUnexpected value has been entered, please select the value from menu list!", ConsoleColor.Red);
+                InputOutputHelper.PrintColorText("\nUnexpected value has been entered, please select the value from menu list!", ConsoleColor.Red);
             }
             catch (Exception ex)
             {
-                AuxiliaryMethods.PrintColorText("\nWrong value has been entered! " + ex.Message, ConsoleColor.Red);
+                InputOutputHelper.PrintColorText("\nWrong value has been entered! " + ex.Message, ConsoleColor.Red);
             }
         }
     }

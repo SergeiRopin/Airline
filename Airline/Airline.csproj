@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Airport.cs" />
-    <Compile Include="AuxiliaryMethods.cs" />
+    <Compile Include="InputOutputHelper.cs" />
     <Compile Include="Flight\ArrivalDeparture.cs" />
     <Compile Include="Flight\Gate.cs" />
     <Compile Include="Flight\Terminal.cs" />

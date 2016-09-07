@@ -17,10 +17,10 @@ namespace Airline
         public Gate Gate { get; private set; }
         public FlightStatus Status { get; private set; }
         public DateTime DateTime { get; private set; }
-        public List<Passenger> PassengersList { get; private set; }
+        public List<Passenger> Passengers { get; private set; }
 
         public Flight(ArrivalDeparture arrivalDeparture, string number, string cityFrom, string cityTo, string airline,
-            Terminal terminal, Gate gate, FlightStatus status, DateTime dateTime, List<Passenger> passengersList)
+            Terminal terminal, Gate gate, FlightStatus status, DateTime dateTime, List<Passenger> passengers)
         {
             ArrivalDeparture = arrivalDeparture;
             Number = number.ToUpper();
@@ -31,7 +31,7 @@ namespace Airline
             Gate = gate;
             Status = status;
             DateTime = dateTime;
-            PassengersList = passengersList;
+            Passengers = passengers;
         }
 
         public override string ToString() =>
