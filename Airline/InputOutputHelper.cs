@@ -49,7 +49,7 @@ namespace Airline
             while (failure);
         }
 
-        public static void ValueInput(out int input, string inputMessage)
+        public static void Int32Input(out int input, string inputMessage)
         {
             input = default(int);
             bool failure = false;

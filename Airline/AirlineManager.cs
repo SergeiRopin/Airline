@@ -442,18 +442,17 @@ namespace Airline
                 9. InFlight
                 10. Boarding");
 
-
             Console.WriteLine("\nEnter a flight time in the following format: ");
             int year;
-            InputOutputHelper.ValueInput(out year, "\nYear: ");
+            InputOutputHelper.Int32Input(out year, "\nYear: ");
             int month;
-            InputOutputHelper.ValueInput(out month, "Month (from 01 to 12): ");
+            InputOutputHelper.Int32Input(out month, "Month (from 01 to 12): ");
             int day;
-            InputOutputHelper.ValueInput(out day, "Day (from 01 to 31): ");
+            InputOutputHelper.Int32Input(out day, "Day (from 01 to 31): ");
             int hours;
-            InputOutputHelper.ValueInput(out hours, "Hours (from 0 to 23): ");
+            InputOutputHelper.Int32Input(out hours, "Hours (from 0 to 23): ");
             int minutes;
-            InputOutputHelper.ValueInput(out minutes, "Minutes (from 0 to 59): ");
+            InputOutputHelper.Int32Input(out minutes, "Minutes (from 0 to 59): ");
 
             flightTime = new DateTime(year, month, day, hours, minutes, 00);
         }
@@ -481,18 +480,41 @@ namespace Airline
             Console.Clear();
             InputOutputHelper.PrintColorText("\n******** DELETE FLIGHT MENU ********", ConsoleColor.DarkCyan);
 
-            Console.WriteLine("Please enter a flight number: ");
+            Console.Write("\nPlease enter a flight number: ");
             string flightNumber = Console.ReadLine();
 
-            Flight flightToRemove = _airport.GetFlightByNumber(flightNumber);
-            if (flightToRemove != null)
-                Console.WriteLine($"You want to remove the flight number: {flightToRemove.Number}");
+            Flight flight = _airport.GetFlightByNumber(flightNumber);
+            if (flight != null)
+            {
+                Console.Write($"\nYou want to remove the flight: {flight.Number}. Are you sure? Y/N: ");
+                string userChoise;
+                do
+                {
+                    userChoise = Console.ReadLine().ToUpper();
+                    switch (userChoise)
+                    {
+                        case "Y":
+                            _airport.RemoveFlight(flight);
+                            InputOutputHelper.PrintColorText($"\nFlight {flight.Number} was successfully removed!", ConsoleColor.DarkCyan);
+                            break;
+                        case "N":
+                            InputOutputHelper.PrintColorText("\nFlight removing canceled!", ConsoleColor.DarkCyan);
+                            break;
+                        default:
+                            InputOutputHelper.PrintColorText("\nPlease make a choise. Y/N: ", ConsoleColor.DarkCyan);
+                            break;
+                    }
+                } while (userChoise != "Y" & userChoise != "N");
+            }
             else
                 Console.WriteLine(_noMatchesMessage);
         }
 
         private void EditFlight()
         {
+            Console.Clear();
+            InputOutputHelper.PrintColorText("\n******** EDIT FLIGHT MENU ********", ConsoleColor.DarkCyan);
+
 
         }
     }

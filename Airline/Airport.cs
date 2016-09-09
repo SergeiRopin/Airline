@@ -12,14 +12,16 @@ namespace Airline
 
         public void AddFlight(Flight flight) => _flights.Add(flight);
 
-        public IList<Flight> GetFlights() => _flights;
+        public void RemoveFlight(Flight flight) => _flights.Remove(flight);
+
+        public IEnumerable<Flight> GetFlights() => _flights;
 
         public Flight GetFlightByNumber(string number)
         {
             Flight flight = null;
             foreach (var item in _flights)
             {
-                if (String.Equals(item.Number.Replace(" ", string.Empty), flight.Number.Replace(" ", string.Empty), StringComparison.OrdinalIgnoreCase))
+                if (String.Equals(item.Number.Replace(" ", string.Empty), number.Replace(" ", string.Empty), StringComparison.OrdinalIgnoreCase))
                     flight = item;
             }
             return flight;

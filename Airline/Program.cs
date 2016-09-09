@@ -68,9 +68,9 @@ namespace Airline
                 _menuManager.MenuHandler = ManageMainMenu;
                 _menuManager.HandleExceptions();
 
-                InputOutputHelper.PrintColorText("\nPress \"Space\" to exit; press any key to return to the main menu\n", ConsoleColor.DarkGreen);
+                InputOutputHelper.PrintColorText("\nPress \"Esc\" to exit; press any key to return to the main menu\n", ConsoleColor.DarkGreen);
             }
-            while (Console.ReadKey().Key != ConsoleKey.Spacebar);
+            while (Console.ReadKey().Key != ConsoleKey.Escape);
         }
 
         static void ManageMainMenu()
