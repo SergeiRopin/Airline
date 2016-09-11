@@ -15,7 +15,7 @@ namespace Airline
         private Airport _airport = new Airport();
 
         private string _noMatchesMessage = "No matches found!";
-        private string _returnToMain = "\nPress \"Space\" to return to the main menu; press any key to leave in the current menu";
+        private string _returnToMain = "\nPress \"Space\" to return to the airline main menu; press any key to continue with the current menu";
 
         public void InitializeAirport()
         {
@@ -77,7 +77,7 @@ namespace Airline
         /// <summary>
         /// Search flight by the selected criterion and print an information about the one
         /// </summary>
-        public void SearchFlight()
+        public void SearchFlights()
         {
             do
             {
@@ -109,7 +109,7 @@ namespace Airline
                 { 1, SearchFlightByNumber },
                 { 2, SearchFlightByTime },
                 { 3, SearchFlightByCity },
-                { 4, SearchFlightsInHour}
+                { 4, SearchFlightsInThisHour}
             };
 
             _menuManager.MenuItemHandler = menuItems[index];
@@ -180,7 +180,7 @@ namespace Airline
                 Console.WriteLine(_noMatchesMessage);
         }
 
-        private void SearchFlightsInHour()
+        private void SearchFlightsInThisHour()
         {
             InputOutputHelper.PrintColorText("\nFlights in this hour: ", ConsoleColor.DarkCyan);
 
@@ -272,8 +272,7 @@ namespace Airline
 
         private void SearchPassengerByName()
         {
-            string name = null;
-            InputOutputHelper.StringInput(out name, "Please enter a name of the passenger: ");
+            string name = InputOutputHelper.CheckStringInput("Please enter a name of the passenger: ");
 
             InputOutputHelper.PrintColorText("\nResults of the search: ", ConsoleColor.DarkCyan);
 
@@ -326,7 +325,7 @@ namespace Airline
         /// <summary>
         /// Search all flights with the price of economy ticket lower than user input
         /// </summary>
-        public void SearchLowerPrice()
+        public void SearchFlightsWithLowPrice()
         {
             do
             {
@@ -366,7 +365,7 @@ namespace Airline
         /// <summary>
         /// Allows add, delete and edit flights information
         /// </summary>
-        public void EditFlights()
+        public void EditFlightsInfo()
         {
             do
             {
@@ -401,36 +400,36 @@ namespace Airline
             _menuManager.CallMenuItem();
         }
 
-        private void SetFlightInfo(out string number, out ArrivalDeparture arrivalDeparture, out string cityFrom, out string cityTo, out string airline,
-            out Terminal terminal, out Gate gate, out FlightStatus status, out DateTime flightTime)
+        private Flight CreateFlight()
         {
-            InputOutputHelper.StringInput(out number, "\nEnter a number of the flight: ");
+            var number = InputOutputHelper.CheckStringInput("\nEnter a number of the flight: ");
 
-            Console.WriteLine('\n');
-            InputOutputHelper.EnumInput<ArrivalDeparture>(out arrivalDeparture, @"Enter a flight type. Choose a number from the following list:
+            Console.Write('\n');
+            var arrivalDeparture = InputOutputHelper.CheckEnumInput<ArrivalDeparture>
+                (@"Enter a flight type. Choose a number from the following list:
                 1. Arrival
                 2. Departure");
 
-            InputOutputHelper.StringInput(out cityFrom, "\nEnter a city of departure: ");
+            string cityFrom = InputOutputHelper.CheckStringInput("\nEnter a city of departure: ");
 
-            InputOutputHelper.StringInput(out cityTo, "\nEnter a city of destination: ");
+            string cityTo = InputOutputHelper.CheckStringInput("\nEnter a city of destination: ");
 
-            InputOutputHelper.StringInput(out airline, "\nEnter an airline: ");
+            string airline = InputOutputHelper.CheckStringInput("\nEnter an airline: ");
 
-            Console.WriteLine('\n');
-            InputOutputHelper.EnumInput<Terminal>(out terminal, @"Enter a terminal of the flight. Choose a number from the following list:
+            Console.Write('\n');
+            var terminal = InputOutputHelper.CheckEnumInput<Terminal>(@"Enter a terminal of the flight. Choose a number from the following list:
                 1. A
                 2. B");
 
-            Console.WriteLine('\n');
-            InputOutputHelper.EnumInput<Gate>(out gate, @"Enter a gate of the flight. Choose a number from the following list:
+            Console.Write('\n');
+            var gate = InputOutputHelper.CheckEnumInput<Gate>(@"Enter a gate of the flight. Choose a number from the following list:
                 1. A1
                 2. A2
                 3. A3
                 4. A4");
 
-            Console.WriteLine('\n');
-            InputOutputHelper.EnumInput<FlightStatus>(out status, @"Enter a flight status. Choose a number from the following list:
+            Console.Write('\n');
+            var status = InputOutputHelper.CheckEnumInput<FlightStatus>(@"Enter a flight status. Choose a number from the following list:
                 1. CheckIn
                 2. GateClosed
                 3. Arrived
@@ -443,18 +442,10 @@ namespace Airline
                 10. Boarding");
 
             Console.WriteLine("\nEnter a flight time in the following format: ");
-            int year;
-            InputOutputHelper.Int32Input(out year, "\nYear: ");
-            int month;
-            InputOutputHelper.Int32Input(out month, "Month (from 01 to 12): ");
-            int day;
-            InputOutputHelper.Int32Input(out day, "Day (from 01 to 31): ");
-            int hours;
-            InputOutputHelper.Int32Input(out hours, "Hours (from 0 to 23): ");
-            int minutes;
-            InputOutputHelper.Int32Input(out minutes, "Minutes (from 0 to 59): ");
+            DateTime flightTime = InputOutputHelper.CheckDateTimeInput();
 
-            flightTime = new DateTime(year, month, day, hours, minutes, 00);
+            Flight createdFlight = new Flight(arrivalDeparture, number, cityFrom, cityTo, airline, terminal, gate, status, flightTime, new List<Passenger>());
+            return createdFlight;
         }
 
         private void AddFlight()
@@ -462,17 +453,11 @@ namespace Airline
             Console.Clear();
             InputOutputHelper.PrintColorText("\n******** ADD A NEW FLIGHT MENU ********", ConsoleColor.DarkCyan);
 
-            ArrivalDeparture arrivalDeparture;
-            string number, cityFrom, cityTo, airline;
-            Terminal terminal;
-            Gate gate;
-            FlightStatus status;
-            DateTime flightTime;
+            Flight newFlight = CreateFlight();
 
-            SetFlightInfo(out number, out arrivalDeparture, out cityFrom, out cityTo, out airline, out terminal, out gate, out status, out flightTime);
-
-            _airport.AddFlight(new Flight(arrivalDeparture, number, cityFrom, cityTo, airline, terminal, gate, status, flightTime, new List<Passenger>()));
-            InputOutputHelper.PrintColorText("\nFlight was successfully added", ConsoleColor.DarkCyan);
+            _airport.AddFlight(newFlight);
+            InputOutputHelper.PrintColorText($"\nFlight \"{newFlight.Number}\" was successfully added!", ConsoleColor.DarkCyan);
+            InputOutputHelper.PrintColorText(newFlight.ToString(), ConsoleColor.DarkCyan);
         }
 
         private void DeleteFlight()
@@ -486,12 +471,13 @@ namespace Airline
             Flight flight = _airport.GetFlightByNumber(flightNumber);
             if (flight != null)
             {
+                Console.WriteLine("\n" + flight);
                 Console.Write($"\nYou want to remove the flight: {flight.Number}. Are you sure? Y/N: ");
-                string userChoise;
+                string confirmation;
                 do
                 {
-                    userChoise = Console.ReadLine().ToUpper();
-                    switch (userChoise)
+                    confirmation = Console.ReadLine().ToUpper();
+                    switch (confirmation)
                     {
                         case "Y":
                             _airport.RemoveFlight(flight);
@@ -504,10 +490,10 @@ namespace Airline
                             InputOutputHelper.PrintColorText("\nPlease make a choise. Y/N: ", ConsoleColor.DarkCyan);
                             break;
                     }
-                } while (userChoise != "Y" & userChoise != "N");
+                } while (confirmation != "Y" & confirmation != "N");
             }
             else
-                Console.WriteLine(_noMatchesMessage);
+                Console.WriteLine($"\n{_noMatchesMessage}");
         }
 
         private void EditFlight()
@@ -515,7 +501,23 @@ namespace Airline
             Console.Clear();
             InputOutputHelper.PrintColorText("\n******** EDIT FLIGHT MENU ********", ConsoleColor.DarkCyan);
 
+            Console.Write("\nPlease enter a flight number to edit: ");
+            string flightNumber = Console.ReadLine();
+            Flight originalFlight = _airport.GetFlightByNumber(flightNumber);
+            if (originalFlight != null)
+            {
+                Console.WriteLine("\nActual flight information:");
+                InputOutputHelper.PrintColorText(originalFlight.ToString(), ConsoleColor.DarkCyan);
 
+                Console.WriteLine("\nFollow the instruction to update the flight information:");
+                Flight editedFlight = CreateFlight();
+
+                _airport.EditFlight(originalFlight, editedFlight);
+                InputOutputHelper.PrintColorText($"\nFlight \"{editedFlight.Number}\" was successfully updated!", ConsoleColor.DarkCyan);
+                InputOutputHelper.PrintColorText(editedFlight.ToString(), ConsoleColor.DarkCyan);
+            }
+            else
+                Console.WriteLine($"\n{_noMatchesMessage}");
         }
     }
 }

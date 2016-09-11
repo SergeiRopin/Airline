@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Airline
 {
-    enum ArrivalDeparture
+    enum Sex
     {
-        Arrival = 1,
-        Departure
+        Male,
+        Female
     }
 }

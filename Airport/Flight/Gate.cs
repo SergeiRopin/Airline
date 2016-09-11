@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace Airline
 {
-    enum ArrivalDeparture
+    enum Gate
     {
-        Arrival = 1,
-        Departure
+        A1 = 1,
+        A2,
+        A3,
+        A4
     }
 }

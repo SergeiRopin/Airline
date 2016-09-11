@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Airline
 {
-    enum ArrivalDeparture
+    enum SeatClass
     {
-        Arrival = 1,
-        Departure
+        Economy,
+        Business
     }
 }

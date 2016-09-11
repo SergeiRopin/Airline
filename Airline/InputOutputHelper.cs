@@ -15,21 +15,22 @@ namespace Airline
             Console.ResetColor();
         }
 
-        public static void StringInput(out string input, string inputMessage)
+        public static string CheckStringInput(string inputMessage)
         {
+            string input = null;
             do
             {
                 Console.Write(inputMessage);
                 input = Console.ReadLine();
             }
             while (String.IsNullOrWhiteSpace(input));
+            return input;
         }
 
-        public static void EnumInput<T>(out T input, string inputMessage)
+        public static T CheckEnumInput<T>(string inputMessage)
         {
-            bool failure = false;
-            //T temp = default(T);
-            input = default(T);
+            bool failure;
+            T input = default(T);
             do
             {
                 try
@@ -37,21 +38,24 @@ namespace Airline
                     Console.WriteLine(inputMessage);
                     Console.Write("Please enter a number: ");
                     input = (T)Enum.Parse(typeof(T), Console.ReadLine());
-                    failure = false;
+                    if (Enum.IsDefined(typeof(T), input))
+                        failure = false;
+                    else
+                        throw new Exception();
                 }
                 catch (Exception)
                 {
-                    PrintColorText("\nWrong value has been entered! Please choose a number from the list", ConsoleColor.Red);
+                    PrintColorText("\nWrong value has been entered! Please choose a number from the list\n", ConsoleColor.Red);
                     failure = true;
                 }
-                //input = input;
             }
             while (failure);
+            return input;
         }
 
-        public static void Int32Input(out int input, string inputMessage)
+        public static int CheckInt32Input(string inputMessage)
         {
-            input = default(int);
+            int input = default(int);
             bool failure = false;
             do
             {
@@ -63,11 +67,40 @@ namespace Airline
                 }
                 catch (Exception)
                 {
-                    PrintColorText("\nWrong value has been entered!", ConsoleColor.Red);
+                    PrintColorText("\nWrong value has been entered. Please check the input!\n", ConsoleColor.Red);
                     failure = true;
                 }
             }
             while (failure);
+            return input;
+        }
+
+        public static DateTime CheckDateTimeInput()
+        {
+            DateTime flightTime = default(DateTime);
+            bool failure = false;
+            do
+            {
+                try
+                {
+                    int year = CheckInt32Input("\nYear: ");
+                    int month = CheckInt32Input("Month (from 01 to 12): ");
+                    int day = CheckInt32Input("Day (from 01 to 31): ");
+                    int hours = CheckInt32Input("Hours (from 0 to 23): ");
+                    int minutes = CheckInt32Input("Minutes (from 0 to 59): ");
+
+                    flightTime = new DateTime(year, month, day, hours, minutes, 00);
+                    failure = false;
+                }
+                catch (Exception)
+                {
+                    PrintColorText("\nWrong value was encountered during date and time input."
+                        + "\nPlease re-enter flight date and time!", ConsoleColor.Red);
+                    failure = true;
+                }
+            }
+            while (failure);
+            return flightTime;
         }
     }
 }
