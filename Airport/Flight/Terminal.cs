@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Airline
+namespace Airport
 {
-    enum Terminal
+    public enum Terminal
     {
         A = 1,
         B

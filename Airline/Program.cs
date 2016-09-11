@@ -27,12 +27,11 @@ namespace Airline
                 Console.WriteLine(@"Welcome to airline main menu:
 
                 1. View all flights (without passengers);
-                2. Search a flight;
-                3. View all flight’s passengers;
+                2. Search flights;
+                3. Search flights with low price;
                 4. Search passengers;
-                5. Search flights with lower price;
-                6. Add, delete, edit flights;
-                7. Add, delete, edit passengers.");
+                5. Add, delete, edit flights;
+                6. Add, delete, edit passengers.");
                 Console.Write("\nPlease choose menu item number: ");
 
                 _menuManager.MenuHandler = ManageMainMenu;
@@ -45,17 +44,15 @@ namespace Airline
 
         static void ManageMainMenu()
         {
-
             int index = (int)uint.Parse(Console.ReadLine());
             IDictionary<int, MenuItemHandler> menuItems = new Dictionary<int, MenuItemHandler>
                     {
                         { 1, airlineManager.ViewAllFlights },
                         { 2, airlineManager.SearchFlights },
-                        { 3, airlineManager.ViewPassengers },
+                        { 3, airlineManager.SearchFlightsWithLowPrice },
                         { 4, airlineManager.SearchPassengers },
-                        { 5, airlineManager.SearchFlightsWithLowPrice },
-                        { 6, airlineManager.EditFlightsInfo },
-                        //{ 7, airlineManager }
+                        { 5, airlineManager.EditFlightsInfo },
+                        { 6, airlineManager.EditPassengersInfo }
                     };
             _menuManager.MenuItemHandler = menuItems[index];
             _menuManager.CallMenuItem();

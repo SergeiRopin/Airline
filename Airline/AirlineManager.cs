@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Airport;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace Airline
     class AirlineManager
     {
         private MenuManager _menuManager = new MenuManager();
-        private Airport _airport = new Airport();
+        private AirportManager _airport = new AirportManager();
 
         private string _noMatchesMessage = "No matches found!";
         private string _returnToMain = "\nPress \"Space\" to return to the airline main menu; press any key to continue with the current menu";
@@ -55,7 +56,7 @@ namespace Airline
 
             // Print arrivals.
             InputOutputHelper.PrintColorText("\nARRIVAL FLIGHTS:", ConsoleColor.DarkCyan);
-            foreach (var flight in _airport.GetFlights())
+            foreach (var flight in _airport.GetAllFlights())
             {
                 if (flight.ArrivalDeparture == ArrivalDeparture.Arrival)
                 {
@@ -65,7 +66,7 @@ namespace Airline
 
             // Print departures.
             InputOutputHelper.PrintColorText("\nDEPARTURED FLIGHTS:", ConsoleColor.DarkCyan);
-            foreach (var flight in _airport.GetFlights())
+            foreach (var flight in _airport.GetAllFlights())
             {
                 if (flight.ArrivalDeparture == ArrivalDeparture.Departure)
                 {
@@ -124,7 +125,7 @@ namespace Airline
 
             // Print matching flights.
             int temp = 0;
-            foreach (var flight in _airport.GetFlights())
+            foreach (var flight in _airport.GetAllFlights())
             {
                 if (String.Equals(flightNumber.Replace(" ", string.Empty), flight.Number.Replace(" ", string.Empty),
                     StringComparison.OrdinalIgnoreCase))
@@ -133,7 +134,6 @@ namespace Airline
                     temp++;
                     break;
                 }
-
             }
             if (temp == 0)
                 Console.WriteLine(_noMatchesMessage);
@@ -151,7 +151,7 @@ namespace Airline
 
             // Print matching flights.
             int temp = 0;
-            foreach (var flight in _airport.GetFlights())
+            foreach (var flight in _airport.GetAllFlights())
                 if (hours == flight.DateTime.Hour && minutes == flight.DateTime.Minute)
                 {
                     Console.WriteLine(flight);
@@ -169,7 +169,7 @@ namespace Airline
 
             // Print matching flights.
             int temp = 0;
-            foreach (var flight in _airport.GetFlights())
+            foreach (var flight in _airport.GetAllFlights())
                 if (String.Equals(city, flight.CityFrom, StringComparison.OrdinalIgnoreCase) |
                     String.Equals(city, flight.CityTo, StringComparison.OrdinalIgnoreCase))
                 {
@@ -186,138 +186,12 @@ namespace Airline
 
             // Print matching flights.
             int temp = 0;
-            foreach (var flight in _airport.GetFlights())
+            foreach (var flight in _airport.GetAllFlights())
                 if (DateTime.Now > flight.DateTime.AddMinutes(-30) && DateTime.Now < flight.DateTime.AddMinutes(30))
                 {
                     Console.WriteLine(flight);
                     temp++;
                 }
-            if (temp == 0)
-                Console.WriteLine(_noMatchesMessage);
-        }
-
-        /// <summary>
-        /// View all passengers based on the flight number
-        /// </summary>
-        public void ViewPassengers()
-        {
-            do
-            {
-                Console.Clear();
-                InputOutputHelper.PrintColorText("\n******** VIEW PASSENGERS MENU ********", ConsoleColor.DarkCyan);
-
-                Console.Write("\nPlease enter a number of flight to view all passengers: ");
-                string flightNumber = Console.ReadLine();
-                InputOutputHelper.PrintColorText("\nResults of the search: ", ConsoleColor.DarkCyan);
-
-                int temp = 0;
-                foreach (var flight in _airport.GetFlights())
-                {
-                    if (String.Equals(flightNumber.Replace(" ", string.Empty), flight.Number.Replace(" ", string.Empty),
-                        StringComparison.OrdinalIgnoreCase))
-                    {
-                        foreach (var passenger in flight.Passengers)
-                        {
-                            Console.WriteLine(passenger);
-                        }
-                        temp++;
-                        break;
-                    }
-                }
-                if (temp == 0)
-                    Console.WriteLine(_noMatchesMessage);
-
-                InputOutputHelper.PrintColorText(_returnToMain, ConsoleColor.DarkGreen);
-            }
-            while (Console.ReadKey().Key != ConsoleKey.Spacebar);
-        }
-
-        /// <summary>
-        /// Search a passenger by the selected criterion
-        /// </summary>
-        public void SearchPassengers()
-        {
-            do
-            {
-                Console.Clear();
-                InputOutputHelper.PrintColorText("\n******** SEARCH PASSENGERS MENU ********\n", ConsoleColor.DarkCyan);
-                Console.WriteLine(@"Please choose one of the following search criterions (enter a menu number):
-
-                1. Search by Name (first or last name);
-                2. Search by Flight number;
-                3. Search by Passport;");
-
-                Console.Write("Your choise: ");
-
-                _menuManager.MenuHandler = ManageSearchPassengersMenu;
-                _menuManager.HandleExceptions();
-
-                InputOutputHelper.PrintColorText(_returnToMain, ConsoleColor.DarkGreen);
-            }
-            while (Console.ReadKey().Key != ConsoleKey.Spacebar);
-        }
-
-        private void ManageSearchPassengersMenu()
-        {
-            int index = (int)uint.Parse(Console.ReadLine());
-            IDictionary<int, MenuItemHandler> menuItems = new Dictionary<int, MenuItemHandler>
-            {
-                { 1, SearchPassengerByName },
-                //{ 2, SearchPassengerByFlight },
-                { 3, SearchPassengerByPassport }
-            };
-            _menuManager.MenuItemHandler = menuItems[index];
-            _menuManager.CallMenuItem();
-        }
-
-        private void SearchPassengerByName()
-        {
-            string name = InputOutputHelper.CheckStringInput("Please enter a name of the passenger: ");
-
-            InputOutputHelper.PrintColorText("\nResults of the search: ", ConsoleColor.DarkCyan);
-
-            // Print matching passengers.
-            int temp = 0;
-            foreach (var flight in _airport.GetFlights())
-            {
-                foreach (var passenger in flight.Passengers)
-                {
-                    if (passenger.FirstName.ToUpper().Contains(name.ToUpper()) |
-                        passenger.LastName.ToUpper().Contains(name.ToUpper()))
-                    {
-                        Console.WriteLine($"Flight: {flight.Number}, " + passenger);
-                        temp++;
-                    }
-                }
-            }
-            if (temp == 0)
-                Console.WriteLine(_noMatchesMessage);
-        }
-
-        //private void SearchPassengerByFlight()
-        //{
-
-        //}
-
-        private void SearchPassengerByPassport()
-        {
-            Console.Write("\nPlease enter a passport of the passenger: ");
-            string passport = Console.ReadLine();
-            InputOutputHelper.PrintColorText("\nResults of the search: ", ConsoleColor.DarkCyan);
-
-            // Print matching passengers.
-            int temp = 0;
-            foreach (var flight in _airport.GetFlights())
-            {
-                foreach (var passenger in flight.Passengers)
-                {
-                    if (passenger.Passport.ToUpper().Contains(passport.ToUpper()))
-                    {
-                        Console.WriteLine(passenger);
-                        temp++;
-                    }
-                }
-            }
             if (temp == 0)
                 Console.WriteLine(_noMatchesMessage);
         }
@@ -338,7 +212,7 @@ namespace Airline
 
                 HashSet<Flight> economyFlights = new HashSet<Flight>();
                 int temp = 0;
-                foreach (var flight in _airport.GetFlights())
+                foreach (var flight in _airport.GetAllFlights())
                 {
                     foreach (var passenger in flight.Passengers)
                     {
@@ -363,23 +237,22 @@ namespace Airline
         }
 
         /// <summary>
-        /// Allows add, delete and edit flights information
+        /// Search a passenger by the selected criterion
         /// </summary>
-        public void EditFlightsInfo()
+        public void SearchPassengers()
         {
             do
             {
                 Console.Clear();
-                InputOutputHelper.PrintColorText("\n******** EDIT FLIGHTS MENU ********\n", ConsoleColor.DarkCyan);
-                Console.WriteLine(@"Please choose one of the following items (enter a menu number):
+                InputOutputHelper.PrintColorText("\n******** SEARCH PASSENGERS MENU ********\n", ConsoleColor.DarkCyan);
+                Console.WriteLine(@"To find the passenger please choose one of the following search criterions (enter a menu number):
 
-                1. Add a flight;
-                2. Delete a flight;
-                3. Edit a flight.");
-
+                1. Search by Name (first or last name);
+                2. Search by Flight number;
+                3. Search by Passport;");
                 Console.Write("Your choise: ");
 
-                _menuManager.MenuHandler = ManageEditFlightsMenu;
+                _menuManager.MenuHandler = ManageSearchPassengersMenu;
                 _menuManager.HandleExceptions();
 
                 InputOutputHelper.PrintColorText(_returnToMain, ConsoleColor.DarkGreen);
@@ -387,7 +260,100 @@ namespace Airline
             while (Console.ReadKey().Key != ConsoleKey.Spacebar);
         }
 
-        private void ManageEditFlightsMenu()
+        private void ManageSearchPassengersMenu()
+        {
+            int index = (int)uint.Parse(Console.ReadLine());
+            IDictionary<int, MenuItemHandler> menuItems = new Dictionary<int, MenuItemHandler>
+            {
+                { 1, SearchPassengerByName },
+                { 2, SearchPassengersByFlightNumber },
+                { 3, SearchPassengerByPassport }
+            };
+            _menuManager.MenuItemHandler = menuItems[index];
+            _menuManager.CallMenuItem();
+        }
+
+        private void SearchPassengerByName()
+        {
+            string name = InputOutputHelper.CheckStringInput("\nPlease enter a name of the passenger: ");
+            InputOutputHelper.PrintColorText("\nResults of the search: ", ConsoleColor.DarkCyan);
+
+            // Print matching passengers.
+            int temp = 0;
+            _airport.GetAllFlights().ToList()
+                .ForEach(x => x.Passengers
+                .ForEach(y =>
+                {
+                    if (y.FirstName.ToUpper().Contains(name.ToUpper()) |
+                        y.LastName.ToUpper().Contains(name.ToUpper()))
+                    {
+                        Console.WriteLine($"Flight: {x.Number}, " + y);
+                        temp++;
+                    }
+                }));
+            if (temp == 0)
+                Console.WriteLine(_noMatchesMessage);
+        }
+
+        public void SearchPassengersByFlightNumber()
+        {
+            Console.Write("\nPlease enter a number of flight to view all passengers: ");
+            string flightNumber = Console.ReadLine();
+            InputOutputHelper.PrintColorText("\nResults of the search: ", ConsoleColor.DarkCyan);
+
+            Flight flight = _airport.GetFlightByNumber(flightNumber);
+            if (flight != null)
+                _airport.GetPassengers(flight).ForEach(x => Console.WriteLine($"Flight: {flight.Number}, " + x));
+            else Console.WriteLine(_noMatchesMessage);
+        }
+
+        private void SearchPassengerByPassport()
+        {
+            string passport = InputOutputHelper.CheckStringInput("\nPlease enter a passport of the passenger: ");
+            InputOutputHelper.PrintColorText("\nResults of the search: ", ConsoleColor.DarkCyan);
+
+            // Print matching passengers.
+            int temp = 0;
+            _airport.GetAllFlights().ToList()
+                .ForEach(x => x.Passengers
+                .ForEach(y =>
+                {
+                    if (y.Passport.ToUpper().Contains(passport.ToUpper()))
+                    {
+                        Console.WriteLine($"Flight: {x.Number}, " + y);
+                        temp++;
+                    }
+                }));
+            if (temp == 0)
+                Console.WriteLine(_noMatchesMessage);
+        }
+
+        /// <summary>
+        /// Allows add, delete and edit flight's information
+        /// </summary>
+        public void EditFlightsInfo()
+        {
+            do
+            {
+                Console.Clear();
+                InputOutputHelper.PrintColorText("\n******** EDIT FLIGHTS INFORMATION MENU ********\n", ConsoleColor.DarkCyan);
+                Console.WriteLine(@"Please choose one of the following items (enter a menu number):
+
+                1. Add a flight;
+                2. Delete a flight;
+                3. Edit a flight's information.");
+
+                Console.Write("Your choise: ");
+
+                _menuManager.MenuHandler = ManageEditFlightsInfoMenu;
+                _menuManager.HandleExceptions();
+
+                InputOutputHelper.PrintColorText(_returnToMain, ConsoleColor.DarkGreen);
+            }
+            while (Console.ReadKey().Key != ConsoleKey.Spacebar);
+        }
+
+        private void ManageEditFlightsInfoMenu()
         {
             int index = (int)uint.Parse(Console.ReadLine());
             IDictionary<int, MenuItemHandler> menuItems = new Dictionary<int, MenuItemHandler>
@@ -402,7 +368,7 @@ namespace Airline
 
         private Flight CreateFlight()
         {
-            var number = InputOutputHelper.CheckStringInput("\nEnter a number of the flight: ");
+            string number = InputOutputHelper.CheckStringInput("\nEnter a number of the flight: ");
 
             Console.Write('\n');
             var arrivalDeparture = InputOutputHelper.CheckEnumInput<ArrivalDeparture>
@@ -454,7 +420,6 @@ namespace Airline
             InputOutputHelper.PrintColorText("\n******** ADD A NEW FLIGHT MENU ********", ConsoleColor.DarkCyan);
 
             Flight newFlight = CreateFlight();
-
             _airport.AddFlight(newFlight);
             InputOutputHelper.PrintColorText($"\nFlight \"{newFlight.Number}\" was successfully added!", ConsoleColor.DarkCyan);
             InputOutputHelper.PrintColorText(newFlight.ToString(), ConsoleColor.DarkCyan);
@@ -492,8 +457,7 @@ namespace Airline
                     }
                 } while (confirmation != "Y" & confirmation != "N");
             }
-            else
-                Console.WriteLine($"\n{_noMatchesMessage}");
+            else Console.WriteLine($"\n{_noMatchesMessage}");
         }
 
         private void EditFlight()
@@ -516,8 +480,153 @@ namespace Airline
                 InputOutputHelper.PrintColorText($"\nFlight \"{editedFlight.Number}\" was successfully updated!", ConsoleColor.DarkCyan);
                 InputOutputHelper.PrintColorText(editedFlight.ToString(), ConsoleColor.DarkCyan);
             }
-            else
-                Console.WriteLine($"\n{_noMatchesMessage}");
+            else Console.WriteLine($"\n{_noMatchesMessage}");
+        }
+
+        /// <summary>
+        /// Allows add, delete and edit passenger's information
+        /// </summary>
+        public void EditPassengersInfo()
+        {
+            do
+            {
+                Console.Clear();
+                InputOutputHelper.PrintColorText("\n******** EDIT PASSENGERS INFORMATION MENU ********\n", ConsoleColor.DarkCyan);
+                Console.WriteLine(@"Please choose one of the following menu items (enter a menu number):
+
+                1. Add a passenger;
+                2. Delete a passenger;
+                3. Edit a passenger's information.");
+
+                Console.Write("Your choise: ");
+
+                _menuManager.MenuHandler = ManageEditPassengersInfoMenu;
+                _menuManager.HandleExceptions();
+
+                InputOutputHelper.PrintColorText(_returnToMain, ConsoleColor.DarkGreen);
+            }
+            while (Console.ReadKey().Key != ConsoleKey.Spacebar);
+        }
+
+        private void ManageEditPassengersInfoMenu()
+        {
+            int index = (int)uint.Parse(Console.ReadLine());
+            IDictionary<int, MenuItemHandler> menuItems = new Dictionary<int, MenuItemHandler>
+            {
+                { 1, AddPassenger },
+                { 2, DeletePassenger },
+                { 3, EditPassenger }
+            };
+            _menuManager.MenuItemHandler = menuItems[index];
+            _menuManager.CallMenuItem();
+        }
+
+        public Passenger CreatePassenger()
+        {
+            string firstName = InputOutputHelper.CheckStringInput("\nEnter a first name: ");
+
+            string lastName = InputOutputHelper.CheckStringInput("\nEnter a last name: ");
+
+            string nationality = InputOutputHelper.CheckStringInput("\nEnter a nationalty: ");
+
+            string passport = InputOutputHelper.CheckStringInput("\nEnter a passport: ");
+
+            Console.Write('\n');
+            var sex = InputOutputHelper.CheckEnumInput<Sex>(@"Enter a sex of the passenger. Choose a number from the following list:
+                1. Male
+                2. Female");
+
+            Console.WriteLine("\nEnter a passenger birthday: ");
+            DateTime birthday = InputOutputHelper.CheckDateTimeInput();
+
+            InputOutputHelper.PrintColorText("\nPassenger information successfully filled. Enter a ticket information.", ConsoleColor.DarkCyan);
+
+            Console.Write('\n');
+            var seatClass = InputOutputHelper.CheckEnumInput<SeatClass>(@"Enter a seat class. Choose a number from the following list:
+                1. Economy
+                2. Business");
+
+            decimal price = InputOutputHelper.CheckDecimalInput("\nEnter a ticket price (dollars): ");
+
+            Passenger createdFlight = new Passenger(firstName, lastName, nationality, passport, birthday, sex, new Ticket(seatClass, price));
+            return createdFlight;
+
+        }
+
+        public Passenger GetPassengerByPassport(Flight flight)
+        {
+            Passenger passenger = null;
+            if (flight != null)
+            {
+                Console.Write("\nPlease enter a passenger passport: ");
+                string passport = Console.ReadLine();
+                passenger = flight.Passengers
+                    .FirstOrDefault(x => String.Equals(x.Passport, passport, StringComparison.OrdinalIgnoreCase));
+            }
+            return passenger;
+        }
+
+        private void AddPassenger()
+        {
+            Console.Clear();
+            InputOutputHelper.PrintColorText("\n******** ADD A NEW PASSENGER MENU ********", ConsoleColor.DarkCyan);
+
+            Console.Write("\nPlease enter a flight number: ");
+            string flightNumber = Console.ReadLine();
+            Flight flight = _airport.GetFlightByNumber(flightNumber);
+            if (flight != null)
+            {
+                InputOutputHelper.PrintColorText("\nFill an information about passenger:", ConsoleColor.DarkCyan);
+                Passenger passenger = CreatePassenger();
+
+                _airport.AddPassenger(flight, passenger);
+
+                InputOutputHelper.PrintColorText($"\nPassenger was successfully added to the flight \"{flight.Number}\"!", ConsoleColor.DarkCyan);
+                InputOutputHelper.PrintColorText(passenger.ToString(), ConsoleColor.DarkCyan);
+            }
+            else Console.WriteLine($"\n{_noMatchesMessage}");
+        }
+
+        private void DeletePassenger()
+        {
+            Console.Clear();
+            InputOutputHelper.PrintColorText("\n******** DELETE PASSENGER MENU ********", ConsoleColor.DarkCyan);
+
+            Console.Write("\nPlease enter a flight number: ");
+            string flightNumber = Console.ReadLine();
+            Flight flight = _airport.GetFlightByNumber(flightNumber);
+
+            Passenger passenger = GetPassengerByPassport(flight);
+
+            if (flight != null && passenger != null)
+            {
+                InputOutputHelper.PrintColorText($"\nFlight: {flight.Number}, {passenger}", ConsoleColor.DarkCyan);
+                Console.Write($"\nYou want to remove the passenger: {passenger.FirstName} {passenger.LastName} . Are you sure? Y/N: ");
+                string confirmation;
+                do
+                {
+                    confirmation = Console.ReadLine().ToUpper();
+                    switch (confirmation)
+                    {
+                        case "Y":
+                            _airport.RemovePassenger(flight, passenger);
+                            InputOutputHelper.PrintColorText($"\nPassenger was successfully removed!", ConsoleColor.DarkCyan);
+                            break;
+                        case "N":
+                            InputOutputHelper.PrintColorText("\nPassenger removing canceled!", ConsoleColor.DarkCyan);
+                            break;
+                        default:
+                            InputOutputHelper.PrintColorText("\nPlease make a choise. Y/N: ", ConsoleColor.DarkCyan);
+                            break;
+                    }
+                } while (confirmation != "Y" & confirmation != "N");
+            }
+            else Console.WriteLine($"\n{_noMatchesMessage}");
+        }
+
+        private void EditPassenger()
+        {
+
         }
     }
 }

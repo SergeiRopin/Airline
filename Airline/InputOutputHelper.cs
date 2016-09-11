@@ -75,6 +75,28 @@ namespace Airline
             return input;
         }
 
+        public static decimal CheckDecimalInput(string inputMessage)
+        {
+            decimal input = default(decimal);
+            bool failure = false;
+            do
+            {
+                try
+                {
+                    Console.Write(inputMessage);
+                    input = decimal.Parse(Console.ReadLine());
+                    failure = false;
+                }
+                catch (Exception)
+                {
+                    PrintColorText("\nWrong value has been entered. Please check the input!\n", ConsoleColor.Red);
+                    failure = true;
+                }
+            }
+            while (failure);
+            return input;
+        }
+
         public static DateTime CheckDateTimeInput()
         {
             DateTime flightTime = default(DateTime);
@@ -94,8 +116,8 @@ namespace Airline
                 }
                 catch (Exception)
                 {
-                    PrintColorText("\nWrong value was encountered during date and time input."
-                        + "\nPlease re-enter flight date and time!", ConsoleColor.Red);
+                    PrintColorText("\nWrong value was encountered during input."
+                        + "\nPlease re-enter data!", ConsoleColor.Red);
                     failure = true;
                 }
             }

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Airline
+namespace Airport
 {
-    enum SeatClass
+    public enum SeatClass
     {
         Economy,
         Business

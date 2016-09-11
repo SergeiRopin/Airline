@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Airline
+namespace Airport
 {
-    enum FlightStatus
+    public enum FlightStatus
     {
         CheckIn = 1,
         GateClosed,

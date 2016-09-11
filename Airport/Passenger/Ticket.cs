@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Airline
+namespace Airport
 {
-    class Ticket
+    public class Ticket
     {
         public SeatClass SeatClass { get; private set; }
         public decimal Price { get; private set; }

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Airline
+namespace Airport
 {
-    class Flight
+    public class Flight
     {
         public ArrivalDeparture ArrivalDeparture { get; set; }
         public string Number { get; private set; }
