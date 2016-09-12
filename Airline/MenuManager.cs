@@ -8,21 +8,18 @@ namespace Airline
 {
     class MenuManager
     {
-        public MenuItemHandler MenuItemHandler { get; set; }
-        public MenuHandler MenuHandler { get; set; }
-        
-        public void CallMenuItem()
+        public void CallMenuItem(Action action)
         {
-            if (MenuItemHandler != null)
-                MenuItemHandler();
+            if (action != null)
+                action();
         }
 
-        public void CatchMenuExceptions()
+        public void CatchMenuExceptions(Action action)
         {
             try
             {
-                if (MenuHandler != null)
-                    MenuHandler();
+                if (action != null)
+                    action();
             }
             catch (KeyNotFoundException)
             {

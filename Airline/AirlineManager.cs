@@ -8,8 +8,6 @@ using System.Threading.Tasks;
 
 namespace Airline
 {
-    public delegate void MenuHandler();
-
     class AirlineManager
     {
         private MenuManager _menuManager = new MenuManager();
@@ -74,7 +72,7 @@ namespace Airline
                 }
             }
             InputOutputHelper.PrintColorText("\nPress any key to continue...", ConsoleColor.DarkCyan);
-            Console.ReadLine();
+            Console.ReadKey();
         }
 
         /// <summary>
@@ -95,8 +93,8 @@ namespace Airline
 
                 Console.Write("Your choise: ");
 
-                _menuManager.MenuHandler = ManageSearchFlightMenu;
-                _menuManager.CatchMenuExceptions();
+                Action menuHandler = ManageSearchFlightMenu;
+                _menuManager.CatchMenuExceptions(menuHandler);
 
                 InputOutputHelper.PrintColorText(_returnToMain, ConsoleColor.DarkGreen);
             }
@@ -107,16 +105,15 @@ namespace Airline
         {
             int index = (int)uint.Parse(Console.ReadLine());
 
-            IDictionary<int, MenuItemHandler> menuItems = new Dictionary<int, MenuItemHandler>
+            IDictionary<int, Action> menuItems = new Dictionary<int, Action>
             {
                 { 1, SearchFlightByNumber },
                 { 2, SearchFlightByTime },
                 { 3, SearchFlightByCity },
                 { 4, SearchFlightsInThisHour}
             };
-
-            _menuManager.MenuItemHandler = menuItems[index];
-            _menuManager.CallMenuItem();
+            Action menuItemHandler = menuItems[index];
+            _menuManager.CallMenuItem(menuItemHandler);
         }
 
         private void SearchFlightByNumber()
@@ -198,8 +195,7 @@ namespace Airline
                 Console.Clear();
                 InputOutputHelper.PrintColorText("\n******** SEARCH FLIGHTS WITH THE LOWER PRICE MENU ********", ConsoleColor.DarkCyan);
 
-                Console.Write($"\nPlease enter a limit of the flight price (dollars): $");
-                decimal priceLimit = decimal.Parse(Console.ReadLine());
+                decimal priceLimit = InputOutputHelper.CheckDecimalInput($"\nPlease enter a limit of the flight price (dollars): $");
                 InputOutputHelper.PrintColorText("\nResults of the search: ", ConsoleColor.DarkCyan);
 
                 HashSet<Flight> economyFlights = new HashSet<Flight>();
@@ -243,8 +239,8 @@ namespace Airline
                 3. Search by Passport;");
                 Console.Write("Your choise: ");
 
-                _menuManager.MenuHandler = ManageSearchPassengersMenu;
-                _menuManager.CatchMenuExceptions();
+                Action menuHandler = ManageSearchPassengersMenu;
+                _menuManager.CatchMenuExceptions(menuHandler);
 
                 InputOutputHelper.PrintColorText(_returnToMain, ConsoleColor.DarkGreen);
             }
@@ -254,14 +250,14 @@ namespace Airline
         private void ManageSearchPassengersMenu()
         {
             int index = (int)uint.Parse(Console.ReadLine());
-            IDictionary<int, MenuItemHandler> menuItems = new Dictionary<int, MenuItemHandler>
+            IDictionary<int, Action> menuItems = new Dictionary<int, Action>
             {
                 { 1, SearchPassengerByName },
                 { 2, SearchPassengersByFlightNumber },
                 { 3, SearchPassengerByPassport }
             };
-            _menuManager.MenuItemHandler = menuItems[index];
-            _menuManager.CallMenuItem();
+            Action menuItemHandler = menuItems[index];
+            _menuManager.CallMenuItem(menuItemHandler);
         }
 
         private void SearchPassengerByName()
@@ -336,8 +332,8 @@ namespace Airline
 
                 Console.Write("Your choise: ");
 
-                _menuManager.MenuHandler = ManageEditFlightsInfoMenu;
-                _menuManager.CatchMenuExceptions();
+                Action menuHandler = ManageEditFlightsInfoMenu;
+                _menuManager.CatchMenuExceptions(menuHandler);
 
                 InputOutputHelper.PrintColorText(_returnToMain, ConsoleColor.DarkGreen);
             }
@@ -347,14 +343,14 @@ namespace Airline
         private void ManageEditFlightsInfoMenu()
         {
             int index = (int)uint.Parse(Console.ReadLine());
-            IDictionary<int, MenuItemHandler> menuItems = new Dictionary<int, MenuItemHandler>
+            IDictionary<int, Action> menuItems = new Dictionary<int, Action>
             {
                 { 1, AddFlight },
                 { 2, DeleteFlight },
                 { 3, EditFlight }
             };
-            _menuManager.MenuItemHandler = menuItems[index];
-            _menuManager.CallMenuItem();
+            Action menuItemHandler = menuItems[index];
+            _menuManager.CallMenuItem(menuItemHandler);
         }
 
         private Flight CreateFlight()
@@ -491,8 +487,8 @@ namespace Airline
 
                 Console.Write("Your choise: ");
 
-                _menuManager.MenuHandler = ManageEditPassengersInfoMenu;
-                _menuManager.CatchMenuExceptions();
+                Action menuHandler = ManageEditPassengersInfoMenu;
+                _menuManager.CatchMenuExceptions(menuHandler);
 
                 InputOutputHelper.PrintColorText(_returnToMain, ConsoleColor.DarkGreen);
             }
@@ -502,14 +498,14 @@ namespace Airline
         private void ManageEditPassengersInfoMenu()
         {
             int index = (int)uint.Parse(Console.ReadLine());
-            IDictionary<int, MenuItemHandler> menuItems = new Dictionary<int, MenuItemHandler>
+            IDictionary<int, Action> menuItems = new Dictionary<int, Action>
             {
                 { 1, AddPassenger },
                 { 2, DeletePassenger },
                 { 3, EditPassenger }
             };
-            _menuManager.MenuItemHandler = menuItems[index];
-            _menuManager.CallMenuItem();
+            Action menuItemHandler = menuItems[index];
+            _menuManager.CallMenuItem(menuItemHandler);
         }
 
         public Passenger CreatePassenger()

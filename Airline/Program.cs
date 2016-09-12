@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace Airline
 {
-    public delegate void MenuItemHandler();
     class Program
     {
         static MenuManager _menuManager = new MenuManager();
@@ -37,17 +36,15 @@ namespace Airline
                 Enter ""0"" to exit...");
                 Console.Write("\nPlease choose menu item number: ");
 
-                _menuManager.MenuHandler = ManageMainMenu;
-                _menuManager.CatchMenuExceptions();
-
-                //InputOutputHelper.PrintColorText("\nPress \"Esc\" to exit; press any key to return to the airline main menu\n", ConsoleColor.DarkGreen);
+                Action menuHandler = ManageMainMenu;
+                _menuManager.CatchMenuExceptions(menuHandler);
             }
         }
 
         static void ManageMainMenu()
         {
             int index = (int)uint.Parse(Console.ReadLine());
-            IDictionary<int, MenuItemHandler> menuItems = new Dictionary<int, MenuItemHandler>
+            IDictionary<int, Action> menuItems = new Dictionary<int, Action>
                     {
                         { 1, airlineManager.ViewAllFlights },
                         { 2, airlineManager.SearchFlights },
@@ -55,10 +52,10 @@ namespace Airline
                         { 4, airlineManager.SearchPassengers },
                         { 5, airlineManager.EditFlightsInfo },
                         { 6, airlineManager.EditPassengersInfo },
-                        { 0, new MenuItemHandler(() => exit = false) }
+                        { 0, new Action(() => exit = false) }
                     };
-            _menuManager.MenuItemHandler = menuItems[index];
-            _menuManager.CallMenuItem();
+            Action menuItemHandler = menuItems[index];
+            _menuManager.CallMenuItem(menuItemHandler);
         }
     }
 }
