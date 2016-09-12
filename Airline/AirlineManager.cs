@@ -16,7 +16,7 @@ namespace Airline
         private AirportManager _airport = new AirportManager();
 
         private string _noMatchesMessage = "No matches found!";
-        private string _returnToMain = "\nPress \"Space\" to return to the airline main menu; press any key to continue with the current menu";
+        private string _returnToMain = "\nPress \"Space\" to return to the airline main menu; press any key to continue with the current menu...";
 
         public void InitializeAirport()
         {
@@ -73,6 +73,8 @@ namespace Airline
                     Console.WriteLine(flight);
                 }
             }
+            InputOutputHelper.PrintColorText("\nPress any key to continue...", ConsoleColor.DarkCyan);
+            Console.ReadLine();
         }
 
         /// <summary>
@@ -94,7 +96,7 @@ namespace Airline
                 Console.Write("Your choise: ");
 
                 _menuManager.MenuHandler = ManageSearchFlightMenu;
-                _menuManager.HandleExceptions();
+                _menuManager.CatchMenuExceptions();
 
                 InputOutputHelper.PrintColorText(_returnToMain, ConsoleColor.DarkGreen);
             }
@@ -124,39 +126,29 @@ namespace Airline
             InputOutputHelper.PrintColorText("\nResults of the search: ", ConsoleColor.DarkCyan);
 
             // Print matching flights.
-            int temp = 0;
-            foreach (var flight in _airport.GetAllFlights())
-            {
-                if (String.Equals(flightNumber.Replace(" ", string.Empty), flight.Number.Replace(" ", string.Empty),
-                    StringComparison.OrdinalIgnoreCase))
-                {
-                    Console.WriteLine(flight);
-                    temp++;
-                    break;
-                }
-            }
-            if (temp == 0)
+            Flight flight = _airport.GetFlightByNumber(flightNumber);
+            Console.WriteLine(flight);
+
+            if (flight == null)
                 Console.WriteLine(_noMatchesMessage);
         }
 
         private void SearchFlightByTime()
         {
             Console.WriteLine("\nSpecify the time of a flight in the following format:");
-            Console.Write("Hours (from 0 to 23): ");
-            int hours = (int)uint.Parse(Console.ReadLine());
-            Console.Write("Minutes (from 0 to 59): ");
-            int minutes = (int)uint.Parse(Console.ReadLine());
-
-            InputOutputHelper.PrintColorText("\nResults of the search: ", ConsoleColor.DarkCyan);
+            DateTime flightTime = InputOutputHelper.CheckDateTimeInput();
 
             // Print matching flights.
+            InputOutputHelper.PrintColorText("\nResults of the search: ", ConsoleColor.DarkCyan);
             int temp = 0;
-            foreach (var flight in _airport.GetAllFlights())
-                if (hours == flight.DateTime.Hour && minutes == flight.DateTime.Minute)
+            _airport.GetAllFlights().ToList().ForEach(x =>
+            {
+                if (x.DateTime == flightTime)
                 {
-                    Console.WriteLine(flight);
+                    Console.WriteLine(x);
                     temp++;
                 }
+            });
             if (temp == 0)
                 Console.WriteLine(_noMatchesMessage);
         }
@@ -212,22 +204,21 @@ namespace Airline
 
                 HashSet<Flight> economyFlights = new HashSet<Flight>();
                 int temp = 0;
-                foreach (var flight in _airport.GetAllFlights())
+                _airport.GetAllFlights().ToList()
+                .ForEach(x => x.Passengers
+                .ForEach(y =>
                 {
-                    foreach (var passenger in flight.Passengers)
+                    if (priceLimit >= y.Ticket.Price && y.Ticket.SeatClass == SeatClass.Economy)
                     {
-                        if (priceLimit >= passenger.Ticket.Price)
+                        bool isAdded = economyFlights.Add(x);
+                        if (isAdded)
                         {
-                            bool isAdded = economyFlights.Add(flight);
-                            if (isAdded)
-                            {
-                                Console.WriteLine($@"{flight}, ");
-                                Console.WriteLine($"{passenger.Ticket}\n");
-                            }
-                            temp++;
+                            Console.WriteLine($@"{x}, ");
+                            Console.WriteLine($"{y.Ticket}\n");
                         }
+                        temp++;
                     }
-                }
+                }));
                 if (temp == 0)
                     Console.WriteLine(_noMatchesMessage);
 
@@ -253,7 +244,7 @@ namespace Airline
                 Console.Write("Your choise: ");
 
                 _menuManager.MenuHandler = ManageSearchPassengersMenu;
-                _menuManager.HandleExceptions();
+                _menuManager.CatchMenuExceptions();
 
                 InputOutputHelper.PrintColorText(_returnToMain, ConsoleColor.DarkGreen);
             }
@@ -346,7 +337,7 @@ namespace Airline
                 Console.Write("Your choise: ");
 
                 _menuManager.MenuHandler = ManageEditFlightsInfoMenu;
-                _menuManager.HandleExceptions();
+                _menuManager.CatchMenuExceptions();
 
                 InputOutputHelper.PrintColorText(_returnToMain, ConsoleColor.DarkGreen);
             }
@@ -467,18 +458,18 @@ namespace Airline
 
             Console.Write("\nPlease enter a flight number to edit: ");
             string flightNumber = Console.ReadLine();
-            Flight originalFlight = _airport.GetFlightByNumber(flightNumber);
-            if (originalFlight != null)
+            Flight actualFlight = _airport.GetFlightByNumber(flightNumber);
+            if (actualFlight != null)
             {
                 Console.WriteLine("\nActual flight information:");
-                InputOutputHelper.PrintColorText(originalFlight.ToString(), ConsoleColor.DarkCyan);
+                InputOutputHelper.PrintColorText(actualFlight.ToString(), ConsoleColor.DarkCyan);
 
                 Console.WriteLine("\nFollow the instruction to update the flight information:");
-                Flight editedFlight = CreateFlight();
+                Flight updatedFlight = CreateFlight();
 
-                _airport.EditFlight(originalFlight, editedFlight);
-                InputOutputHelper.PrintColorText($"\nFlight \"{editedFlight.Number}\" was successfully updated!", ConsoleColor.DarkCyan);
-                InputOutputHelper.PrintColorText(editedFlight.ToString(), ConsoleColor.DarkCyan);
+                _airport.EditFlight(actualFlight, updatedFlight);
+                InputOutputHelper.PrintColorText($"\nFlight \"{updatedFlight.Number}\" was successfully updated!", ConsoleColor.DarkCyan);
+                InputOutputHelper.PrintColorText(updatedFlight.ToString(), ConsoleColor.DarkCyan);
             }
             else Console.WriteLine($"\n{_noMatchesMessage}");
         }
@@ -501,7 +492,7 @@ namespace Airline
                 Console.Write("Your choise: ");
 
                 _menuManager.MenuHandler = ManageEditPassengersInfoMenu;
-                _menuManager.HandleExceptions();
+                _menuManager.CatchMenuExceptions();
 
                 InputOutputHelper.PrintColorText(_returnToMain, ConsoleColor.DarkGreen);
             }
@@ -626,7 +617,29 @@ namespace Airline
 
         private void EditPassenger()
         {
+            Console.Clear();
+            InputOutputHelper.PrintColorText("\n******** EDIT PASSENGER MENU ********", ConsoleColor.DarkCyan);
 
+            Console.Write("\nPlease enter a flight number: ");
+            string flightNumber = Console.ReadLine();
+            Flight flight = _airport.GetFlightByNumber(flightNumber);
+
+            Passenger actualPassenger = GetPassengerByPassport(flight);
+
+            if (flight != null && actualPassenger != null)
+            {
+                Console.WriteLine("\nActual passenger information:");
+                InputOutputHelper.PrintColorText($"Flight: {flight.Number}, {actualPassenger}", ConsoleColor.DarkCyan);
+
+                Console.WriteLine("\nUpdate an information about the passenger:");
+                Passenger updatedPassenger = CreatePassenger();
+
+                _airport.EditPassenger(flight, actualPassenger, updatedPassenger);
+
+                InputOutputHelper.PrintColorText($"\nPassenger information was successfully updated!\n", ConsoleColor.DarkCyan);
+                InputOutputHelper.PrintColorText(updatedPassenger.ToString(), ConsoleColor.DarkCyan);
+            }
+            else Console.WriteLine($"\n{_noMatchesMessage}");
         }
     }
 }

@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 namespace Airline
 {
     public delegate void MenuItemHandler();
-
     class Program
     {
         static MenuManager _menuManager = new MenuManager();
         static AirlineManager airlineManager = new AirlineManager();
+        static bool exit = true;
 
         static void Main(string[] args)
         {
@@ -20,10 +20,11 @@ namespace Airline
             Console.WindowWidth = 160;
             airlineManager.InitializeAirport();
 
-            do
+            while (exit)
             {
                 Console.Clear();
                 InputOutputHelper.PrintColorText("********** AIRLINE **********\n", ConsoleColor.DarkGreen);
+
                 Console.WriteLine(@"Welcome to airline main menu:
 
                 1. View all flights (without passengers);
@@ -31,15 +32,16 @@ namespace Airline
                 3. Search flights with low price;
                 4. Search passengers;
                 5. Add, delete, edit flights;
-                6. Add, delete, edit passengers.");
+                6. Add, delete, edit passengers.
+
+                Enter ""0"" to exit...");
                 Console.Write("\nPlease choose menu item number: ");
 
                 _menuManager.MenuHandler = ManageMainMenu;
-                _menuManager.HandleExceptions();
+                _menuManager.CatchMenuExceptions();
 
-                InputOutputHelper.PrintColorText("\nPress \"Esc\" to exit; press any key to return to the airline main menu\n", ConsoleColor.DarkGreen);
+                //InputOutputHelper.PrintColorText("\nPress \"Esc\" to exit; press any key to return to the airline main menu\n", ConsoleColor.DarkGreen);
             }
-            while (Console.ReadKey().Key != ConsoleKey.Escape);
         }
 
         static void ManageMainMenu()
@@ -52,7 +54,8 @@ namespace Airline
                         { 3, airlineManager.SearchFlightsWithLowPrice },
                         { 4, airlineManager.SearchPassengers },
                         { 5, airlineManager.EditFlightsInfo },
-                        { 6, airlineManager.EditPassengersInfo }
+                        { 6, airlineManager.EditPassengersInfo },
+                        { 0, new MenuItemHandler(() => exit = false) }
                     };
             _menuManager.MenuItemHandler = menuItems[index];
             _menuManager.CallMenuItem();

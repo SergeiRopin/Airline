@@ -17,7 +17,7 @@ namespace Airline
                 MenuItemHandler();
         }
 
-        public void HandleExceptions()
+        public void CatchMenuExceptions()
         {
             try
             {

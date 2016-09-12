@@ -8,7 +8,7 @@ namespace Airport
 {
     public enum SeatClass
     {
-        Economy,
+        Economy = 1,
         Business
     }
 }

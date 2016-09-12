@@ -36,13 +36,13 @@ namespace Airport
             return flight;
         }
 
-        public void EditFlight(Flight actualFlight, Flight editedFlight)
+        public void EditFlight(Flight actualFlight, Flight updatedFlight)
         {
-            if (actualFlight != null && editedFlight != null)
+            if (actualFlight != null && updatedFlight != null)
             {
                 int index = _flights.IndexOf(actualFlight);
                 if (index != -1)
-                    _flights[index] = editedFlight;
+                    _flights[index] = updatedFlight;
             }
         }
 
@@ -51,7 +51,7 @@ namespace Airport
             List<Passenger> passengers = flight.Passengers;
             return passengers;
         }
-                
+
         public void AddPassenger(Flight flight, Passenger passenger)
         {
             if (flight != null && passenger != null)
@@ -62,17 +62,21 @@ namespace Airport
         public void RemovePassenger(Flight flight, Passenger passenger)
         {
             if (flight != null)
-               _flights.Where(x => x == flight).FirstOrDefault(y => y.Passengers.Remove(passenger));
+                _flights.Where(x => x == flight).FirstOrDefault(y => y.Passengers.Remove(passenger));
         }
 
-        public void EditPassenger(Flight flight, Passenger actualPassenger, Passenger editedPassenger)
+        public void EditPassenger(Flight flight, Passenger actualPassenger, Passenger updatedPassenger)
         {
-            //if (actualPassenger != null && editedPassenger != null)
-            //{
-            //    int index = _flights.IndexOf(actualFlight);
-            //    if (index != -1)
-            //        _flights[index] = editedFlight;
-            //}
+            if (flight != null && actualPassenger != null && updatedPassenger != null)
+            {
+                int flightIndex = _flights.IndexOf(flight);
+                if (flightIndex != -1)
+                {
+                    int passengerIndex = flight.Passengers.IndexOf(actualPassenger);
+                    if (passengerIndex != -1)
+                        flight.Passengers[passengerIndex] = updatedPassenger;
+                }
+            }
         }
     }
 }
