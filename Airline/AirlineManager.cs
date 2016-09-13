@@ -117,13 +117,9 @@ namespace Airline
         }
 
         private void SearchFlightByNumber()
-        {
-            Console.Write("\nPlease enter a number of the flight: ");
-            string flightNumber = Console.ReadLine();
+        {           
+            Flight flight = RealizeGetFlightByNumber();
             InputOutputHelper.PrintColorText("\nResults of the search: ", ConsoleColor.DarkCyan);
-
-            // Print matching flights.
-            Flight flight = _airport.GetFlightByNumber(flightNumber);
             Console.WriteLine(flight);
 
             if (flight == null)
@@ -401,6 +397,14 @@ namespace Airline
             return createdFlight;
         }
 
+        private Flight RealizeGetFlightByNumber()
+        {
+            Console.Write("\nPlease enter a flight number: ");
+            string flightNumber = Console.ReadLine();
+            Flight flight = _airport.GetFlightByNumber(flightNumber);
+            return flight;
+        }
+
         private void AddFlight()
         {
             Console.Clear();
@@ -417,10 +421,7 @@ namespace Airline
             Console.Clear();
             InputOutputHelper.PrintColorText("\n******** DELETE FLIGHT MENU ********", ConsoleColor.DarkCyan);
 
-            Console.Write("\nPlease enter a flight number: ");
-            string flightNumber = Console.ReadLine();
-
-            Flight flight = _airport.GetFlightByNumber(flightNumber);
+            Flight flight = RealizeGetFlightByNumber();
             if (flight != null)
             {
                 Console.WriteLine("\n" + flight);
@@ -452,9 +453,7 @@ namespace Airline
             Console.Clear();
             InputOutputHelper.PrintColorText("\n******** EDIT FLIGHT MENU ********", ConsoleColor.DarkCyan);
 
-            Console.Write("\nPlease enter a flight number to edit: ");
-            string flightNumber = Console.ReadLine();
-            Flight actualFlight = _airport.GetFlightByNumber(flightNumber);
+            Flight actualFlight = RealizeGetFlightByNumber();
             if (actualFlight != null)
             {
                 Console.WriteLine("\nActual flight information:");
@@ -557,10 +556,8 @@ namespace Airline
         {
             Console.Clear();
             InputOutputHelper.PrintColorText("\n******** ADD A NEW PASSENGER MENU ********", ConsoleColor.DarkCyan);
-
-            Console.Write("\nPlease enter a flight number: ");
-            string flightNumber = Console.ReadLine();
-            Flight flight = _airport.GetFlightByNumber(flightNumber);
+            
+            Flight flight = RealizeGetFlightByNumber();
             if (flight != null)
             {
                 InputOutputHelper.PrintColorText("\nFill an information about passenger:", ConsoleColor.DarkCyan);
@@ -578,11 +575,8 @@ namespace Airline
         {
             Console.Clear();
             InputOutputHelper.PrintColorText("\n******** DELETE PASSENGER MENU ********", ConsoleColor.DarkCyan);
-
-            Console.Write("\nPlease enter a flight number: ");
-            string flightNumber = Console.ReadLine();
-            Flight flight = _airport.GetFlightByNumber(flightNumber);
-
+            
+            Flight flight = RealizeGetFlightByNumber();
             Passenger passenger = GetPassengerByPassport(flight);
 
             if (flight != null && passenger != null)
@@ -615,11 +609,8 @@ namespace Airline
         {
             Console.Clear();
             InputOutputHelper.PrintColorText("\n******** EDIT PASSENGER MENU ********", ConsoleColor.DarkCyan);
-
-            Console.Write("\nPlease enter a flight number: ");
-            string flightNumber = Console.ReadLine();
-            Flight flight = _airport.GetFlightByNumber(flightNumber);
-
+            
+            Flight flight = RealizeGetFlightByNumber();
             Passenger actualPassenger = GetPassengerByPassport(flight);
 
             if (flight != null && actualPassenger != null)
