@@ -117,7 +117,7 @@ namespace Airline
         }
 
         private void SearchFlightByNumber()
-        {           
+        {
             Flight flight = RealizeGetFlightByNumber();
             InputOutputHelper.PrintColorText("\nResults of the search: ", ConsoleColor.DarkCyan);
             Console.WriteLine(flight);
@@ -453,20 +453,56 @@ namespace Airline
             Console.Clear();
             InputOutputHelper.PrintColorText("\n******** EDIT FLIGHT MENU ********", ConsoleColor.DarkCyan);
 
-            Flight actualFlight = RealizeGetFlightByNumber();
-            if (actualFlight != null)
+            Flight flight = RealizeGetFlightByNumber();
+            if (flight != null)
             {
-                Console.WriteLine("\nActual flight information:");
-                InputOutputHelper.PrintColorText(actualFlight.ToString(), ConsoleColor.DarkCyan);
+                Console.WriteLine("\nActual fligth information:");
+                InputOutputHelper.PrintColorText(flight.ToString(), ConsoleColor.DarkCyan);
 
                 Console.WriteLine("\nFollow the instruction to update the flight information:");
-                Flight updatedFlight = CreateFlight();
 
-                _airport.EditFlight(actualFlight, updatedFlight);
-                InputOutputHelper.PrintColorText($"\nFlight \"{updatedFlight.Number}\" was successfully updated!", ConsoleColor.DarkCyan);
-                InputOutputHelper.PrintColorText(updatedFlight.ToString(), ConsoleColor.DarkCyan);
+                //Edit flight number
+                InputOutputHelper.PrintColorText($"\nActual number: {flight.Number}", ConsoleColor.DarkCyan);
+                Func<string> flightNumberHandler = CreateFlightNumber;
+                string flightNumber = EditFlightHelper(flightNumberHandler);
+
+                //Edit arrival/departure info.
+                InputOutputHelper.PrintColorText($"\nActual flight type: {flight.ArrivalDeparture}", ConsoleColor.DarkCyan);
+                Func<ArrivalDeparture> arrivalDepartureHandler = CreateArrivalDeparture;
+                var arrivalDeparture = EditFlightHelper(arrivalDepartureHandler);
+
+                //Edit city of departure
+                InputOutputHelper.PrintColorText($"\nActual departure city: {flight.CityFrom}", ConsoleColor.DarkCyan);
+                Func<string> cityFromHandler = CreateFlightNumber;
+
+
+
+                //Flight updatedFlight = new Flight();
             }
             else Console.WriteLine($"\n{_noMatchesMessage}");
+
+
+
+
+
+
+
+
+
+            //Flight actualFlight = RealizeGetFlightByNumber();
+            //if (actualFlight != null)
+            //{
+            //    Console.WriteLine("\nActual flight information:");
+            //    InputOutputHelper.PrintColorText(actualFlight.ToString(), ConsoleColor.DarkCyan);
+
+            //    Console.WriteLine("\nFollow the instruction to update the flight information:");
+            //    Flight updatedFlight = CreateFlight();
+
+            //    _airport.EditFlight(actualFlight, updatedFlight);
+            //    InputOutputHelper.PrintColorText($"\nFlight \"{updatedFlight.Number}\" was successfully updated!", ConsoleColor.DarkCyan);
+            //    InputOutputHelper.PrintColorText(updatedFlight.ToString(), ConsoleColor.DarkCyan);
+            //}
+            //else Console.WriteLine($"\n{_noMatchesMessage}");
         }
 
         /// <summary>
@@ -556,7 +592,7 @@ namespace Airline
         {
             Console.Clear();
             InputOutputHelper.PrintColorText("\n******** ADD A NEW PASSENGER MENU ********", ConsoleColor.DarkCyan);
-            
+
             Flight flight = RealizeGetFlightByNumber();
             if (flight != null)
             {
@@ -575,7 +611,7 @@ namespace Airline
         {
             Console.Clear();
             InputOutputHelper.PrintColorText("\n******** DELETE PASSENGER MENU ********", ConsoleColor.DarkCyan);
-            
+
             Flight flight = RealizeGetFlightByNumber();
             Passenger passenger = GetPassengerByPassport(flight);
 
@@ -609,7 +645,7 @@ namespace Airline
         {
             Console.Clear();
             InputOutputHelper.PrintColorText("\n******** EDIT PASSENGER MENU ********", ConsoleColor.DarkCyan);
-            
+
             Flight flight = RealizeGetFlightByNumber();
             Passenger actualPassenger = GetPassengerByPassport(flight);
 
@@ -627,6 +663,50 @@ namespace Airline
                 InputOutputHelper.PrintColorText(updatedPassenger.ToString(), ConsoleColor.DarkCyan);
             }
             else Console.WriteLine($"\n{_noMatchesMessage}");
+        }
+
+
+
+
+        private string CreateFlightNumber()
+        {
+            string flightNumber = InputOutputHelper.CheckStringInput("\nEnter a number of the flight: ");
+            return flightNumber;
+        }
+
+        private ArrivalDeparture CreateArrivalDeparture()
+        {
+            var arrivalDeparture = InputOutputHelper.CheckEnumInput<ArrivalDeparture>
+                (@"Enter a flight type. Choose a number from the following list:
+                1. Arrival
+                2. Departure");
+            return arrivalDeparture;
+        }
+
+
+        public T EditFlightHelper<T>(Func<T> flightHandler)
+        {
+            T output = default(T);
+            string key;
+            do
+            {
+                Console.Write("To change actual value press \"C\" button, to keep the default value press \"Enter\": ");
+                key = Console.ReadKey().Key.ToString().ToUpper();
+                switch (key)
+                {
+                    case "C":
+                        output = flightHandler.Invoke();
+                        InputOutputHelper.PrintColorText($"Information has been updated!", ConsoleColor.DarkCyan);
+                        break;
+                    case "ENTER":
+                        InputOutputHelper.PrintColorText("\nDefault information has been kept!", ConsoleColor.DarkCyan);
+                        break;
+                    default:
+                        InputOutputHelper.PrintColorText("\nPlease make a choise. \"C\" / \"Enter\": ", ConsoleColor.Red);
+                        break;
+                }
+            } while (key != "ENTER" & key != "C");
+            return output;
         }
     }
 }
