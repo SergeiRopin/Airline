@@ -128,8 +128,7 @@ namespace Airline
 
         private void SearchFlightByTime()
         {
-            Console.WriteLine("\nSpecify the time of a flight in the following format:");
-            DateTime flightTime = InputOutputHelper.CheckDateTimeInput();
+            DateTime flightTime = InputOutputHelper.CheckDateTimeInput("\nSpecify the time of a flight in the following format:");
 
             // Print matching flights.
             InputOutputHelper.PrintColorText("\nResults of the search: ", ConsoleColor.DarkCyan);
@@ -390,8 +389,8 @@ namespace Airline
                 9. InFlight
                 10. Boarding");
 
-            Console.WriteLine("\nEnter a flight time in the following format: ");
-            DateTime flightTime = InputOutputHelper.CheckDateTimeInput();
+            //Console.WriteLine("\nEnter a flight time in the following format: ");
+            DateTime flightTime = InputOutputHelper.CheckDateTimeInput("\nEnter a flight time in the following format: ");
 
             Flight createdFlight = new Flight(arrivalDeparture, number, cityFrom, cityTo, airline, terminal, gate, status, flightTime, new List<Passenger>());
             return createdFlight;
@@ -461,23 +460,74 @@ namespace Airline
 
                 Console.WriteLine("\nFollow the instruction to update the flight information:");
 
-                //Edit flight number
-                InputOutputHelper.PrintColorText($"\nActual number: {flight.Number}", ConsoleColor.DarkCyan);
-                Func<string> flightNumberHandler = CreateFlightNumber;
-                string flightNumber = EditFlightHelper(flightNumberHandler);
+                //Edit flight number.
+                InputOutputHelper.PrintColorText($"\nActual flight number: {flight.Number}", ConsoleColor.DarkCyan);
+                Func<string, string> flightNumberHandler = InputOutputHelper.CheckStringInput;
+                string number = EditFlightHelper(flightNumberHandler, "\nEnter a number of the flight: ");
 
                 //Edit arrival/departure info.
                 InputOutputHelper.PrintColorText($"\nActual flight type: {flight.ArrivalDeparture}", ConsoleColor.DarkCyan);
-                Func<ArrivalDeparture> arrivalDepartureHandler = CreateArrivalDeparture;
-                var arrivalDeparture = EditFlightHelper(arrivalDepartureHandler);
+                Func<string, ArrivalDeparture> arrivalDepartureHandler = InputOutputHelper.CheckEnumInput<ArrivalDeparture>;
+                string arrivalDepartureMessage = "\n" + @"Enter a flight type. Choose a number from the following list:
+                1. Arrival
+                2. Departure";
+                var arrivalDeparture = EditFlightHelper(arrivalDepartureHandler, arrivalDepartureMessage);
 
-                //Edit city of departure
+                //Edit city of departure.
                 InputOutputHelper.PrintColorText($"\nActual departure city: {flight.CityFrom}", ConsoleColor.DarkCyan);
-                Func<string> cityFromHandler = CreateFlightNumber;
+                Func<string, string> cityFromHandler = InputOutputHelper.CheckStringInput;
+                string cityFrom = EditFlightHelper(cityFromHandler, "\nEnter a city of departure: ");
 
+                //Edit city of departure.
+                InputOutputHelper.PrintColorText($"\nActual arrival city: {flight.CityTo}", ConsoleColor.DarkCyan);
+                Func<string, string> cityToHandler = InputOutputHelper.CheckStringInput;
+                string cityTo = EditFlightHelper(cityToHandler, "\nEnter a city of arrival: ");
 
+                //Edit airline.
+                InputOutputHelper.PrintColorText($"\nActual airline: {flight.Airline}", ConsoleColor.DarkCyan);
+                Func<string, string> airlineHandler = InputOutputHelper.CheckStringInput;
+                string airline = EditFlightHelper(airlineHandler, "\nEnter an airline: ");
 
-                //Flight updatedFlight = new Flight();
+                //Edit terminal.
+                InputOutputHelper.PrintColorText($"\nActual terminal: {flight.Terminal}", ConsoleColor.DarkCyan);
+                Func<string, Terminal> terminalHandler = InputOutputHelper.CheckEnumInput<Terminal>;
+                string terminalMessage = "\n" + @"Enter a terminal of the flight. Choose a number from the following list:
+                1. A
+                2. B";
+                var terminal = EditFlightHelper(terminalHandler, terminalMessage);
+
+                //Edit gate.
+                InputOutputHelper.PrintColorText($"\nActual gate: {flight.Gate}", ConsoleColor.DarkCyan);
+                Func<string, Gate> gateHandler = InputOutputHelper.CheckEnumInput<Gate>;
+                string gateMessage = "\n" + @"Enter a gate of the flight. Choose a number from the following list:
+                1. A1
+                2. A2
+                3. A3
+                4. A4";
+                var gate = EditFlightHelper(gateHandler, gateMessage);
+
+                //Edit flight status.
+                InputOutputHelper.PrintColorText($"\nActual flight status: {flight.Status}", ConsoleColor.DarkCyan);
+                Func<string, FlightStatus> statusHandler = InputOutputHelper.CheckEnumInput<FlightStatus>;
+                string statusMessage = "\n" + @"Enter a flight status. Choose a number from the following list:
+                1. CheckIn
+                2. GateClosed
+                3. Arrived
+                4. DeparturedAt
+                5. Unknown
+                6. Canceled
+                7. ExpectedAt
+                8. Delayed
+                9. InFlight
+                10. Boarding";
+                var status = EditFlightHelper(statusHandler, statusMessage);
+
+                //Edit fligth time.
+                InputOutputHelper.PrintColorText($"\nActual flight date and time: {flight.DateTime}", ConsoleColor.DarkCyan);
+                Func<string, DateTime> dateTimeHandler = InputOutputHelper.CheckDateTimeInput;
+                DateTime dateTime = EditFlightHelper(dateTimeHandler, "\nEnter a flight time in the following format: ");
+                
+                Flight updatedFlight = new Flight(arrivalDeparture, number,  cityFrom, cityTo, airline, terminal, gate, status, dateTime, new List<Passenger>());
             }
             else Console.WriteLine($"\n{_noMatchesMessage}");
 
@@ -558,8 +608,8 @@ namespace Airline
                 1. Male
                 2. Female");
 
-            Console.WriteLine("\nEnter a passenger birthday: ");
-            DateTime birthday = InputOutputHelper.CheckDateTimeInput();
+            //Console.WriteLine("\nEnter a passenger birthday: ");
+            DateTime birthday = InputOutputHelper.CheckDateTimeInput("\nEnter a passenger birthday: ");
 
             InputOutputHelper.PrintColorText("\nPassenger information successfully filled. Enter a ticket information.", ConsoleColor.DarkCyan);
 
@@ -668,23 +718,10 @@ namespace Airline
 
 
 
-        private string CreateFlightNumber()
-        {
-            string flightNumber = InputOutputHelper.CheckStringInput("\nEnter a number of the flight: ");
-            return flightNumber;
-        }
-
-        private ArrivalDeparture CreateArrivalDeparture()
-        {
-            var arrivalDeparture = InputOutputHelper.CheckEnumInput<ArrivalDeparture>
-                (@"Enter a flight type. Choose a number from the following list:
-                1. Arrival
-                2. Departure");
-            return arrivalDeparture;
-        }
 
 
-        public T EditFlightHelper<T>(Func<T> flightHandler)
+
+        public T EditFlightHelper<T>(Func<string, T> flightHandler, string infoMessage)
         {
             T output = default(T);
             string key;
@@ -695,7 +732,7 @@ namespace Airline
                 switch (key)
                 {
                     case "C":
-                        output = flightHandler.Invoke();
+                        output = flightHandler.Invoke(infoMessage);
                         InputOutputHelper.PrintColorText($"Information has been updated!", ConsoleColor.DarkCyan);
                         break;
                     case "ENTER":
