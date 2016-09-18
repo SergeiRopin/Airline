@@ -46,6 +46,7 @@
     <Compile Include="Flight\FlightStatus.cs" />
     <Compile Include="Flight\Gate.cs" />
     <Compile Include="Flight\Terminal.cs" />
+    <Compile Include="IEntity.cs" />
     <Compile Include="Passenger\Passenger.cs" />
     <Compile Include="Passenger\SeatClass.cs" />
     <Compile Include="Passenger\Sex.cs" />

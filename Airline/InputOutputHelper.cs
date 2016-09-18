@@ -45,7 +45,7 @@ namespace Airline
                 }
                 catch (Exception)
                 {
-                    PrintColorText("\nWrong value has been entered! Please choose a number from the list\n", ConsoleColor.Red);
+                    PrintColorText("\nWrong value has been entered! Please choose a number from the list!", ConsoleColor.Red);
                     failure = true;
                 }
             }
@@ -53,38 +53,16 @@ namespace Airline
             return input;
         }
 
-        public static int CheckInt32Input(string infoMessage)
+        public static T CheckValueTypeInput<T>(string infoMessage) where T : struct
         {
-            int input = default(int);
+            T input = default(T);
             bool failure = false;
             do
             {
                 try
                 {
                     Console.Write(infoMessage);
-                    input = (int)uint.Parse(Console.ReadLine());
-                    failure = false;
-                }
-                catch (Exception)
-                {
-                    PrintColorText("\nWrong value has been entered. Please check the input!\n", ConsoleColor.Red);
-                    failure = true;
-                }
-            }
-            while (failure);
-            return input;
-        }
-
-        public static decimal CheckDecimalInput(string infoMessage)
-        {
-            decimal input = default(decimal);
-            bool failure = false;
-            do
-            {
-                try
-                {
-                    Console.Write(infoMessage);
-                    input = decimal.Parse(Console.ReadLine());
+                    input = (T)Convert.ChangeType(Console.ReadLine(), typeof(T));
                     failure = false;
                 }
                 catch (Exception)
@@ -106,11 +84,11 @@ namespace Airline
                 try
                 {
                     Console.Write(infoMessage);
-                    int year = CheckInt32Input("\nYear: ");
-                    int month = CheckInt32Input("Month (from 01 to 12): ");
-                    int day = CheckInt32Input("Day (from 01 to 31): ");
-                    int hours = CheckInt32Input("Hours (from 0 to 23): ");
-                    int minutes = CheckInt32Input("Minutes (from 0 to 59): ");
+                    int year = CheckValueTypeInput<int>("\nYear: ");
+                    int month = CheckValueTypeInput<int>("Month (from 01 to 12): ");
+                    int day = CheckValueTypeInput<int>("Day (from 01 to 31): ");
+                    int hours = CheckValueTypeInput<int>("Hours (from 0 to 23): ");
+                    int minutes = CheckValueTypeInput<int>("Minutes (from 0 to 59): ");
 
                     flightTime = new DateTime(year, month, day, hours, minutes, 00);
                     failure = false;
@@ -124,6 +102,32 @@ namespace Airline
             }
             while (failure);
             return flightTime;
+        }
+
+
+
+        public static T CheckEditedEntityToDefaultProperties<T>(T actual, T updated) where T : class
+        {
+            T updatedEntity = updated;
+            if (actual != null && updated != null)
+            {
+                Type type = typeof(T);
+                var properties = type.GetProperties();
+                for (int i = 0; i < properties.Length; i++)
+                {
+                    var valueType = properties[i].PropertyType.IsValueType;
+                    object actualValue = type.GetProperty(properties[i].Name).GetValue(actual);
+                    object updatedValue = type.GetProperty(properties[i].Name).GetValue(updated);
+                    object o = updatedEntity.GetType().GetProperty(properties[i].Name).GetValue(updated);
+
+                    if (valueType)
+                    {
+                        o = actualValue;
+                        updatedValue = actualValue;
+                    }
+                }
+            }
+            return updated;
         }
     }
 }

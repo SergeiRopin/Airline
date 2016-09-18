@@ -47,15 +47,15 @@ namespace Airline
             IDictionary<int, Action> menuItems = new Dictionary<int, Action>
                     {
                         { 1, airlineManager.ViewAllFlights },
-                        { 2, airlineManager.SearchFlights },
+                        { 2, _menuManager.SearchFlights },
                         { 3, airlineManager.SearchFlightsWithLowPrice },
-                        { 4, airlineManager.SearchPassengers },
-                        { 5, airlineManager.EditFlightsInfo },
-                        { 6, airlineManager.EditPassengersInfo },
+                        { 4, _menuManager.SearchPassengers },
+                        { 5, _menuManager.EditFlights },
+                        { 6, _menuManager.EditPassengers },
                         { 0, new Action(() => exit = false) }
                     };
             Action menuItemHandler = menuItems[index];
-            _menuManager.CallMenuItem(menuItemHandler);
+            menuItemHandler();
         }
     }
 }

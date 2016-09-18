@@ -8,12 +8,25 @@ namespace Airport
 {
     public class AirportManager
     {
-        private IList<Flight> _flights;
+        readonly static AirportManager s_instance = new AirportManager();
+        
+        public static AirportManager Instance
+        {
+            get
+            {
+                return s_instance;
+            }
+        }
 
-        public AirportManager()
+        private AirportManager()
         {
             _flights = new List<Flight>();
         }
+
+        /// <summary>
+        /// Collection of flights
+        /// </summary>
+        private IList<Flight> _flights;
 
         public void AddFlight(Flight flight)
         {
