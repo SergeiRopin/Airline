@@ -10,14 +10,14 @@ namespace Airline.TemplateMethod
 {
     class FlightCreateEntityManager : CreateEntityManager<IEntity>
     {
-        protected override bool AskQuestion()
+        protected override bool AskQuestionToCreate()
         {
             Console.Write("\nDo you want to create a new flight? (Y/N): ");
             var answer = Console.ReadLine();
             return string.Equals(answer, "y", StringComparison.OrdinalIgnoreCase);
         }
 
-        protected override string ReadAnswer()
+        protected override string ReadAnswerToCreate()
         {
             var answer = new StringBuilder();
 
@@ -72,88 +72,88 @@ namespace Airline.TemplateMethod
                 Convert.ToDateTime(parameters[8]), new List<Passenger>());
         }
 
-        protected override bool AskEditQuestion()
+        protected override bool AskQuestionToEdit()
         {
             Console.Write("\nDo you want to edit the flight? (Y/N): ");
             var answer = Console.ReadLine();
             return string.Equals(answer, "y", StringComparison.OrdinalIgnoreCase);
         }
 
-        protected override string ReadEditAnswer(IEntity actualFlight)
+        protected override string ReadAnswerToEdit(IEntity actualFlight)
         {
-            var editEntityHelper = new EditEntityHelper();
+            var entityHelper = new CreateEditEntityHelper();
             var answer = new StringBuilder();
 
             //Edit arrival/departure info.
             var actualArrivalDeparture = actualFlight.GetType().GetProperty("ArrivalDeparture").GetValue(actualFlight);
             InputOutputHelper.PrintColorText($"\nActual flight type: {actualArrivalDeparture}", ConsoleColor.DarkCyan);
             Func<ArrivalDeparture> arrivalDepartureHandler = CreateArrivalDeparture;
-            var arrivalDeparture = editEntityHelper.EditEntity(arrivalDepartureHandler);
-            arrivalDeparture = editEntityHelper.UpdatePropertyOrKeepDefault((ArrivalDeparture)actualArrivalDeparture, arrivalDeparture);
+            var arrivalDeparture = entityHelper.AskEditEntity(arrivalDepartureHandler);
+            arrivalDeparture = entityHelper.UpdateEntityOrKeepDefault((ArrivalDeparture)actualArrivalDeparture, arrivalDeparture);
             answer.Append(AddSeparator(arrivalDeparture.ToString()));
 
             //Edit flight number.
             var actualNumber = actualFlight.GetType().GetProperty("Number").GetValue(actualFlight);
             InputOutputHelper.PrintColorText($"\nActual flight number: {actualNumber}", ConsoleColor.DarkCyan);
             Func<string> flightNumberHandler = CreateFlightNumber;
-            string number = editEntityHelper.EditEntity(flightNumberHandler);
-            number = editEntityHelper.UpdatePropertyOrKeepDefault((string)actualNumber, number);
+            string number = entityHelper.AskEditEntity(flightNumberHandler);
+            number = entityHelper.UpdateEntityOrKeepDefault((string)actualNumber, number);
             answer.Append(AddSeparator(number));
 
             //Edit city of departure.
             var actualCityFrom = actualFlight.GetType().GetProperty("CityFrom").GetValue(actualFlight);
             InputOutputHelper.PrintColorText($"\nActual departure city: {actualCityFrom}", ConsoleColor.DarkCyan);
             Func<string> cityFromHandler = CreateDepartureCity;
-            string cityFrom = editEntityHelper.EditEntity(cityFromHandler);
-            cityFrom = editEntityHelper.UpdatePropertyOrKeepDefault((string)actualCityFrom, cityFrom);
+            string cityFrom = entityHelper.AskEditEntity(cityFromHandler);
+            cityFrom = entityHelper.UpdateEntityOrKeepDefault((string)actualCityFrom, cityFrom);
             answer.Append(AddSeparator(cityFrom));
 
             //Edit city of arrival.
             var actualCityTo = actualFlight.GetType().GetProperty("CityTo").GetValue(actualFlight);
             InputOutputHelper.PrintColorText($"\nActual arrival city: {actualCityTo}", ConsoleColor.DarkCyan);
             Func<string> cityToHandler = CreateArrivalCity;
-            string cityTo = editEntityHelper.EditEntity(cityToHandler);
-            cityTo = editEntityHelper.UpdatePropertyOrKeepDefault((string)actualCityTo, cityTo);
+            string cityTo = entityHelper.AskEditEntity(cityToHandler);
+            cityTo = entityHelper.UpdateEntityOrKeepDefault((string)actualCityTo, cityTo);
             answer.Append(AddSeparator(cityTo));
 
             //Edit airline.
             var actualAirline = actualFlight.GetType().GetProperty("Airline").GetValue(actualFlight);
             InputOutputHelper.PrintColorText($"\nActual airline: {actualAirline}", ConsoleColor.DarkCyan);
             Func<string> airlineHandler = CreateAirline;
-            string airline = editEntityHelper.EditEntity(airlineHandler);
-            airline = editEntityHelper.UpdatePropertyOrKeepDefault((string)actualAirline, airline);
+            string airline = entityHelper.AskEditEntity(airlineHandler);
+            airline = entityHelper.UpdateEntityOrKeepDefault((string)actualAirline, airline);
             answer.Append(AddSeparator(airline));
 
             //Edit terminal.
             var actualTerminal = actualFlight.GetType().GetProperty("Terminal").GetValue(actualFlight);
             InputOutputHelper.PrintColorText($"\nActual terminal: {actualTerminal}", ConsoleColor.DarkCyan);
             Func<Terminal> terminalHandler = CreateTerminal;
-            var terminal = editEntityHelper.EditEntity(terminalHandler);
-            terminal = editEntityHelper.UpdatePropertyOrKeepDefault((Terminal)actualTerminal, terminal);
+            var terminal = entityHelper.AskEditEntity(terminalHandler);
+            terminal = entityHelper.UpdateEntityOrKeepDefault((Terminal)actualTerminal, terminal);
             answer.Append(AddSeparator(terminal.ToString()));
 
             //Edit gate.
             var actualGate = actualFlight.GetType().GetProperty("Gate").GetValue(actualFlight);
             InputOutputHelper.PrintColorText($"\nActual gate: {actualGate}", ConsoleColor.DarkCyan);
             Func<Gate> gateHandler = CreateGate;
-            var gate = editEntityHelper.EditEntity(gateHandler);
-            gate = editEntityHelper.UpdatePropertyOrKeepDefault((Gate)actualGate, gate);
+            var gate = entityHelper.AskEditEntity(gateHandler);
+            gate = entityHelper.UpdateEntityOrKeepDefault((Gate)actualGate, gate);
             answer.Append(AddSeparator(gate.ToString()));
 
             //Edit flight status.
             var actualStatus = actualFlight.GetType().GetProperty("Status").GetValue(actualFlight);
             InputOutputHelper.PrintColorText($"\nActual flight status: {actualStatus}", ConsoleColor.DarkCyan);
             Func<FlightStatus> statusHandler = CreateFlightStatus;
-            var status = editEntityHelper.EditEntity(statusHandler);
-            status = editEntityHelper.UpdatePropertyOrKeepDefault((FlightStatus)actualStatus, status);
+            var status = entityHelper.AskEditEntity(statusHandler);
+            status = entityHelper.UpdateEntityOrKeepDefault((FlightStatus)actualStatus, status);
             answer.Append(AddSeparator(status.ToString()));
 
             //Edit fligth time.
             var actualFlightTime = actualFlight.GetType().GetProperty("DateTime").GetValue(actualFlight);
             InputOutputHelper.PrintColorText($"\nActual flight date and time: {actualFlightTime}", ConsoleColor.DarkCyan);
             Func<DateTime> timeHandler = CreateFlightTime;
-            DateTime flightTime = editEntityHelper.EditEntity(timeHandler);
-            flightTime = editEntityHelper.UpdatePropertyOrKeepDefault((DateTime)actualFlightTime, flightTime);
+            DateTime flightTime = entityHelper.AskEditEntity(timeHandler);
+            flightTime = entityHelper.UpdateEntityOrKeepDefault((DateTime)actualFlightTime, flightTime);
             answer.Append(flightTime.ToString());
 
             return answer.ToString();
@@ -163,7 +163,7 @@ namespace Airline.TemplateMethod
 
         private ArrivalDeparture CreateArrivalDeparture()
         {
-            var arrivalDeparture = InputOutputHelper.CheckEnumInput<ArrivalDeparture>
+            var arrivalDeparture = InputOutputHelper.CreateEnum<ArrivalDeparture>
                 ("\n" + @"Enter a flight type. Choose a number from the following list:
                 1. Arrival
                 2. Departure");
@@ -172,31 +172,31 @@ namespace Airline.TemplateMethod
 
         private string CreateFlightNumber()
         {
-            string number = InputOutputHelper.CheckStringInput("\nEnter a number of the flight: ");
+            string number = InputOutputHelper.CreateString("\nEnter a number of the flight: ");
             return number;
         }
 
         private string CreateDepartureCity()
         {
-            string cityFrom = InputOutputHelper.CheckStringInput("\nEnter a city of departure: ");
+            string cityFrom = InputOutputHelper.CreateString("\nEnter a city of departure: ");
             return cityFrom;
         }
 
         private string CreateArrivalCity()
         {
-            string cityTo = InputOutputHelper.CheckStringInput("\nEnter a city of arrival: ");
+            string cityTo = InputOutputHelper.CreateString("\nEnter a city of arrival: ");
             return cityTo;
         }
 
         private string CreateAirline()
         {
-            string airline = InputOutputHelper.CheckStringInput("\nEnter an airline: ");
+            string airline = InputOutputHelper.CreateString("\nEnter an airline: ");
             return airline;
         }
 
         private Terminal CreateTerminal()
         {
-            var terminal = InputOutputHelper.CheckEnumInput<Terminal>("\n" + @"Enter a terminal of the flight. Choose a number from the following list:
+            var terminal = InputOutputHelper.CreateEnum<Terminal>("\n" + @"Enter a terminal of the flight. Choose a number from the following list:
                 1. A
                 2. B");
             return terminal;
@@ -204,7 +204,7 @@ namespace Airline.TemplateMethod
 
         private Gate CreateGate()
         {
-            var gate = InputOutputHelper.CheckEnumInput<Gate>("\n" + @"Enter a gate of the flight. Choose a number from the following list:
+            var gate = InputOutputHelper.CreateEnum<Gate>("\n" + @"Enter a gate of the flight. Choose a number from the following list:
                 1. A1
                 2. A2
                 3. A3
@@ -214,7 +214,7 @@ namespace Airline.TemplateMethod
 
         private FlightStatus CreateFlightStatus()
         {
-            var status = InputOutputHelper.CheckEnumInput<FlightStatus>("\n" + @"Enter a flight status. Choose a number from the following list:
+            var status = InputOutputHelper.CreateEnum<FlightStatus>("\n" + @"Enter a flight status. Choose a number from the following list:
                 1. CheckIn
                 2. GateClosed
                 3. Arrived
@@ -230,7 +230,7 @@ namespace Airline.TemplateMethod
 
         private DateTime CreateFlightTime()
         {
-            DateTime flightTime = InputOutputHelper.CheckDateTimeInput("\nEnter a flight time in the following format: ");
+            DateTime flightTime = InputOutputHelper.CreateDateTime("\nEnter a flight time in the following format: ");
             return flightTime;
         }
         #endregion

@@ -43,18 +43,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CreateEntityTemplateMethod\CreateEntityManager.cs" />
-    <Compile Include="CreateEntityTemplateMethod\EditEntityHelper.cs" />
+    <Compile Include="CreateEntityTemplateMethod\TemplateMethod\CreateEntityManager.cs" />
+    <Compile Include="CreateEntityTemplateMethod\CreateEditEntityHelper.cs" />
+    <Compile Include="CreateEntityTemplateMethod\TemplateMethod\EntityFactory.cs" />
     <Compile Include="InputOutputHelper.cs" />
     <Compile Include="AirlineManager.cs" />
     <Compile Include="MenuManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CreateEntityTemplateMethod\CreateEntityTemplate.cs" />
+    <Compile Include="CreateEntityTemplateMethod\TemplateMethod\CreateEntityTemplate.cs" />
     <Compile Include="CreateEntityTemplateMethod\Exceptions\EntityCreationCanceledException.cs" />
     <Compile Include="CreateEntityTemplateMethod\Exceptions\InvalidEntityInputException.cs" />
-    <Compile Include="CreateEntityTemplateMethod\PassengerCreateEntityManager.cs" />
-    <Compile Include="CreateEntityTemplateMethod\FlightCreateEntityManager.cs" />
+    <Compile Include="CreateEntityTemplateMethod\TemplateMethod\PassengerCreateEntityManager.cs" />
+    <Compile Include="CreateEntityTemplateMethod\TemplateMethod\FlightCreateEntityManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

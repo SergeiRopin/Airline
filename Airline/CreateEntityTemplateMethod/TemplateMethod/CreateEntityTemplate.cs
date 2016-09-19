@@ -11,18 +11,9 @@ namespace Airline.TemplateMethod
     {
         public IEntity CreateEntity(Type type)
         {
+            EntityFactory entityFactory = new EntityFactory();
             IEntity entity = null;
-            CreateEntityManager<IEntity> createEntityManager = null;  
-
-            if (type == typeof(Flight))
-            {
-                createEntityManager = new FlightCreateEntityManager(); 
-            }
-            else if (type == typeof(Passenger))
-            {
-                createEntityManager = new PassengerCreateEntityManager(); 
-            }
-
+            var createEntityManager = entityFactory.CreateEntityManager(type);
             do
             {
                 try
@@ -46,18 +37,9 @@ namespace Airline.TemplateMethod
 
         public IEntity EditEntity(Type type, IEntity actualEntity)
         {
+            EntityFactory entityFactory = new EntityFactory();
             IEntity entity = null;
-            CreateEntityManager<IEntity> createEntityManager = null;
-
-            if (type == typeof(Flight))
-            {
-                createEntityManager = new FlightCreateEntityManager();
-            }
-            else if (type == typeof(Passenger))
-            {
-                createEntityManager = new PassengerCreateEntityManager();
-            }
-
+            var createEntityManager = entityFactory.CreateEntityManager(type);
             do
             {
                 try

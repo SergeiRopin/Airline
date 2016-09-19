@@ -15,7 +15,7 @@ namespace Airline
             Console.ResetColor();
         }
 
-        public static string CheckStringInput(string infoMessage)
+        public static string CreateString(string infoMessage)
         {
             string input = null;
             do
@@ -27,7 +27,7 @@ namespace Airline
             return input;
         }
 
-        public static T CheckEnumInput<T>(string infoMessage)
+        public static T CreateEnum<T>(string infoMessage)
         {
             bool failure;
             T input = default(T);
@@ -53,7 +53,7 @@ namespace Airline
             return input;
         }
 
-        public static T CheckValueTypeInput<T>(string infoMessage) where T : struct
+        public static T CreateValueType<T>(string infoMessage) where T : struct
         {
             T input = default(T);
             bool failure = false;
@@ -75,7 +75,7 @@ namespace Airline
             return input;
         }
 
-        public static DateTime CheckDateTimeInput(string infoMessage)
+        public static DateTime CreateDateTime(string infoMessage)
         {
             DateTime flightTime = default(DateTime);
             bool failure = false;
@@ -84,11 +84,11 @@ namespace Airline
                 try
                 {
                     Console.Write(infoMessage);
-                    int year = CheckValueTypeInput<int>("\nYear: ");
-                    int month = CheckValueTypeInput<int>("Month (from 01 to 12): ");
-                    int day = CheckValueTypeInput<int>("Day (from 01 to 31): ");
-                    int hours = CheckValueTypeInput<int>("Hours (from 0 to 23): ");
-                    int minutes = CheckValueTypeInput<int>("Minutes (from 0 to 59): ");
+                    int year = CreateValueType<int>("\nYear: ");
+                    int month = CreateValueType<int>("Month (from 01 to 12): ");
+                    int day = CreateValueType<int>("Day (from 01 to 31): ");
+                    int hours = CreateValueType<int>("Hours (from 0 to 23): ");
+                    int minutes = CreateValueType<int>("Minutes (from 0 to 59): ");
 
                     flightTime = new DateTime(year, month, day, hours, minutes, 00);
                     failure = false;

@@ -15,7 +15,6 @@ namespace Airline
         private AirportManager _airport = AirportManager.Instance;
 
         private string _noMatchesMessage = "No matches found!";
-        private string _returnToMainMenu = "\nPress \"Space\" to return to the airline main menu; press any key to continue with the current menu...";
 
         public void InitializeAirport()
         {
@@ -50,8 +49,7 @@ namespace Airline
         /// </summary>
         public void ViewAllFlights()
         {
-            Console.Clear();
-            InputOutputHelper.PrintColorText("\n******** VIEW FLIGHTS MENU ********", ConsoleColor.DarkCyan);
+            InputOutputHelper.PrintColorText("\n******** VIEW FLIGHTS CONSOLE MENU ********", ConsoleColor.DarkCyan);
 
             // Print arrivals.
             InputOutputHelper.PrintColorText("\nARRIVAL FLIGHTS:", ConsoleColor.DarkCyan);
@@ -72,9 +70,6 @@ namespace Airline
                     Console.WriteLine(x);
                 }
             });
-
-            InputOutputHelper.PrintColorText("\nPress any key to continue...", ConsoleColor.DarkCyan);
-            Console.ReadKey();
         }
 
 
@@ -90,7 +85,7 @@ namespace Airline
 
         public void SearchFlightByTime()
         {
-            DateTime flightTime = InputOutputHelper.CheckDateTimeInput("\nSpecify the time of a flight in the following format:");
+            DateTime flightTime = InputOutputHelper.CreateDateTime("\nSpecify the time of a flight in the following format:");
 
             // Print matching flights.
             InputOutputHelper.PrintColorText("\nResults of the search: ", ConsoleColor.DarkCyan);
@@ -145,45 +140,38 @@ namespace Airline
         /// <summary>
         /// Search all flights with the price of economy ticket lower than user input
         /// </summary>
-        public void SearchFlightsWithLowPrice()
+        public void SearchCheapFlights()
         {
-            do
+            InputOutputHelper.PrintColorText("\n******** SEARCH CHEAP FLIGHTS CONSOLE MENU ********", ConsoleColor.DarkCyan);
+
+            decimal priceLimit = InputOutputHelper.CreateValueType<decimal>($"\nPlease enter a limit of the flight price (dollars): $");
+            InputOutputHelper.PrintColorText("\nResults of the search: ", ConsoleColor.DarkCyan);
+
+            HashSet<Flight> economyFlights = new HashSet<Flight>();
+            int temp = 0;
+            _airport.GetAllFlights().ToList()
+            .ForEach(x => x.Passengers
+            .ForEach(y =>
             {
-                Console.Clear();
-                InputOutputHelper.PrintColorText("\n******** SEARCH FLIGHTS WITH THE LOWER PRICE MENU ********", ConsoleColor.DarkCyan);
-
-                decimal priceLimit = InputOutputHelper.CheckValueTypeInput<decimal>($"\nPlease enter a limit of the flight price (dollars): $");
-                InputOutputHelper.PrintColorText("\nResults of the search: ", ConsoleColor.DarkCyan);
-
-                HashSet<Flight> economyFlights = new HashSet<Flight>();
-                int temp = 0;
-                _airport.GetAllFlights().ToList()
-                .ForEach(x => x.Passengers
-                .ForEach(y =>
+                if (priceLimit >= y.Ticket.Price && y.Ticket.SeatClass == SeatClass.Economy)
                 {
-                    if (priceLimit >= y.Ticket.Price && y.Ticket.SeatClass == SeatClass.Economy)
+                    bool isAdded = economyFlights.Add(x);
+                    if (isAdded)
                     {
-                        bool isAdded = economyFlights.Add(x);
-                        if (isAdded)
-                        {
-                            Console.WriteLine($@"{x}, ");
-                            Console.WriteLine($"{y.Ticket}\n");
-                        }
-                        temp++;
+                        Console.WriteLine($@"{x}, ");
+                        Console.WriteLine($"{y.Ticket}\n");
                     }
-                }));
-                if (temp == 0)
-                    Console.WriteLine(_noMatchesMessage);
-
-                InputOutputHelper.PrintColorText(_returnToMainMenu, ConsoleColor.DarkGreen);
-            }
-            while (Console.ReadKey().Key != ConsoleKey.Spacebar);
+                    temp++;
+                }
+            }));
+            if (temp == 0)
+                Console.WriteLine(_noMatchesMessage);
         }
 
 
         public void SearchPassengerByName()
         {
-            string name = InputOutputHelper.CheckStringInput("\nPlease enter a name of the passenger: ");
+            string name = InputOutputHelper.CreateString("\nPlease enter a name of the passenger: ");
             InputOutputHelper.PrintColorText("\nResults of the search: ", ConsoleColor.DarkCyan);
 
             // Print matching passengers.
@@ -217,7 +205,7 @@ namespace Airline
 
         public void SearchPassengerByPassport()
         {
-            string passport = InputOutputHelper.CheckStringInput("\nPlease enter a passport of the passenger: ");
+            string passport = InputOutputHelper.CreateString("\nPlease enter a passport of the passenger: ");
             InputOutputHelper.PrintColorText("\nResults of the search: ", ConsoleColor.DarkCyan);
 
             // Print matching passengers.
@@ -248,35 +236,12 @@ namespace Airline
             return flight;
         }
 
-        /// <summary>
-        /// Creates entities using template method
-        /// </summary>
-        /// <returns>new entity (Flight / Passenger)</returns>
-        private T CreateEntity<T>()
-        {
-            CreateEntityTemplate createEntityTemplate = new CreateEntityTemplate();
-            IEntity entity = createEntityTemplate.CreateEntity(typeof(T));
-            return (T)entity;
-        }
-
-        /// <summary>
-        /// Edits entities using template method
-        /// </summary>
-        /// <param name="actualEntity">entity to edit</param>
-        /// <returns>updated entity (Flight / Passenger)</returns>
-        private T EditEntity<T>(IEntity actualEntity)
-        {
-            CreateEntityTemplate createEntityTemplate = new CreateEntityTemplate();
-            IEntity entity = createEntityTemplate.EditEntity(typeof(T), actualEntity);
-            return (T)entity;
-        }
-
         public void AddFlight()
         {
-            Console.Clear();
-            InputOutputHelper.PrintColorText("\n******** ADD A NEW FLIGHT MENU ********", ConsoleColor.DarkCyan);
+            InputOutputHelper.PrintColorText("\n******** ADD A NEW FLIGHT CONSOLE MENU ********", ConsoleColor.DarkCyan);
 
-            Flight newFlight = CreateEntity<Flight>();
+            CreateEditEntityHelper entityHelper = new CreateEditEntityHelper();
+            Flight newFlight = entityHelper.CreateEntity<Flight>();
             if (newFlight != null)
             {
                 _airport.AddFlight(newFlight);
@@ -287,14 +252,13 @@ namespace Airline
 
         public void DeleteFlight()
         {
-            Console.Clear();
-            InputOutputHelper.PrintColorText("\n******** DELETE FLIGHT MENU ********", ConsoleColor.DarkCyan);
+            InputOutputHelper.PrintColorText("\n******** DELETE FLIGHT CONSOLE MENU ********", ConsoleColor.DarkCyan);
 
             Flight flight = RealizeGetFlightByNumber();
             if (flight != null)
             {
                 Console.WriteLine("\n" + flight);
-                Console.Write($"\nYou want to remove the flight: {flight.Number}. Are you sure? Y/N: ");
+                Console.Write($"\nYou want to remove the flight: {flight.Number}? (Y/N): ");
                 string confirmation;
                 do
                 {
@@ -320,7 +284,7 @@ namespace Airline
         public void EditFlight()
         {
             Console.Clear();
-            InputOutputHelper.PrintColorText("\n******** EDIT FLIGHT MENU ********", ConsoleColor.DarkCyan);
+            InputOutputHelper.PrintColorText("\n******** EDIT FLIGHT CONSOLE MENU ********", ConsoleColor.DarkCyan);
 
             Flight actualFlight = RealizeGetFlightByNumber();
             if (actualFlight != null)
@@ -329,7 +293,8 @@ namespace Airline
                 InputOutputHelper.PrintColorText(actualFlight.ToString(), ConsoleColor.DarkCyan);
                 Console.WriteLine("\nFollow the instruction to update the flight information:");
 
-                Flight updatedFlight = EditEntity<Flight>(actualFlight);
+                CreateEditEntityHelper entityHelper = new CreateEditEntityHelper();
+                Flight updatedFlight = entityHelper.EditEntity<Flight>(actualFlight);
                 if (updatedFlight != null)
                 {
                     _airport.EditFlight(actualFlight, updatedFlight);
@@ -356,14 +321,15 @@ namespace Airline
 
         public void AddPassenger()
         {
-            Console.Clear();
-            InputOutputHelper.PrintColorText("\n******** ADD A NEW PASSENGER MENU ********", ConsoleColor.DarkCyan);
+            InputOutputHelper.PrintColorText("\n******** ADD A NEW PASSENGER CONSOLE MENU ********", ConsoleColor.DarkCyan);
 
+            Console.WriteLine("\nTo add the passenger first enter the flight number.");
             Flight flight = RealizeGetFlightByNumber();
             if (flight != null)
             {
                 InputOutputHelper.PrintColorText("\nFill an information about passenger:", ConsoleColor.DarkCyan);
-                Passenger passenger = CreateEntity<Passenger>();
+                CreateEditEntityHelper entityHelper = new CreateEditEntityHelper();
+                Passenger passenger = entityHelper.CreateEntity<Passenger>();
                 if (passenger != null)
                 {
                     _airport.AddPassenger(flight, passenger);
@@ -377,8 +343,7 @@ namespace Airline
 
         public void DeletePassenger()
         {
-            Console.Clear();
-            InputOutputHelper.PrintColorText("\n******** DELETE PASSENGER MENU ********", ConsoleColor.DarkCyan);
+            InputOutputHelper.PrintColorText("\n******** DELETE PASSENGER CONSOLE MENU ********", ConsoleColor.DarkCyan);
 
             Flight flight = RealizeGetFlightByNumber();
             Passenger passenger = GetPassengerByPassport(flight);
@@ -386,7 +351,7 @@ namespace Airline
             if (flight != null && passenger != null)
             {
                 InputOutputHelper.PrintColorText($"\nFlight: {flight.Number}, {passenger}", ConsoleColor.DarkCyan);
-                Console.Write($"\nYou want to remove the passenger: {passenger.FirstName} {passenger.LastName} . Are you sure? Y/N: ");
+                Console.Write($"\nYou want to remove the passenger: {passenger.FirstName} {passenger.LastName}? (Y/N): ");
                 string confirmation;
                 do
                 {
@@ -411,8 +376,7 @@ namespace Airline
 
         public void EditPassenger()
         {
-            Console.Clear();
-            InputOutputHelper.PrintColorText("\n******** EDIT PASSENGER MENU ********", ConsoleColor.DarkCyan);
+            InputOutputHelper.PrintColorText("\n******** EDIT PASSENGER CONSOLE MENU ********", ConsoleColor.DarkCyan);
 
             Console.WriteLine("\nTo change the passenger information first enter the flight number and passenger passport.");
             Flight flight = RealizeGetFlightByNumber();
@@ -424,7 +388,8 @@ namespace Airline
                 InputOutputHelper.PrintColorText($"Flight: {flight.Number}, {actualPassenger}", ConsoleColor.DarkCyan);
 
                 Console.WriteLine("\nUpdate an information about the passenger:");
-                Passenger updatedPassenger = EditEntity<Passenger>(actualPassenger);
+                CreateEditEntityHelper entityHelper = new CreateEditEntityHelper();
+                Passenger updatedPassenger = entityHelper.EditEntity<Passenger>(actualPassenger);
                 if (updatedPassenger != null)
                 {
                     _airport.EditPassenger(flight, actualPassenger, updatedPassenger);

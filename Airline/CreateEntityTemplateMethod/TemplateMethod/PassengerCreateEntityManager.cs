@@ -10,14 +10,14 @@ namespace Airline.TemplateMethod
 {
     class PassengerCreateEntityManager : CreateEntityManager<IEntity>
     {
-        protected override bool AskQuestion()
+        protected override bool AskQuestionToCreate()
         {
             Console.Write("\nDo you want to create a new passenger? (Y/N): ");
             var answer = Console.ReadLine();
             return string.Equals(answer, "y", StringComparison.OrdinalIgnoreCase);
         }
 
-        protected override string ReadAnswer()
+        protected override string ReadAnswerToCreate()
         {
             var answer = new StringBuilder();
 
@@ -62,64 +62,64 @@ namespace Airline.TemplateMethod
                new Ticket((SeatClass)Enum.Parse(typeof(SeatClass), parameters[6]), Convert.ToDecimal(parameters[7])));
         }
 
-        protected override bool AskEditQuestion()
+        protected override bool AskQuestionToEdit()
         {
             Console.Write("\nDo you want to edit the passenger information? (Y/N): ");
             var answer = Console.ReadLine();
             return string.Equals(answer, "y", StringComparison.OrdinalIgnoreCase);
         }
 
-        protected override string ReadEditAnswer(IEntity actualPassenger)
+        protected override string ReadAnswerToEdit(IEntity actualPassenger)
         {
-            var editEntityHelper = new EditEntityHelper();
+            var entityHelper = new CreateEditEntityHelper();
             var answer = new StringBuilder();
 
             //Edit first name.
             var actualFirstName = actualPassenger.GetType().GetProperty("FirstName").GetValue(actualPassenger);
             InputOutputHelper.PrintColorText($"\nActual passenger first name: {actualFirstName}", ConsoleColor.DarkCyan);
             Func<string> firstNameHandler = CreateFirstName;
-            var firstName = editEntityHelper.EditEntity(firstNameHandler);
-            firstName = editEntityHelper.UpdatePropertyOrKeepDefault((string)actualFirstName, firstName);
+            var firstName = entityHelper.AskEditEntity(firstNameHandler);
+            firstName = entityHelper.UpdateEntityOrKeepDefault((string)actualFirstName, firstName);
             answer.Append(AddSeparator(firstName.ToString()));
 
             //Edit last name.
             var actualLastName = actualPassenger.GetType().GetProperty("LastName").GetValue(actualPassenger);
             InputOutputHelper.PrintColorText($"\nActual passenger last name: {actualLastName}", ConsoleColor.DarkCyan);
             Func<string> lastNameHandler = CreateLastName;
-            var lastName = editEntityHelper.EditEntity(lastNameHandler);
-            lastName = editEntityHelper.UpdatePropertyOrKeepDefault((string)actualLastName, lastName);
+            var lastName = entityHelper.AskEditEntity(lastNameHandler);
+            lastName = entityHelper.UpdateEntityOrKeepDefault((string)actualLastName, lastName);
             answer.Append(AddSeparator(lastName.ToString()));
 
             //Edit nationality.
             var actualNationality = actualPassenger.GetType().GetProperty("Nationality").GetValue(actualPassenger);
             InputOutputHelper.PrintColorText($"\nActual passenger nationality: {actualNationality}", ConsoleColor.DarkCyan);
             Func<string> nationalityHandler = CreateNationality;
-            string nationality = editEntityHelper.EditEntity(nationalityHandler);
-            nationality = editEntityHelper.UpdatePropertyOrKeepDefault((string)actualNationality, nationality);
+            string nationality = entityHelper.AskEditEntity(nationalityHandler);
+            nationality = entityHelper.UpdateEntityOrKeepDefault((string)actualNationality, nationality);
             answer.Append(AddSeparator(nationality));
 
             //Edit passport.
             var actualPassport = actualPassenger.GetType().GetProperty("Passport").GetValue(actualPassenger);
             InputOutputHelper.PrintColorText($"\nActual passenger passport: {actualPassport}", ConsoleColor.DarkCyan);
             Func<string> passportHandler = CreatePassport;
-            string passport = editEntityHelper.EditEntity(passportHandler);
-            passport = editEntityHelper.UpdatePropertyOrKeepDefault((string)actualPassport, passport);
+            string passport = entityHelper.AskEditEntity(passportHandler);
+            passport = entityHelper.UpdateEntityOrKeepDefault((string)actualPassport, passport);
             answer.Append(AddSeparator(passport));
 
             //Edit birthday.
             var actualBirthday = actualPassenger.GetType().GetProperty("Birthday").GetValue(actualPassenger);
             InputOutputHelper.PrintColorText($"\nActual passenger birthday: {actualBirthday}", ConsoleColor.DarkCyan);
             Func<DateTime> birthdayHandler = CreateBirthday;
-            var birthday = editEntityHelper.EditEntity(birthdayHandler);
-            birthday = editEntityHelper.UpdatePropertyOrKeepDefault((DateTime)actualBirthday, birthday);
+            var birthday = entityHelper.AskEditEntity(birthdayHandler);
+            birthday = entityHelper.UpdateEntityOrKeepDefault((DateTime)actualBirthday, birthday);
             answer.Append(AddSeparator(birthday.ToString()));
 
             //Edit sex.
             var actualSex = actualPassenger.GetType().GetProperty("Sex").GetValue(actualPassenger);
             InputOutputHelper.PrintColorText($"\nActual passenger sex: {actualSex}", ConsoleColor.DarkCyan);
             Func<Sex> sexHandler = CreateSex;
-            var sex = editEntityHelper.EditEntity(sexHandler);
-            sex = editEntityHelper.UpdatePropertyOrKeepDefault((Sex)actualSex, sex);
+            var sex = entityHelper.AskEditEntity(sexHandler);
+            sex = entityHelper.UpdateEntityOrKeepDefault((Sex)actualSex, sex);
             answer.Append(AddSeparator(sex.ToString()));
 
             //Edit ticket seat class.
@@ -127,16 +127,16 @@ namespace Airline.TemplateMethod
             var actualSeatClass = actualTicket.GetType().GetProperty("SeatClass").GetValue(actualTicket);
             InputOutputHelper.PrintColorText($"\nActual ticket seat class: {actualSeatClass}", ConsoleColor.DarkCyan);
             Func<SeatClass> seatClassHandler = CreateSeatClass;
-            var seatClass = editEntityHelper.EditEntity(seatClassHandler);
-            seatClass = editEntityHelper.UpdatePropertyOrKeepDefault((SeatClass)actualSeatClass, seatClass);
+            var seatClass = entityHelper.AskEditEntity(seatClassHandler);
+            seatClass = entityHelper.UpdateEntityOrKeepDefault((SeatClass)actualSeatClass, seatClass);
             answer.Append(AddSeparator(seatClass.ToString()));
 
             //Edit ticket price.
             var actualPrice = actualTicket.GetType().GetProperty("Price").GetValue(actualTicket);
             InputOutputHelper.PrintColorText($"\nActual ticket price: {actualPrice}", ConsoleColor.DarkCyan);
             Func<decimal> priceHandler = CreatePrice;
-            var price = editEntityHelper.EditEntity(priceHandler);
-            price = editEntityHelper.UpdatePropertyOrKeepDefault((decimal)actualPrice, price);
+            var price = entityHelper.AskEditEntity(priceHandler);
+            price = entityHelper.UpdateEntityOrKeepDefault((decimal)actualPrice, price);
             answer.Append(price.ToString());
 
             return answer.ToString();
@@ -146,37 +146,37 @@ namespace Airline.TemplateMethod
 
         private string CreateFirstName()
         {
-            string firstName = InputOutputHelper.CheckStringInput("\nEnter a first name: ");
+            string firstName = InputOutputHelper.CreateString("\nEnter a first name: ");
             return firstName;
         }
 
         private string CreateLastName()
         {
-            string lastName = InputOutputHelper.CheckStringInput("\nEnter a last name: ");
+            string lastName = InputOutputHelper.CreateString("\nEnter a last name: ");
             return lastName;
         }
 
         private string CreateNationality()
         {
-            string nationality = InputOutputHelper.CheckStringInput("\nEnter a nationalty: ");
+            string nationality = InputOutputHelper.CreateString("\nEnter a nationalty: ");
             return nationality;
         }
 
         private string CreatePassport()
         {
-            string passport = InputOutputHelper.CheckStringInput("\nEnter a passport: ");
+            string passport = InputOutputHelper.CreateString("\nEnter a passport: ");
             return passport;
         }
 
         private DateTime CreateBirthday()
         {
-            DateTime birthday = InputOutputHelper.CheckDateTimeInput("\nEnter a passenger birthday: ");
+            DateTime birthday = InputOutputHelper.CreateDateTime("\nEnter a passenger birthday: ");
             return birthday;
         }
 
         private Sex CreateSex()
         {
-            var sex = InputOutputHelper.CheckEnumInput<Sex>("\n" + @"Enter a sex of the passenger. Choose a number from the following list:
+            var sex = InputOutputHelper.CreateEnum<Sex>("\n" + @"Enter a sex of the passenger. Choose a number from the following list:
                 1. Male
                 2. Female");
             return sex;
@@ -184,7 +184,7 @@ namespace Airline.TemplateMethod
 
         private SeatClass CreateSeatClass()
         {
-            var seatClass = InputOutputHelper.CheckEnumInput<SeatClass>(@"Enter a seat class. Choose a number from the following list:
+            var seatClass = InputOutputHelper.CreateEnum<SeatClass>(@"Enter a seat class. Choose a number from the following list:
                 1. Economy
                 2. Business");
             return seatClass;
@@ -192,7 +192,7 @@ namespace Airline.TemplateMethod
 
         private decimal CreatePrice()
         {
-            decimal price = InputOutputHelper.CheckValueTypeInput<decimal>("\nEnter a ticket price (dollars): ");
+            decimal price = InputOutputHelper.CreateValueType<decimal>("\nEnter a ticket price (dollars): ");
             return price;
         }
         #endregion

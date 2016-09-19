@@ -10,8 +10,6 @@ namespace Airline
     {
         AirlineManager airlineManager = new AirlineManager();
 
-        private string _returnToMainMenu = "\nPress \"Space\" to return to the airline main menu; press any key to continue with the current menu...";
-
         /// <summary>
         /// Catch exceptions happened during menu item selection 
         /// </summary>
@@ -31,6 +29,18 @@ namespace Airline
             {
                 InputOutputHelper.PrintColorText("\nWrong value has been entered! " + ex.Message, ConsoleColor.Red);
             }
+
+            InputOutputHelper.PrintColorText("\nPress \"Space\" to return to the airline main menu; press any key to continue with the current menu...",
+                ConsoleColor.DarkGreen);
+        }
+
+        /// <summary>
+        /// View all flights menu
+        /// </summary>
+        public void ViewAllFlightsMenu()
+        {
+            Action menuItemHandler = airlineManager.ViewAllFlights;
+            CatchMenuExceptions(menuItemHandler);
         }
 
         /// <summary>
@@ -38,28 +48,20 @@ namespace Airline
         /// </summary>
         public void SearchFlights()
         {
-            do
-            {
-                Console.Clear();
-                InputOutputHelper.PrintColorText("\n******** SEARCH FLIGHT MENU ********\n", ConsoleColor.DarkCyan);
-                Console.WriteLine(@"Please choose one of the following search criterions (enter a menu number):
+            InputOutputHelper.PrintColorText("\n******** SEARCH FLIGHT MENU ********\n", ConsoleColor.DarkCyan);
+            Console.WriteLine(@"Please choose one of the following search criterions (enter a menu number):
 
-                1. Search by number;
-                2. Search by time of arrival/departure;
-                3. Search by city;
-                4. Search all flights in this hour;");
+            1. Search by number;
+            2. Search by time of arrival/departure;
+            3. Search by city;
+            4. Search all flights in this hour;");
+            Console.Write("Your choise: ");
 
-                Console.Write("Your choise: ");
-
-                Action menuHandler = ManageSearchFlightMenu;
-                CatchMenuExceptions(menuHandler);
-
-                InputOutputHelper.PrintColorText(_returnToMainMenu, ConsoleColor.DarkGreen);
-            }
-            while (Console.ReadKey().Key != ConsoleKey.Spacebar);
+            Action menuHandler = CallSearchFlightsMenu;
+            CatchMenuExceptions(menuHandler);
         }
 
-        private void ManageSearchFlightMenu()
+        private void CallSearchFlightsMenu()
         {
             int index = (int)uint.Parse(Console.ReadLine());
 
@@ -75,30 +77,32 @@ namespace Airline
         }
 
         /// <summary>
+        /// Search flights with low price menu
+        /// </summary>
+        public void SearchFlightsWithLowPriceMenu()
+        {
+            Action menuItemHandler = airlineManager.SearchCheapFlights;
+            CatchMenuExceptions(menuItemHandler);
+        }
+
+        /// <summary>
         /// Search passengers menu
         /// </summary>
         public void SearchPassengers()
         {
-            do
-            {
-                Console.Clear();
-                InputOutputHelper.PrintColorText("\n******** SEARCH PASSENGERS MENU ********\n", ConsoleColor.DarkCyan);
-                Console.WriteLine(@"To find the passenger please choose one of the following search criterions (enter a menu number):
+            InputOutputHelper.PrintColorText("\n******** SEARCH PASSENGERS MENU ********\n", ConsoleColor.DarkCyan);
+            Console.WriteLine(@"To find the passenger please choose one of the following search criterions (enter a menu number):
 
-                1. Search by Name (first or last name);
-                2. Search by Flight number;
-                3. Search by Passport;");
-                Console.Write("Your choise: ");
+            1. Search by Name (first or last name);
+            2. Search by Flight number;
+            3. Search by Passport;");
+            Console.Write("Your choise: ");
 
-                Action menuHandler = ManageSearchPassengersMenu;
-                CatchMenuExceptions(menuHandler);
-
-                InputOutputHelper.PrintColorText(_returnToMainMenu, ConsoleColor.DarkGreen);
-            }
-            while (Console.ReadKey().Key != ConsoleKey.Spacebar);
+            Action menuHandler = CallSearchPassengersMenu;
+            CatchMenuExceptions(menuHandler);
         }
 
-        private void ManageSearchPassengersMenu()
+        private void CallSearchPassengersMenu()
         {
             int index = (int)uint.Parse(Console.ReadLine());
             IDictionary<int, Action> menuItems = new Dictionary<int, Action>
@@ -116,27 +120,19 @@ namespace Airline
         /// </summary>
         public void EditFlights()
         {
-            do
-            {
-                Console.Clear();
-                InputOutputHelper.PrintColorText("\n******** EDIT FLIGHTS INFORMATION MENU ********\n", ConsoleColor.DarkCyan);
-                Console.WriteLine(@"Please choose one of the following items (enter a menu number):
+            InputOutputHelper.PrintColorText("\n******** EDIT FLIGHTS INFORMATION MENU ********\n", ConsoleColor.DarkCyan);
+            Console.WriteLine(@"Please choose one of the following items (enter a menu number):
 
-                1. Add a flight;
-                2. Delete a flight;
-                3. Edit a flight's information.");
+            1. Add a flight;
+            2. Delete a flight;
+            3. Edit a flight's information.");
+            Console.Write("Your choise: ");
 
-                Console.Write("Your choise: ");
-
-                Action menuHandler = ManageEditFlightsMenu;
-                CatchMenuExceptions(menuHandler);
-
-                InputOutputHelper.PrintColorText(_returnToMainMenu, ConsoleColor.DarkGreen);
-            }
-            while (Console.ReadKey().Key != ConsoleKey.Spacebar);
+            Action menuHandler = CallEditFlightsMenu;
+            CatchMenuExceptions(menuHandler);
         }
 
-        private void ManageEditFlightsMenu()
+        private void CallEditFlightsMenu()
         {
             int index = (int)uint.Parse(Console.ReadLine());
             IDictionary<int, Action> menuItems = new Dictionary<int, Action>
@@ -154,27 +150,19 @@ namespace Airline
         /// </summary>
         public void EditPassengers()
         {
-            do
-            {
-                Console.Clear();
-                InputOutputHelper.PrintColorText("\n******** EDIT PASSENGERS INFORMATION MENU ********\n", ConsoleColor.DarkCyan);
-                Console.WriteLine(@"Please choose one of the following menu items (enter a menu number):
+            InputOutputHelper.PrintColorText("\n******** EDIT PASSENGERS INFORMATION MENU ********\n", ConsoleColor.DarkCyan);
+            Console.WriteLine(@"Please choose one of the following menu items (enter a menu number):
 
-                1. Add a passenger;
-                2. Delete a passenger;
-                3. Edit a passenger's information.");
+            1. Add a passenger;
+            2. Delete a passenger;
+            3. Edit a passenger's information.");
+            Console.Write("Your choise: ");
 
-                Console.Write("Your choise: ");
-
-                Action menuHandler = ManageEditPassengersMenu;
-                CatchMenuExceptions(menuHandler);
-
-                InputOutputHelper.PrintColorText(_returnToMainMenu, ConsoleColor.DarkGreen);
-            }
-            while (Console.ReadKey().Key != ConsoleKey.Spacebar);
+            Action menuHandler = CallEditPassengersMenu;
+            CatchMenuExceptions(menuHandler);
         }
 
-        private void ManageEditPassengersMenu()
+        private void CallEditPassengersMenu()
         {
             int index = (int)uint.Parse(Console.ReadLine());
             IDictionary<int, Action> menuItems = new Dictionary<int, Action>

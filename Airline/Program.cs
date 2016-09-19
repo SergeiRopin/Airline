@@ -11,7 +11,7 @@ namespace Airline
     {
         static MenuManager _menuManager = new MenuManager();
         static AirlineManager airlineManager = new AirlineManager();
-        static bool exit = true;
+        static bool exit;
 
         static void Main(string[] args)
         {
@@ -19,7 +19,7 @@ namespace Airline
             Console.WindowWidth = 160;
             airlineManager.InitializeAirport();
 
-            while (exit)
+            while (!exit)
             {
                 Console.Clear();
                 InputOutputHelper.PrintColorText("********** AIRLINE **********\n", ConsoleColor.DarkGreen);
@@ -46,16 +46,22 @@ namespace Airline
             int index = (int)uint.Parse(Console.ReadLine());
             IDictionary<int, Action> menuItems = new Dictionary<int, Action>
                     {
-                        { 1, airlineManager.ViewAllFlights },
+                        { 1, _menuManager.ViewAllFlightsMenu },
                         { 2, _menuManager.SearchFlights },
-                        { 3, airlineManager.SearchFlightsWithLowPrice },
+                        { 3, _menuManager.SearchFlightsWithLowPriceMenu },
                         { 4, _menuManager.SearchPassengers },
                         { 5, _menuManager.EditFlights },
                         { 6, _menuManager.EditPassengers },
-                        { 0, new Action(() => exit = false) }
+                        { 0, new Action(() => exit = true) }
                     };
-            Action menuItemHandler = menuItems[index];
-            menuItemHandler();
+            do
+            {
+                Console.Clear();
+                Action menuItemHandler = menuItems[index];
+                menuItemHandler();
+                if (exit)
+                    break;
+            } while (Console.ReadKey().Key != ConsoleKey.Spacebar);
         }
     }
 }
