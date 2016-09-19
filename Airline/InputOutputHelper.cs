@@ -103,31 +103,5 @@ namespace Airline
             while (failure);
             return flightTime;
         }
-
-
-
-        public static T CheckEditedEntityToDefaultProperties<T>(T actual, T updated) where T : class
-        {
-            T updatedEntity = updated;
-            if (actual != null && updated != null)
-            {
-                Type type = typeof(T);
-                var properties = type.GetProperties();
-                for (int i = 0; i < properties.Length; i++)
-                {
-                    var valueType = properties[i].PropertyType.IsValueType;
-                    object actualValue = type.GetProperty(properties[i].Name).GetValue(actual);
-                    object updatedValue = type.GetProperty(properties[i].Name).GetValue(updated);
-                    object o = updatedEntity.GetType().GetProperty(properties[i].Name).GetValue(updated);
-
-                    if (valueType)
-                    {
-                        o = actualValue;
-                        updatedValue = actualValue;
-                    }
-                }
-            }
-            return updated;
-        }
     }
 }

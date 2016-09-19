@@ -26,12 +26,25 @@ namespace Airline.TemplateMethod
                         InputOutputHelper.PrintColorText("\nDefault information has been kept!", ConsoleColor.DarkCyan);
                         break;
                     default:
-                        InputOutputHelper.PrintColorText("\nPlease make a choise. \"C\" / \"Enter\": ", ConsoleColor.Red);
+                        InputOutputHelper.PrintColorText("\nPlease make a choise. \"Enter\" / \"Esc\": ", ConsoleColor.Red);
                         break;
                 }
             } while (key != "ENTER" & key != "ESCAPE");
 
             return output;
+        }
+
+        public T UpdatePropertyOrKeepDefault<T>(T actual, T updated)
+        {
+            T value = (T)Convert.ChangeType(updated, typeof(T));
+
+            if (updated == null)
+                updated = actual;
+            else if (updated.GetType().IsValueType && value.ToString().Equals("0"))
+                updated = actual;
+            else if (updated.GetType().IsValueType && value.Equals(default(DateTime)))
+                updated = actual;
+            return updated;
         }
     }
 }

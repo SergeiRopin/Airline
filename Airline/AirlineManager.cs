@@ -237,7 +237,7 @@ namespace Airline
         }
 
         /// <summary>
-        /// Ask to enter a flight number and return the flight
+        /// Asks to enter a flight number and returns the flight
         /// </summary>
         /// <returns>new flight</returns>
         private Flight RealizeGetFlightByNumber()
@@ -249,7 +249,7 @@ namespace Airline
         }
 
         /// <summary>
-        /// Creates an entities using template method
+        /// Creates entities using template method
         /// </summary>
         /// <returns>new entity (Flight / Passenger)</returns>
         private T CreateEntity<T>()
@@ -332,7 +332,6 @@ namespace Airline
                 Flight updatedFlight = EditEntity<Flight>(actualFlight);
                 if (updatedFlight != null)
                 {
-                    InputOutputHelper.CheckEditedEntityToDefaultProperties(actualFlight, updatedFlight);
                     _airport.EditFlight(actualFlight, updatedFlight);
                     InputOutputHelper.PrintColorText($"\nFlight \"{updatedFlight.Number}\" was successfully updated!", ConsoleColor.DarkCyan);
                     InputOutputHelper.PrintColorText(updatedFlight.ToString(), ConsoleColor.DarkCyan);
@@ -415,6 +414,7 @@ namespace Airline
             Console.Clear();
             InputOutputHelper.PrintColorText("\n******** EDIT PASSENGER MENU ********", ConsoleColor.DarkCyan);
 
+            Console.WriteLine("\nTo change the passenger information first enter the flight number and passenger passport.");
             Flight flight = RealizeGetFlightByNumber();
             Passenger actualPassenger = GetPassengerByPassport(flight);
 
@@ -424,12 +424,13 @@ namespace Airline
                 InputOutputHelper.PrintColorText($"Flight: {flight.Number}, {actualPassenger}", ConsoleColor.DarkCyan);
 
                 Console.WriteLine("\nUpdate an information about the passenger:");
-                Passenger updatedPassenger = CreateEntity<Passenger>();
-
-                _airport.EditPassenger(flight, actualPassenger, updatedPassenger);
-
-                InputOutputHelper.PrintColorText($"\nPassenger information was successfully updated!\n", ConsoleColor.DarkCyan);
-                InputOutputHelper.PrintColorText(updatedPassenger.ToString(), ConsoleColor.DarkCyan);
+                Passenger updatedPassenger = EditEntity<Passenger>(actualPassenger);
+                if (updatedPassenger != null)
+                {
+                    _airport.EditPassenger(flight, actualPassenger, updatedPassenger);
+                    InputOutputHelper.PrintColorText($"\nPassenger information was successfully updated!\n", ConsoleColor.DarkCyan);
+                    InputOutputHelper.PrintColorText(updatedPassenger.ToString(), ConsoleColor.DarkCyan);
+                }
             }
             else Console.WriteLine($"\n{_noMatchesMessage}");
         }
