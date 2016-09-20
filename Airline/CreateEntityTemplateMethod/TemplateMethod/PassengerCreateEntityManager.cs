@@ -57,9 +57,15 @@ namespace Airline.TemplateMethod
         protected override IEntity CreateEntity(string value)
         {
             var parameters = value.Split('|');
-            return new Passenger(parameters[0], parameters[1], parameters[2], parameters[3],
-               Convert.ToDateTime(parameters[4]), (Sex)Enum.Parse(typeof(Sex), parameters[5]),
-               new Ticket((SeatClass)Enum.Parse(typeof(SeatClass), parameters[6]), Convert.ToDecimal(parameters[7])));
+            return new Passenger(
+                parameters[0],
+                parameters[1],
+                parameters[2],
+                parameters[3],
+                Convert.ToDateTime(parameters[4]),
+                (Sex)Enum.Parse(typeof(Sex),
+                parameters[5]),
+                new Ticket((SeatClass)Enum.Parse(typeof(SeatClass), parameters[6]), Convert.ToDecimal(parameters[7])));
         }
 
         protected override bool AskQuestionToEdit()
@@ -140,6 +146,12 @@ namespace Airline.TemplateMethod
             answer.Append(price.ToString());
 
             return answer.ToString();
+        }
+
+        protected override IEntity EditEntity(string value, IEntity actualPassenger)
+        {
+            var entity = CreateEntity(value);
+            return entity;
         }
 
         #region CreatePassengerMethods

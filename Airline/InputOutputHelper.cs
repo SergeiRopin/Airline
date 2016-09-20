@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Airline
@@ -84,6 +85,17 @@ namespace Airline
                 try
                 {
                     Console.Write(infoMessage);
+
+                    Console.WriteLine("Enter date and time in the following format: Year|Month|Day|Hours|Minutes");
+                    string date = Console.ReadLine();
+                    string pattern = @"\d{1,4}(\|\d{1,2}){4}";
+                    foreach(Match matches in Regex.Matches(date, pattern))
+                    {
+                        Console.WriteLine(matches.Value);
+                    }
+
+                    var match = Regex.Matches(date, pattern);
+
                     int year = CreateValueType<int>("\nYear: ");
                     int month = CreateValueType<int>("Month (from 01 to 12): ");
                     int day = CreateValueType<int>("Day (from 01 to 31): ");

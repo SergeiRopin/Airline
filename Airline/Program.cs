@@ -60,7 +60,7 @@ namespace Airline
                 Action menuItemHandler = menuItems[index];
                 menuItemHandler();
                 if (exit)
-                    break;
+                    break; 
             } while (Console.ReadKey().Key != ConsoleKey.Spacebar);
         }
     }

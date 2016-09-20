@@ -64,7 +64,6 @@ namespace Airline
         private void CallSearchFlightsMenu()
         {
             int index = (int)uint.Parse(Console.ReadLine());
-
             IDictionary<int, Action> menuItems = new Dictionary<int, Action>
             {
                 { 1, airlineManager.SearchFlightByNumber },

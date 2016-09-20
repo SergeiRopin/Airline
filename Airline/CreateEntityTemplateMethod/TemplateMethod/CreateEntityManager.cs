@@ -19,7 +19,8 @@ namespace Airline.TemplateMethod
         protected abstract T CreateEntity(string value);
         protected abstract bool AskQuestionToEdit();
         protected abstract string ReadAnswerToEdit(T actualEntity);
-
+        protected abstract T EditEntity(string value, T entity);
+        
         /// <summary>
         /// Algorithm of creation an entity
         /// </summary>        
@@ -42,7 +43,7 @@ namespace Airline.TemplateMethod
             if (!IsValid(response))
                 throw new InvalidEntityInputException("Input value is incorrect!");
 
-            return CreateEntity(response);
+            return EditEntity(response, actualEntity);
         }
 
         protected string AddSeparator(string answer) => $"{answer}|";

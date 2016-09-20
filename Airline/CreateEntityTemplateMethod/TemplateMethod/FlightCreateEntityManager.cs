@@ -69,7 +69,8 @@ namespace Airline.TemplateMethod
                 (Terminal)Enum.Parse(typeof(Terminal), parameters[5]),
                 (Gate)Enum.Parse(typeof(Gate), parameters[6]),               
                 (FlightStatus)Enum.Parse(typeof(FlightStatus), parameters[7]),                
-                Convert.ToDateTime(parameters[8]), new List<Passenger>());
+                Convert.ToDateTime(parameters[8]), 
+                new List<Passenger>());
         }
 
         protected override bool AskQuestionToEdit()
@@ -158,7 +159,23 @@ namespace Airline.TemplateMethod
 
             return answer.ToString();
         }
-        
+
+        protected override IEntity EditEntity(string value, IEntity actualFlight)
+        {
+            var parameters = value.Split('|');
+            return new Flight(
+                (ArrivalDeparture)Enum.Parse(typeof(ArrivalDeparture), parameters[0]),
+                parameters[1],
+                parameters[2],
+                parameters[3],
+                parameters[4],
+                (Terminal)Enum.Parse(typeof(Terminal), parameters[5]),
+                (Gate)Enum.Parse(typeof(Gate), parameters[6]),
+                (FlightStatus)Enum.Parse(typeof(FlightStatus), parameters[7]),
+                Convert.ToDateTime(parameters[8]), 
+                (List<Passenger>)actualFlight.GetType().GetProperty("Passengers").GetValue(actualFlight));
+        }
+
         #region CreateFlightMethods
 
         private ArrivalDeparture CreateArrivalDeparture()
