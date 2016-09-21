@@ -1,4 +1,5 @@
-﻿using Airline.TemplateMethod;
+﻿using Airline.CreateDateStrategy;
+using Airline.TemplateMethod;
 using Airport;
 using System;
 using System.Collections.Generic;
@@ -182,8 +183,9 @@ namespace Airline.TemplateMethod
 
         private DateTime CreateBirthday()
         {
-            DateTime birthday = InputOutputHelper.CreateDateTime("\nEnter a passenger birthday: ");
-            return birthday;
+            CreateDateHelper dateHelper = new CreateDateHelper(new BirthdayDate());
+            DateTime birthdayDate = dateHelper.CreateDate();
+            return birthdayDate;
         }
 
         private Sex CreateSex()

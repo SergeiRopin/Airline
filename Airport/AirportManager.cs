@@ -23,7 +23,7 @@ namespace Airport
             _flights = new List<Flight>();
         }
 
-        /// <summary>
+         /// <summary>
         /// Collection of flights
         /// </summary>
         private IList<Flight> _flights;

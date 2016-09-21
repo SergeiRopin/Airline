@@ -1,4 +1,5 @@
-﻿using Airline.TemplateMethod;
+﻿using Airline.CreateDateStrategy;
+using Airline.TemplateMethod;
 using Airport;
 using System;
 using System.Collections.Generic;
@@ -247,7 +248,8 @@ namespace Airline.TemplateMethod
 
         private DateTime CreateFlightTime()
         {
-            DateTime flightTime = InputOutputHelper.CreateDateTime("\nEnter a flight time in the following format: ");
+            CreateDateHelper dateHelper = new CreateDateHelper(new FlightDate());
+            DateTime flightTime = dateHelper.CreateDate();
             return flightTime;
         }
         #endregion
