@@ -40,7 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AirportManager.cs" />
+    <Compile Include="Airport.cs" />
     <Compile Include="Flight\ArrivalDeparture.cs" />
     <Compile Include="Flight\Flight.cs" />
     <Compile Include="Flight\FlightStatus.cs" />

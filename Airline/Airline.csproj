@@ -43,15 +43,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CreateDateStrategy\BirthdayDate.cs" />
-    <Compile Include="CreateDateStrategy\CreateDateHelper.cs" />
-    <Compile Include="CreateDateStrategy\FlightDate.cs" />
-    <Compile Include="CreateDateStrategy\IDate.cs" />
+    <Compile Include="FlightsManager.cs" />
+    <Compile Include="PassengersManager.cs" />
+    <Compile Include="SetDateStrategy\BirthdayDate.cs" />
+    <Compile Include="SetDateStrategy\SetDateHelper.cs" />
+    <Compile Include="SetDateStrategy\FlightDate.cs" />
+    <Compile Include="SetDateStrategy\IDate.cs" />
     <Compile Include="CreateEntityTemplateMethod\TemplateMethod\CreateEntityManager.cs" />
     <Compile Include="CreateEntityTemplateMethod\CreateEditEntityHelper.cs" />
     <Compile Include="CreateEntityTemplateMethod\TemplateMethod\EntityFactory.cs" />
     <Compile Include="InputOutputHelper.cs" />
-    <Compile Include="AirlineManager.cs" />
     <Compile Include="MenuManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

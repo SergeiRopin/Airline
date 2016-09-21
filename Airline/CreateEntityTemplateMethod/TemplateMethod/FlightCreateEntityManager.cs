@@ -1,4 +1,4 @@
-﻿using Airline.CreateDateStrategy;
+﻿using Airline.SetDateStrategy;
 using Airline.TemplateMethod;
 using Airport;
 using System;
@@ -11,14 +11,14 @@ namespace Airline.TemplateMethod
 {
     class FlightCreateEntityManager : CreateEntityManager<IEntity>
     {
-        protected override bool AskQuestionToCreate()
+        protected override bool AskQuestionCreateEntity()
         {
             Console.Write("\nDo you want to create a new flight? (Y/N): ");
             var answer = Console.ReadLine();
             return string.Equals(answer, "y", StringComparison.OrdinalIgnoreCase);
         }
 
-        protected override string ReadAnswerToCreate()
+        protected override string ReadAnswerCreateEntity()
         {
             var answer = new StringBuilder();
 
@@ -74,14 +74,14 @@ namespace Airline.TemplateMethod
                 new List<Passenger>());
         }
 
-        protected override bool AskQuestionToEdit()
+        protected override bool AskQuestionEditEntity()
         {
             Console.Write("\nDo you want to edit the flight? (Y/N): ");
             var answer = Console.ReadLine();
             return string.Equals(answer, "y", StringComparison.OrdinalIgnoreCase);
         }
 
-        protected override string ReadAnswerToEdit(IEntity actualFlight)
+        protected override string ReadAnswerEditEntity(IEntity actualFlight)
         {
             var entityHelper = new CreateEditEntityHelper();
             var answer = new StringBuilder();
@@ -181,7 +181,7 @@ namespace Airline.TemplateMethod
 
         private ArrivalDeparture CreateArrivalDeparture()
         {
-            var arrivalDeparture = InputOutputHelper.CreateEnum<ArrivalDeparture>
+            var arrivalDeparture = InputOutputHelper.SetEnum<ArrivalDeparture>
                 ("\n" + @"Enter a flight type. Choose a number from the following list:
                 1. Arrival
                 2. Departure");
@@ -190,31 +190,31 @@ namespace Airline.TemplateMethod
 
         private string CreateFlightNumber()
         {
-            string number = InputOutputHelper.CreateString("\nEnter a number of the flight: ");
+            string number = InputOutputHelper.SetString("\nEnter a number of the flight: ");
             return number;
         }
 
         private string CreateDepartureCity()
         {
-            string cityFrom = InputOutputHelper.CreateString("\nEnter a city of departure: ");
+            string cityFrom = InputOutputHelper.SetString("\nEnter a city of departure: ");
             return cityFrom;
         }
 
         private string CreateArrivalCity()
         {
-            string cityTo = InputOutputHelper.CreateString("\nEnter a city of arrival: ");
+            string cityTo = InputOutputHelper.SetString("\nEnter a city of arrival: ");
             return cityTo;
         }
 
         private string CreateAirline()
         {
-            string airline = InputOutputHelper.CreateString("\nEnter an airline: ");
+            string airline = InputOutputHelper.SetString("\nEnter an airline: ");
             return airline;
         }
 
         private Terminal CreateTerminal()
         {
-            var terminal = InputOutputHelper.CreateEnum<Terminal>("\n" + @"Enter a terminal of the flight. Choose a number from the following list:
+            var terminal = InputOutputHelper.SetEnum<Terminal>("\n" + @"Enter a terminal of the flight. Choose a number from the following list:
                 1. A
                 2. B");
             return terminal;
@@ -222,7 +222,7 @@ namespace Airline.TemplateMethod
 
         private Gate CreateGate()
         {
-            var gate = InputOutputHelper.CreateEnum<Gate>("\n" + @"Enter a gate of the flight. Choose a number from the following list:
+            var gate = InputOutputHelper.SetEnum<Gate>("\n" + @"Enter a gate of the flight. Choose a number from the following list:
                 1. A1
                 2. A2
                 3. A3
@@ -232,7 +232,7 @@ namespace Airline.TemplateMethod
 
         private FlightStatus CreateFlightStatus()
         {
-            var status = InputOutputHelper.CreateEnum<FlightStatus>("\n" + @"Enter a flight status. Choose a number from the following list:
+            var status = InputOutputHelper.SetEnum<FlightStatus>("\n" + @"Enter a flight status. Choose a number from the following list:
                 1. CheckIn
                 2. GateClosed
                 3. Arrived
@@ -248,7 +248,7 @@ namespace Airline.TemplateMethod
 
         private DateTime CreateFlightTime()
         {
-            CreateDateHelper dateHelper = new CreateDateHelper(new FlightDate());
+            SetDateHelper dateHelper = new SetDateHelper(new FlightDate());
             DateTime flightTime = dateHelper.CreateDate();
             return flightTime;
         }

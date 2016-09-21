@@ -1,4 +1,4 @@
-﻿using Airline.CreateDateStrategy;
+﻿using Airline.SetDateStrategy;
 using Airline.TemplateMethod;
 using Airport;
 using System;
@@ -11,14 +11,14 @@ namespace Airline.TemplateMethod
 {
     class PassengerCreateEntityManager : CreateEntityManager<IEntity>
     {
-        protected override bool AskQuestionToCreate()
+        protected override bool AskQuestionCreateEntity()
         {
             Console.Write("\nDo you want to create a new passenger? (Y/N): ");
             var answer = Console.ReadLine();
             return string.Equals(answer, "y", StringComparison.OrdinalIgnoreCase);
         }
 
-        protected override string ReadAnswerToCreate()
+        protected override string ReadAnswerCreateEntity()
         {
             var answer = new StringBuilder();
 
@@ -69,14 +69,14 @@ namespace Airline.TemplateMethod
                 new Ticket((SeatClass)Enum.Parse(typeof(SeatClass), parameters[6]), Convert.ToDecimal(parameters[7])));
         }
 
-        protected override bool AskQuestionToEdit()
+        protected override bool AskQuestionEditEntity()
         {
             Console.Write("\nDo you want to edit the passenger information? (Y/N): ");
             var answer = Console.ReadLine();
             return string.Equals(answer, "y", StringComparison.OrdinalIgnoreCase);
         }
 
-        protected override string ReadAnswerToEdit(IEntity actualPassenger)
+        protected override string ReadAnswerEditEntity(IEntity actualPassenger)
         {
             var entityHelper = new CreateEditEntityHelper();
             var answer = new StringBuilder();
@@ -159,38 +159,38 @@ namespace Airline.TemplateMethod
 
         private string CreateFirstName()
         {
-            string firstName = InputOutputHelper.CreateString("\nEnter a first name: ");
+            string firstName = InputOutputHelper.SetString("\nEnter a first name: ");
             return firstName;
         }
 
         private string CreateLastName()
         {
-            string lastName = InputOutputHelper.CreateString("\nEnter a last name: ");
+            string lastName = InputOutputHelper.SetString("\nEnter a last name: ");
             return lastName;
         }
 
         private string CreateNationality()
         {
-            string nationality = InputOutputHelper.CreateString("\nEnter a nationalty: ");
+            string nationality = InputOutputHelper.SetString("\nEnter a nationalty: ");
             return nationality;
         }
 
         private string CreatePassport()
         {
-            string passport = InputOutputHelper.CreateString("\nEnter a passport: ");
+            string passport = InputOutputHelper.SetString("\nEnter a passport: ");
             return passport;
         }
 
         private DateTime CreateBirthday()
         {
-            CreateDateHelper dateHelper = new CreateDateHelper(new BirthdayDate());
+            SetDateHelper dateHelper = new SetDateHelper(new BirthdayDate());
             DateTime birthdayDate = dateHelper.CreateDate();
             return birthdayDate;
         }
 
         private Sex CreateSex()
         {
-            var sex = InputOutputHelper.CreateEnum<Sex>("\n" + @"Enter a sex of the passenger. Choose a number from the following list:
+            var sex = InputOutputHelper.SetEnum<Sex>("\n" + @"Enter a sex of the passenger. Choose a number from the following list:
                 1. Male
                 2. Female");
             return sex;
@@ -198,7 +198,7 @@ namespace Airline.TemplateMethod
 
         private SeatClass CreateSeatClass()
         {
-            var seatClass = InputOutputHelper.CreateEnum<SeatClass>(@"Enter a seat class. Choose a number from the following list:
+            var seatClass = InputOutputHelper.SetEnum<SeatClass>(@"Enter a seat class. Choose a number from the following list:
                 1. Economy
                 2. Business");
             return seatClass;
@@ -206,7 +206,7 @@ namespace Airline.TemplateMethod
 
         private decimal CreatePrice()
         {
-            decimal price = InputOutputHelper.CreateValueType<decimal>("\nEnter a ticket price (dollars): ");
+            decimal price = InputOutputHelper.SetValueType<decimal>("\nEnter a ticket price (dollars): ");
             return price;
         }
         #endregion

@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Airline.CreateDateStrategy
+namespace Airline.SetDateStrategy
 {
-    class CreateDateHelper
+    class SetDateHelper
     {
         IDate _date;
 
-        public CreateDateHelper(IDate date)
+        public SetDateHelper(IDate date)
         {
             _date = date;
         }

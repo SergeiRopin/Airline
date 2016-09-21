@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Airport
 {
-    public class AirportManager
+    public class Airport
     {
-        readonly static AirportManager s_instance = new AirportManager();
-        
-        public static AirportManager Instance
+        readonly static Airport s_instance = new Airport();
+
+        public static Airport Instance
         {
             get
             {
@@ -18,12 +18,12 @@ namespace Airport
             }
         }
 
-        private AirportManager()
+        private Airport()
         {
             _flights = new List<Flight>();
         }
 
-         /// <summary>
+        /// <summary>
         /// Collection of flights
         /// </summary>
         private IList<Flight> _flights;
@@ -47,6 +47,11 @@ namespace Airport
             Flight flight = _flights.FirstOrDefault(x =>
                 String.Equals(x.Number.Replace(" ", string.Empty), flightNumber.Replace(" ", string.Empty), StringComparison.OrdinalIgnoreCase));
             return flight;
+        }
+
+        public IEnumerable<Flight> FilterFlights(Func<Flight, bool> predicate)
+        {
+            return _flights.Where(predicate);
         }
 
         public void EditFlight(Flight actualFlight, Flight updatedFlight)
@@ -91,5 +96,6 @@ namespace Airport
                 }
             }
         }
+
     }
 }

@@ -16,7 +16,7 @@ namespace Airline
             Console.ResetColor();
         }
 
-        public static string CreateString(string infoMessage)
+        public static string SetString(string infoMessage)
         {
             string input = null;
             do
@@ -28,7 +28,7 @@ namespace Airline
             return input;
         }
 
-        public static T CreateEnum<T>(string infoMessage)
+        public static T SetEnum<T>(string infoMessage)
         {
             bool failure;
             T input = default(T);
@@ -54,7 +54,7 @@ namespace Airline
             return input;
         }
 
-        public static T CreateValueType<T>(string infoMessage) where T : struct
+        public static T SetValueType<T>(string infoMessage) where T : struct
         {
             T input = default(T);
             bool failure = false;
@@ -74,46 +74,6 @@ namespace Airline
             }
             while (failure);
             return input;
-        }
-
-        public static DateTime CreateDateTime(string infoMessage)
-        {
-            DateTime flightTime = default(DateTime);
-            bool failure = false;
-            do
-            {
-                try
-                {
-                    Console.Write(infoMessage);
-
-                    Console.WriteLine("Enter date and time in the following format: Year|Month|Day|Hours|Minutes");
-                    string date = Console.ReadLine();
-                    string pattern = @"\d{1,4}(\|\d{1,2}){4}";
-                    foreach(Match matches in Regex.Matches(date, pattern))
-                    {
-                        Console.WriteLine(matches.Value);
-                    }
-
-                    var match = Regex.Matches(date, pattern);
-
-                    int year = CreateValueType<int>("\nYear: ");
-                    int month = CreateValueType<int>("Month (from 01 to 12): ");
-                    int day = CreateValueType<int>("Day (from 01 to 31): ");
-                    int hours = CreateValueType<int>("Hours (from 0 to 23): ");
-                    int minutes = CreateValueType<int>("Minutes (from 0 to 59): ");
-
-                    flightTime = new DateTime(year, month, day, hours, minutes, 00);
-                    failure = false;
-                }
-                catch (Exception)
-                {
-                    PrintColorText("\nWrong value was encountered during input."
-                        + "\nPlease re-enter data!", ConsoleColor.Red);
-                    failure = true;
-                }
-            }
-            while (failure);
-            return flightTime;
         }
     }
 }

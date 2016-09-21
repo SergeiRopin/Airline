@@ -8,7 +8,8 @@ namespace Airline
 {
     class MenuManager
     {
-        AirlineManager airlineManager = new AirlineManager();
+        FlightsManager _flightsManager = new FlightsManager();
+        PassengersManager _passengersManager = new PassengersManager();
 
         /// <summary>
         /// Catch exceptions happened during menu item selection 
@@ -39,7 +40,7 @@ namespace Airline
         /// </summary>
         public void ViewAllFlightsMenu()
         {
-            Action menuItemHandler = airlineManager.ViewAllFlights;
+            Action menuItemHandler = _flightsManager.ViewAllFlights;
             CatchMenuExceptions(menuItemHandler);
         }
 
@@ -66,10 +67,10 @@ namespace Airline
             int index = (int)uint.Parse(Console.ReadLine());
             IDictionary<int, Action> menuItems = new Dictionary<int, Action>
             {
-                { 1, airlineManager.SearchFlightByNumber },
-                { 2, airlineManager.SearchFlightByTime },
-                { 3, airlineManager.SearchFlightByCity },
-                { 4, airlineManager.SearchFlightsInThisHour}
+                { 1, _flightsManager.SearchFlightByNumber },
+                { 2, _flightsManager.SearchFlightByTime },
+                { 3, _flightsManager.SearchFlightByCity },
+                { 4, _flightsManager.SearchFlightsInThisHour}
             };
             Action menuItemHandler = menuItems[index];
             menuItemHandler();
@@ -80,7 +81,7 @@ namespace Airline
         /// </summary>
         public void SearchFlightsWithLowPriceMenu()
         {
-            Action menuItemHandler = airlineManager.SearchCheapFlights;
+            Action menuItemHandler = _flightsManager.SearchCheapFlights;
             CatchMenuExceptions(menuItemHandler);
         }
 
@@ -106,9 +107,9 @@ namespace Airline
             int index = (int)uint.Parse(Console.ReadLine());
             IDictionary<int, Action> menuItems = new Dictionary<int, Action>
             {
-                { 1, airlineManager.SearchPassengerByName },
-                { 2, airlineManager.SearchPassengersByFlightNumber },
-                { 3, airlineManager.SearchPassengerByPassport }
+                { 1, _passengersManager.SearchPassengerByName },
+                { 2, _passengersManager.SearchPassengersByFlightNumber },
+                { 3, _passengersManager.SearchPassengerByPassport }
             };
             Action menuItemHandler = menuItems[index];
             menuItemHandler();
@@ -136,9 +137,9 @@ namespace Airline
             int index = (int)uint.Parse(Console.ReadLine());
             IDictionary<int, Action> menuItems = new Dictionary<int, Action>
             {
-                { 1, airlineManager.AddFlight },
-                { 2, airlineManager.DeleteFlight },
-                { 3, airlineManager.EditFlight }
+                { 1, _flightsManager.AddFlight },
+                { 2, _flightsManager.DeleteFlight },
+                { 3, _flightsManager.EditFlight }
             };
             Action menuItemHandler = menuItems[index];
             menuItemHandler();
@@ -166,9 +167,9 @@ namespace Airline
             int index = (int)uint.Parse(Console.ReadLine());
             IDictionary<int, Action> menuItems = new Dictionary<int, Action>
             {
-                { 1, airlineManager.AddPassenger },
-                { 2, airlineManager.DeletePassenger },
-                { 3, airlineManager.EditPassenger }
+                { 1, _passengersManager.AddPassenger },
+                { 2, _passengersManager.DeletePassenger },
+                { 3, _passengersManager.EditPassenger }
             };
             Action menuItemHandler = menuItems[index];
             menuItemHandler();

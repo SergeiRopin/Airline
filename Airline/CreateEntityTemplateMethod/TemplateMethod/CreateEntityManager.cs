@@ -14,12 +14,13 @@ namespace Airline.TemplateMethod
     /// <exception cref="InvalidEntityInputException"/>
     abstract class CreateEntityManager<T> where T : class
     {
-        protected abstract bool AskQuestionToCreate();
-        protected abstract string ReadAnswerToCreate();
+        protected abstract bool AskQuestionCreateEntity();
+        protected abstract string ReadAnswerCreateEntity();
         protected abstract bool IsValid(string value);
         protected abstract T CreateEntity(string value);
-        protected abstract bool AskQuestionToEdit();
-        protected abstract string ReadAnswerToEdit(T actualEntity);
+
+        protected abstract bool AskQuestionEditEntity();
+        protected abstract string ReadAnswerEditEntity(T actualEntity);
         protected abstract T EditEntity(string value, T entity);
         
         /// <summary>
@@ -27,9 +28,9 @@ namespace Airline.TemplateMethod
         /// </summary>        
         public T Create()
         {
-            if (!AskQuestionToCreate())
+            if (!AskQuestionCreateEntity())
                 throw new EntityCreationCanceledException("Input process has been canceled.");
-            var response = ReadAnswerToCreate();
+            var response = ReadAnswerCreateEntity();
             if (!IsValid(response))
                 throw new InvalidEntityInputException("Input value is incorrect!");
 
@@ -38,9 +39,9 @@ namespace Airline.TemplateMethod
 
         public T Edit(T actualEntity)
         {
-            if (!AskQuestionToEdit())
+            if (!AskQuestionEditEntity())
                 throw new EntityCreationCanceledException("Edit process has been canceled.");
-            var response = ReadAnswerToEdit(actualEntity);
+            var response = ReadAnswerEditEntity(actualEntity);
             if (!IsValid(response))
                 throw new InvalidEntityInputException("Input value is incorrect!");
 
