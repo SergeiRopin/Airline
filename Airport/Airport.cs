@@ -40,20 +40,6 @@ namespace Airport
                 _flights.Remove(flight);
         }
 
-        public IEnumerable<Flight> GetAllFlights() => _flights;
-
-        public Flight GetFlightByNumber(string flightNumber)
-        {
-            Flight flight = _flights.FirstOrDefault(x =>
-                String.Equals(x.Number.Replace(" ", string.Empty), flightNumber.Replace(" ", string.Empty), StringComparison.OrdinalIgnoreCase));
-            return flight;
-        }
-
-        public IEnumerable<Flight> FilterFlights(Func<Flight, bool> predicate)
-        {
-            return _flights.Where(predicate);
-        }
-
         public void EditFlight(Flight actualFlight, Flight updatedFlight)
         {
             if (actualFlight != null && updatedFlight != null)
@@ -64,17 +50,21 @@ namespace Airport
             }
         }
 
-        public List<Passenger> GetPassengers(Flight flight)
+        //public IEnumerable<Flight> GetAllFlights() => _flights;
+
+        public Flight GetFlightByNumber(string flightNumber)
         {
-            List<Passenger> passengers = flight.Passengers;
-            return passengers;
+            Flight flight = _flights.FirstOrDefault(x =>
+                String.Equals(x.Number.Replace(" ", string.Empty), flightNumber.Replace(" ", string.Empty), StringComparison.OrdinalIgnoreCase));
+            return flight;
         }
+
+        public IEnumerable<Flight> FilterFlights(Func<Flight, bool> predicate) => _flights.Where(predicate);
 
         public void AddPassenger(Flight flight, Passenger passenger)
         {
             if (flight != null && passenger != null)
-                _flights.FirstOrDefault(x => x == flight)
-                    .Passengers.Add(passenger);
+                _flights.FirstOrDefault(x => x == flight).Passengers.Add(passenger);
         }
 
         public void RemovePassenger(Flight flight, Passenger passenger)
@@ -97,5 +87,13 @@ namespace Airport
             }
         }
 
+        //public List<Passenger> GetPassengers(Flight flight)
+        //{
+        //    List<Passenger> passengers = flight.Passengers;
+        //    return passengers;
+        //}
+
+        public IEnumerable<Passenger> FilterPassengers(Flight flight, Func<Passenger, bool> predicate) =>
+            flight.Passengers.Where(predicate);
     }
 }

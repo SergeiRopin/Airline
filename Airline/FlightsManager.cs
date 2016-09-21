@@ -149,37 +149,21 @@ namespace Airline
 
             HashSet<Flight> economyFlights = new HashSet<Flight>();
             int temp = 0;
-            _airport.GetAllFlights().ToList()
-            .ForEach(x => x.Passengers
-            .ForEach(y =>
-            {
-                if (priceLimit >= y.Ticket.Price && y.Ticket.SeatClass == SeatClass.Economy)
+            _airport.FilterFlights(flight => true).ToList()
+                .ForEach(flight => flight.Passengers
+                .ForEach(passenger =>
                 {
-                    bool isAdded = economyFlights.Add(x);
-                    if (isAdded)
+                    if (priceLimit >= passenger.Ticket.Price && passenger.Ticket.SeatClass == SeatClass.Economy)
                     {
-                        Console.WriteLine($@"{x}, ");
-                        Console.WriteLine($"{y.Ticket}\n");
+                        bool isAdded = economyFlights.Add(flight);
+                        if (isAdded)
+                        {
+                            Console.WriteLine($@"{flight}, ");
+                            Console.WriteLine($"{passenger.Ticket}\n");
+                        }
+                        temp++;
                     }
-                    temp++;
-                }
-            }));
-
-            var col = _airport.FilterFlights(flight => flight.Passengers
-            .ForEach(passenger =>
-              {
-                  if (priceLimit >= passenger.Ticket.Price && passenger.Ticket.SeatClass == SeatClass.Economy)
-                  {
-                      bool isAdded = economyFlights.Add(flight);
-                      if (isAdded)
-                      {
-                          Console.WriteLine($@"{flight}, ");
-                          Console.WriteLine($"{passenger.Ticket}\n");
-                      }
-                      temp++;
-                  }
-              }));
-
+                }));
             if (temp == 0)
                 Console.WriteLine(_noMatchesMessage);
         }
