@@ -16,19 +16,15 @@ namespace Airline.SetDateStrategy
             {
                 Console.Write("\nEnter a passenger birthday date in the following format - (Year-Month-Day): ");
                 string dateTime = Console.ReadLine();
-                string pattern = @"";
-                var matches = Regex.Matches(dateTime, pattern);
-                if (matches.Count.Equals(1))
+                try
                 {
-                    string date = null;
-                    foreach (Match match in matches)
-                    {
-                        date = match.Value;
-                    }
-                    var parameters = date.Split('-').ToList().ConvertAll(x => int.Parse(x));
+                    var parameters = dateTime.Split('-').ToList().ConvertAll(x => int.Parse(x));
                     birthdayDate = new DateTime(parameters[0], parameters[1], parameters[2]);
                 }
-                else InputOutputHelper.PrintColorText("\nWrong format of passenger birthday date. Please re-enter data!", ConsoleColor.Red);
+                catch (Exception)
+                {
+                    InputOutputHelper.PrintColorText("\nWrong format of passenger birthday date. Please re-enter data!", ConsoleColor.Red);
+                }
             } while (birthdayDate == default(DateTime));
             return birthdayDate;
         }

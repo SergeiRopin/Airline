@@ -18,13 +18,8 @@ namespace Airline
 
         private string _noMatchesMessage = "No matches found!";
 
-        /// <summary>
-        /// Prints all available flights
-        /// </summary>
-        public void ViewAllFlights()
+        public void PrintFlights()
         {
-            InputOutputHelper.PrintColorText("\n******** VIEW FLIGHTS CONSOLE MENU ********", ConsoleColor.DarkCyan);
-
             // Print arrivals.
             InputOutputHelper.PrintColorText("\nARRIVAL FLIGHTS:", ConsoleColor.DarkCyan);
             _airport.FilterFlights(flight => flight.ArrivalDeparture == ArrivalDeparture.Arrival)
@@ -42,6 +37,15 @@ namespace Airline
                 {
                     Console.WriteLine(flight);
                 });
+        }
+
+        /// <summary>
+        /// Prints all available flights
+        /// </summary>
+        public void ViewAllFlights()
+        {
+            InputOutputHelper.PrintColorText("\n******** VIEW FLIGHTS CONSOLE MENU ********", ConsoleColor.DarkCyan);
+            PrintFlights();
         }
 
         /// <summary>
@@ -192,6 +196,8 @@ namespace Airline
         {
             InputOutputHelper.PrintColorText("\n******** DELETE FLIGHT CONSOLE MENU ********", ConsoleColor.DarkCyan);
 
+            Console.WriteLine("\nTo delete the flight first choose the flight number. Actual flights:");
+            PrintFlights();
             Flight flight = RealizeGetFlightByNumber();
             if (flight != null)
             {
@@ -227,6 +233,8 @@ namespace Airline
             Console.Clear();
             InputOutputHelper.PrintColorText("\n******** EDIT FLIGHT CONSOLE MENU ********", ConsoleColor.DarkCyan);
 
+            Console.WriteLine("\nTo change the flight information first choose the flight number. Actual flights:");
+            PrintFlights();
             Flight actualFlight = RealizeGetFlightByNumber();
             if (actualFlight != null)
             {

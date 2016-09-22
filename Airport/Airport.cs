@@ -50,8 +50,6 @@ namespace Airport
             }
         }
 
-        //public IEnumerable<Flight> GetAllFlights() => _flights;
-
         public Flight GetFlightByNumber(string flightNumber)
         {
             Flight flight = _flights.FirstOrDefault(x =>
@@ -60,40 +58,5 @@ namespace Airport
         }
 
         public IEnumerable<Flight> FilterFlights(Func<Flight, bool> predicate) => _flights.Where(predicate);
-
-        public void AddPassenger(Flight flight, Passenger passenger)
-        {
-            if (flight != null && passenger != null)
-                _flights.FirstOrDefault(x => x == flight).Passengers.Add(passenger);
-        }
-
-        public void RemovePassenger(Flight flight, Passenger passenger)
-        {
-            if (flight != null)
-                _flights.Where(x => x == flight).FirstOrDefault(y => y.Passengers.Remove(passenger));
-        }
-
-        public void EditPassenger(Flight flight, Passenger actualPassenger, Passenger updatedPassenger)
-        {
-            if (flight != null && actualPassenger != null && updatedPassenger != null)
-            {
-                int flightIndex = _flights.IndexOf(flight);
-                if (flightIndex != -1)
-                {
-                    int passengerIndex = flight.Passengers.IndexOf(actualPassenger);
-                    if (passengerIndex != -1)
-                        flight.Passengers[passengerIndex] = updatedPassenger;
-                }
-            }
-        }
-
-        //public List<Passenger> GetPassengers(Flight flight)
-        //{
-        //    List<Passenger> passengers = flight.Passengers;
-        //    return passengers;
-        //}
-
-        public IEnumerable<Passenger> FilterPassengers(Flight flight, Func<Passenger, bool> predicate) =>
-            flight.Passengers.Where(predicate);
     }
 }

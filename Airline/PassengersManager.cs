@@ -18,6 +18,16 @@ namespace Airline
 
         private string _noMatchesMessage = "No matches found!";
 
+        public IEnumerable<Passenger> FilterPassengers(Flight flight, Func<Passenger, bool> predicate) =>
+            flight.Passengers.Where(predicate);
+
+        public void PrintPassengersByFlightNumber(Flight flight)
+        {
+            FilterPassengers(flight, passenger => true)
+                .ToList()
+                .ForEach(passenger => Console.WriteLine($"Flight: {flight.Number}, " + passenger));
+        }
+
         /// <summary>
         /// Prints passengers matching the entered name (partial coincidence)
         /// </summary>
@@ -28,14 +38,14 @@ namespace Airline
 
             // Print matching passengers.
             int temp = 0;
-            _airport.GetAllFlights().ToList()
-                .ForEach(x => x.Passengers
-                .ForEach(y =>
+            _airport.FilterFlights(flight => true)
+                .ToList()
+                .ForEach(flight => flight.Passengers
+                .ForEach(passenger =>
                 {
-                    if (y.FirstName.ToUpper().Contains(name.ToUpper()) |
-                        y.LastName.ToUpper().Contains(name.ToUpper()))
+                    if (passenger.FirstName.ToUpper().Contains(name.ToUpper()) | passenger.LastName.ToUpper().Contains(name.ToUpper()))
                     {
-                        Console.WriteLine($"Flight: {x.Number}, " + y);
+                        Console.WriteLine($"Flight: {flight.Number}, " + passenger);
                         temp++;
                     }
                 }));
@@ -48,13 +58,16 @@ namespace Airline
         /// </summary>
         public void SearchPassengersByFlightNumber()
         {
+            Console.WriteLine("\nActual flights:");
+            _flightsManager.PrintFlights();
+
             Console.Write("\nPlease enter a number of flight to view all passengers: ");
             string flightNumber = Console.ReadLine();
             InputOutputHelper.PrintColorText("\nResults of the search: ", ConsoleColor.DarkCyan);
-
             Flight flight = _airport.GetFlightByNumber(flightNumber);
+
             if (flight != null)
-                _airport.GetPassengers(flight).ForEach(x => Console.WriteLine($"Flight: {flight.Number}, " + x));
+                PrintPassengersByFlightNumber(flight);
             else Console.WriteLine(_noMatchesMessage);
         }
 
@@ -68,13 +81,14 @@ namespace Airline
 
             // Print matching passengers.
             int temp = 0;
-            _airport.GetAllFlights().ToList()
-                .ForEach(x => x.Passengers
-                .ForEach(y =>
+            _airport.FilterFlights(flight => true)
+                .ToList()
+                .ForEach(flight => flight.Passengers
+                .ForEach(passenger =>
                 {
-                    if (y.Passport.ToUpper().Contains(passport.ToUpper()))
+                    if (passenger.Passport.ToUpper().Contains(passport.ToUpper()))
                     {
-                        Console.WriteLine($"Flight: {x.Number}, " + y);
+                        Console.WriteLine($"Flight: {flight.Number}, " + passenger);
                         temp++;
                     }
                 }));
@@ -92,6 +106,7 @@ namespace Airline
             {
                 Console.Write("\nPlease enter a passenger passport: ");
                 string passport = Console.ReadLine();
+
                 passenger = flight.Passengers
                     .FirstOrDefault(x => String.Equals(x.Passport, passport, StringComparison.OrdinalIgnoreCase));
             }
@@ -105,7 +120,8 @@ namespace Airline
         {
             InputOutputHelper.PrintColorText("\n******** ADD A NEW PASSENGER CONSOLE MENU ********", ConsoleColor.DarkCyan);
 
-            Console.WriteLine("\nTo add the passenger first enter the flight number.");
+            Console.WriteLine("\nTo add a passenger first enter the flight number. Actual flights:");
+            _flightsManager.PrintFlights();
             Flight flight = _flightsManager.RealizeGetFlightByNumber();
             if (flight != null)
             {
@@ -114,7 +130,7 @@ namespace Airline
                 Passenger passenger = entityHelper.CreateEntity<Passenger>();
                 if (passenger != null)
                 {
-                    _airport.AddPassenger(flight, passenger);
+                    flight.Passengers.Add(passenger);
 
                     InputOutputHelper.PrintColorText($"\nPassenger was successfully added to the flight \"{flight.Number}\"!", ConsoleColor.DarkCyan);
                     InputOutputHelper.PrintColorText(passenger.ToString(), ConsoleColor.DarkCyan);
@@ -130,7 +146,12 @@ namespace Airline
         {
             InputOutputHelper.PrintColorText("\n******** DELETE PASSENGER CONSOLE MENU ********", ConsoleColor.DarkCyan);
 
+            Console.WriteLine("\nTo delete a passenger first enter the flight number and passenger passport. Actual flights:");
+            _flightsManager.PrintFlights();
             Flight flight = _flightsManager.RealizeGetFlightByNumber();
+
+            Console.WriteLine("\nActual passengers:");
+            PrintPassengersByFlightNumber(flight);
             Passenger passenger = GetPassengerByPassport(flight);
 
             if (flight != null && passenger != null)
@@ -144,7 +165,7 @@ namespace Airline
                     switch (confirmation)
                     {
                         case "Y":
-                            _airport.RemovePassenger(flight, passenger);
+                            flight.Passengers.Remove(passenger);
                             InputOutputHelper.PrintColorText($"\nPassenger was successfully removed!", ConsoleColor.DarkCyan);
                             break;
                         case "N":
@@ -166,8 +187,12 @@ namespace Airline
         {
             InputOutputHelper.PrintColorText("\n******** EDIT PASSENGER CONSOLE MENU ********", ConsoleColor.DarkCyan);
 
-            Console.WriteLine("\nTo change the passenger information first enter the flight number and passenger passport.");
+            Console.WriteLine("\nTo change the passenger information first enter the flight number and passenger passport. Actual flights:");
+            _flightsManager.PrintFlights();
             Flight flight = _flightsManager.RealizeGetFlightByNumber();
+
+            Console.WriteLine("\nActual passengers:");
+            PrintPassengersByFlightNumber(flight);
             Passenger actualPassenger = GetPassengerByPassport(flight);
 
             if (flight != null && actualPassenger != null)
@@ -180,7 +205,10 @@ namespace Airline
                 Passenger updatedPassenger = entityHelper.EditEntity<Passenger>(actualPassenger);
                 if (updatedPassenger != null)
                 {
-                    _airport.EditPassenger(flight, actualPassenger, updatedPassenger);
+                    int passengerIndex = flight.Passengers.IndexOf(actualPassenger);
+                    if (passengerIndex != -1)
+                        flight.Passengers[passengerIndex] = updatedPassenger;
+
                     InputOutputHelper.PrintColorText($"\nPassenger information was successfully updated!\n", ConsoleColor.DarkCyan);
                     InputOutputHelper.PrintColorText(updatedPassenger.ToString(), ConsoleColor.DarkCyan);
                 }

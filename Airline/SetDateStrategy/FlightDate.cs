@@ -16,17 +16,15 @@ namespace Airline.SetDateStrategy
             {
                 Console.Write("\nEnter a flight time in the following format - (Year-Month-Day-Hours-Minutes): ");
                 string dateTime = Console.ReadLine();
-                string pattern = @"\d{1,4}(\-\d{1,2}){4}";
-                var matches = Regex.Matches(dateTime, pattern);
-                if (matches.Count.Equals(1))
+                try
                 {
-                    string date = null;
-                    foreach (Match match in matches)
-                        date = match.Value;
-                    var parameters = date.Split('-').ToList().ConvertAll(x=> int.Parse(x));
+                    var parameters = dateTime.Split('-').ToList().ConvertAll(x => int.Parse(x));
                     flightTime = new DateTime(parameters[0], parameters[1], parameters[2], parameters[3], parameters[4], 0);
                 }
-                else InputOutputHelper.PrintColorText("\nWrong format of flight date or time. Please re-enter data!", ConsoleColor.Red);
+                catch (Exception)
+                {
+                    InputOutputHelper.PrintColorText("\nWrong format of flight date or time. Please re-enter data!", ConsoleColor.Red);
+                }
             } while (flightTime == default(DateTime));
             return flightTime;
         }
