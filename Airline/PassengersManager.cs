@@ -1,5 +1,5 @@
 ﻿using Airline.TemplateMethod;
-using Airport;
+using AirportManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ namespace Airline
     /// </summary>
     class PassengersManager
     {
-        private Airport.Airport _airport = Airport.Airport.Instance;
+        private Airport _airport = Airport.Instance;
         private FlightsManager _flightsManager = new FlightsManager();
 
         private string _noMatchesMessage = "No matches found!";
