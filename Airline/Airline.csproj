@@ -70,6 +70,10 @@
       <Project>{5cbea63a-73dd-4008-8f3a-5292a34aba08}</Project>
       <Name>Airport</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Presenter\Presenter.csproj">
+      <Project>{04956762-2cd0-4af9-8476-68fca83b770a}</Project>
+      <Name>Presenter</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

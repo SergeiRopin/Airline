@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Airline;
 
-namespace Presenter
+namespace PresenterStorage
 {
     public interface IView
     {
-        event EventHandler<EventArgs> ViewAllFlightsEventRaised;
+        event EventHandler<FlightEventArgs> AddFlightEventRaised;
+
+        
     }
 }

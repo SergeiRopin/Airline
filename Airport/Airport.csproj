@@ -41,12 +41,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Airport.cs" />
+    <Compile Include="AirportFactory.cs" />
     <Compile Include="Flight\ArrivalDeparture.cs" />
     <Compile Include="Flight\Flight.cs" />
     <Compile Include="Flight\FlightStatus.cs" />
     <Compile Include="Flight\Gate.cs" />
     <Compile Include="Flight\Terminal.cs" />
+    <Compile Include="MVP\IAirportModel.cs" />
     <Compile Include="IEntity.cs" />
+    <Compile Include="MVP\FlightEventArgs.cs" />
     <Compile Include="Passenger\Passenger.cs" />
     <Compile Include="Passenger\SeatClass.cs" />
     <Compile Include="Passenger\Sex.cs" />

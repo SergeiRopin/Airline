@@ -1,4 +1,5 @@
 ﻿using AirportManager;
+using PresenterStorage;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,6 +19,10 @@ namespace Airline
         {
             Console.WindowHeight = 50;
             Console.WindowWidth = 160;
+
+            //IView view = new FlightsManager();
+            IView view = FlightsManager.Instance;
+            var presenter = new Presenter(view);
 
             while (!_exit)
             {

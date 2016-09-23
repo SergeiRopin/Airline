@@ -14,7 +14,8 @@ namespace Airline
     class PassengersManager
     {
         private Airport _airport = Airport.Instance;
-        private FlightsManager _flightsManager = new FlightsManager();
+        //private FlightsManager _flightsManager = new FlightsManager();
+        FlightsManager _flightsManager = FlightsManager.Instance;
 
         private string _noMatchesMessage = "No matches found!";
 

@@ -1,6 +1,7 @@
 ﻿using Airline.SetDateStrategy;
 using Airline.TemplateMethod;
 using AirportManager;
+using PresenterStorage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +13,20 @@ namespace Airline
     /// <summary>
     /// Realizes the logic related to flights
     /// </summary>
-    class FlightsManager
+    class FlightsManager : IView
     {
-        private Airport _airport = Airport.Instance;
+        #region Singleton
+        readonly static FlightsManager s_instance = new FlightsManager();
 
+        public static FlightsManager Instance => s_instance;
+
+        private FlightsManager() { }
+        #endregion
+
+        private Airport _airport = Airport.Instance;
         private string _noMatchesMessage = "No matches found!";
+
+        public event EventHandler<FlightEventArgs> AddFlightEventRaised;
 
         public void PrintFlights()
         {
@@ -183,10 +193,18 @@ namespace Airline
             Flight newFlight = entityHelper.CreateEntity<Flight>();
             if (newFlight != null)
             {
-                _airport.AddFlight(newFlight);
+                //_airport.AddFlight(newFlight);
+                OnAddFlightEventRaised(this, new FlightEventArgs(newFlight));
                 InputOutputHelper.PrintColorText($"\nFlight \"{newFlight.Number}\" was successfully added!", ConsoleColor.DarkCyan);
                 InputOutputHelper.PrintColorText(newFlight.ToString(), ConsoleColor.DarkCyan);
             }
+        }
+
+        private void OnAddFlightEventRaised(object sender, FlightEventArgs e)
+        {
+            var handler = AddFlightEventRaised;
+            if (handler != null)
+                handler(sender, e);
         }
 
         /// <summary>

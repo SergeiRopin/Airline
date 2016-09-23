@@ -7,17 +7,11 @@ using System.Threading.Tasks;
 
 namespace AirportManager
 {
-    public class Airport
+    public class Airport : IAirportModel
     {
         readonly static Airport s_instance = new Airport();
 
-        public static Airport Instance
-        {
-            get
-            {
-                return s_instance;
-            }
-        }
+        public static Airport Instance => s_instance;
 
         private Airport()
         {
@@ -53,7 +47,9 @@ namespace AirportManager
         /// <summary>
         /// Collection of flights
         /// </summary>
-        private IList<Flight> _flights;                            
+        private IList<Flight> _flights;
+
+        public IEnumerable<Flight> Flights => _flights;
 
         public void AddFlight(Flight flight)
         {
