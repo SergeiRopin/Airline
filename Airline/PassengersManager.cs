@@ -27,7 +27,7 @@ namespace Airline
                 .ToList()
                 .ForEach(passenger => Console.WriteLine($"Flight: {flight.Number}, " + passenger));
         }
-
+        
         /// <summary>
         /// Prints passengers matching the entered name (partial coincidence)
         /// </summary>
