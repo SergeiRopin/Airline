@@ -13,8 +13,7 @@ namespace Airline
     /// </summary>
     class PassengersManager
     {
-        private Airport _airport = Airport.Instance;
-        //private FlightsManager _flightsManager = new FlightsManager();
+        //private Airport _airport = Airport.Instance;
         FlightsManager _flightsManager = FlightsManager.Instance;
 
         private string _noMatchesMessage = "No matches found!";
@@ -123,7 +122,7 @@ namespace Airline
 
             Console.WriteLine("\nTo add a passenger first enter the flight number. Actual flights:");
             _flightsManager.PrintFlights();
-            Flight flight = _flightsManager.RealizeGetFlightByNumber();
+            Flight flight = _flightsManager.GetFlightByNumber();
             if (flight != null)
             {
                 InputOutputHelper.PrintColorText("\nFill an information about passenger:", ConsoleColor.DarkCyan);
@@ -149,7 +148,7 @@ namespace Airline
 
             Console.WriteLine("\nTo delete a passenger first enter the flight number and passenger passport. Actual flights:");
             _flightsManager.PrintFlights();
-            Flight flight = _flightsManager.RealizeGetFlightByNumber();
+            Flight flight = _flightsManager.GetFlightByNumber();
 
             Console.WriteLine("\nActual passengers:");
             PrintPassengersByFlightNumber(flight);
@@ -190,7 +189,7 @@ namespace Airline
 
             Console.WriteLine("\nTo change the passenger information first enter the flight number and passenger passport. Actual flights:");
             _flightsManager.PrintFlights();
-            Flight flight = _flightsManager.RealizeGetFlightByNumber();
+            Flight flight = _flightsManager.GetFlightByNumber();
 
             Console.WriteLine("\nActual passengers:");
             PrintPassengersByFlightNumber(flight);

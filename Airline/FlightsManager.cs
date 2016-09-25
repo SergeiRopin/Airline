@@ -23,30 +23,46 @@ namespace Airline
         private FlightsManager() { }
         #endregion
 
-        private Airport _airport = Airport.Instance;
         private string _noMatchesMessage = "No matches found!";
 
-        public event EventHandler<FlightEventArgs> AddFlightEventRaised;
+        public event EventHandler<FlightEventArgs> AddingFlightEventRaised;
+        public event EventHandler<FlightEventArgs> DeletingFlightEventRaised;
+        public event EventHandler<EditingFlightEventArgs> EditingFlightEventRaised;
+        public event Func<FilteringFlightsEventArgs, IEnumerable<Flight>> FilteringFlightsEventRaised;
+
+        protected virtual void OnAddingFlightEventRaised(object sender, FlightEventArgs e) =>
+            AddingFlightEventRaised?.Invoke(sender, e);
+
+        protected virtual void OnDeletingFlightEventRaised(object sender, FlightEventArgs e) =>
+            DeletingFlightEventRaised?.Invoke(sender, e);
+
+        protected virtual void OnEditingFlightEventRaised(object sender, EditingFlightEventArgs e) =>
+            EditingFlightEventRaised?.Invoke(sender, e);
+
+        protected virtual IEnumerable<Flight> OnFilteringFlightsEventRaised(FilteringFlightsEventArgs e) =>
+            FilteringFlightsEventRaised?.Invoke(e);
 
         public void PrintFlights()
         {
             // Print arrivals.
             InputOutputHelper.PrintColorText("\nARRIVAL FLIGHTS:", ConsoleColor.DarkCyan);
-            _airport.FilterFlights(flight => flight.ArrivalDeparture == ArrivalDeparture.Arrival)
-                .ToList()
-                .ForEach(flight =>
-                {
-                    Console.WriteLine(flight);
-                });
+            OnFilteringFlightsEventRaised(new FilteringFlightsEventArgs(flight =>
+            flight.ArrivalDeparture == ArrivalDeparture.Arrival))
+            .ToList()
+            .ForEach(flight =>
+            {
+                Console.WriteLine(flight);
+            });
 
             // Print departures.
             InputOutputHelper.PrintColorText("\nDEPARTURED FLIGHTS:", ConsoleColor.DarkCyan);
-            _airport.FilterFlights(flight => flight.ArrivalDeparture == ArrivalDeparture.Departure)
-                .ToList()
-                .ForEach(flight =>
-                {
-                    Console.WriteLine(flight);
-                });
+            OnFilteringFlightsEventRaised(new FilteringFlightsEventArgs(flight =>
+            flight.ArrivalDeparture == ArrivalDeparture.Departure))
+            .ToList()
+            .ForEach(flight =>
+            {
+                Console.WriteLine(flight);
+            });
         }
 
         /// <summary>
@@ -62,11 +78,12 @@ namespace Airline
         /// Asks to enter a flight number and returns the flight
         /// </summary>
         /// <returns>new flight</returns>
-        public Flight RealizeGetFlightByNumber()
+        public Flight GetFlightByNumber()
         {
             Console.Write("\nPlease enter a flight number: ");
             string flightNumber = Console.ReadLine();
-            Flight flight = _airport.GetFlightByNumber(flightNumber);
+            Flight flight = OnFilteringFlightsEventRaised(new FilteringFlightsEventArgs(x =>
+            String.Equals(x.Number.Replace(" ", string.Empty), flightNumber.Replace(" ", string.Empty), StringComparison.OrdinalIgnoreCase))).FirstOrDefault();
             return flight;
         }
 
@@ -75,7 +92,7 @@ namespace Airline
         /// </summary>
         public void SearchFlightByNumber()
         {
-            Flight flight = RealizeGetFlightByNumber();
+            Flight flight = GetFlightByNumber();
             InputOutputHelper.PrintColorText("\nResults of the search: ", ConsoleColor.DarkCyan);
             Console.WriteLine(flight);
 
@@ -94,13 +111,13 @@ namespace Airline
             // Print matching flights.
             InputOutputHelper.PrintColorText("\nResults of the search: ", ConsoleColor.DarkCyan);
             int temp = 0;
-            _airport.FilterFlights(flight => DateTime.Equals(flight.DateTime, flightTime))
-                .ToList()
-                .ForEach(flight =>
-                {
-                    Console.WriteLine(flight);
-                    temp++;
-                });
+            OnFilteringFlightsEventRaised(new FilteringFlightsEventArgs(flight => DateTime.Equals(flight.DateTime, flightTime)))
+            .ToList()
+            .ForEach(flight =>
+            {
+                Console.WriteLine(flight);
+                temp++;
+            });
             if (temp == 0)
                 Console.WriteLine(_noMatchesMessage);
         }
@@ -116,9 +133,9 @@ namespace Airline
 
             // Print matching flights.
             int temp = 0;
-            _airport.FilterFlights(flight =>
+            OnFilteringFlightsEventRaised(new FilteringFlightsEventArgs(flight =>
             String.Equals(city, flight.CityFrom, StringComparison.OrdinalIgnoreCase) |
-            String.Equals(city, flight.CityTo, StringComparison.OrdinalIgnoreCase))
+            String.Equals(city, flight.CityTo, StringComparison.OrdinalIgnoreCase)))
             .ToList()
             .ForEach(flight =>
             {
@@ -138,9 +155,9 @@ namespace Airline
 
             // Print matching flights.
             int temp = 0;
-            _airport.FilterFlights(flight =>
+            OnFilteringFlightsEventRaised(new FilteringFlightsEventArgs(flight =>
             DateTime.Now > flight.DateTime.AddMinutes(-30) &&
-            DateTime.Now < flight.DateTime.AddMinutes(30))
+            DateTime.Now < flight.DateTime.AddMinutes(30)))
             .ToList()
             .ForEach(flight =>
             {
@@ -163,7 +180,8 @@ namespace Airline
 
             HashSet<Flight> economyFlights = new HashSet<Flight>();
             int temp = 0;
-            _airport.FilterFlights(flight => true).ToList()
+            OnFilteringFlightsEventRaised(new FilteringFlightsEventArgs(flight => true))
+                .ToList()
                 .ForEach(flight => flight.Passengers
                 .ForEach(passenger =>
                 {
@@ -193,18 +211,10 @@ namespace Airline
             Flight newFlight = entityHelper.CreateEntity<Flight>();
             if (newFlight != null)
             {
-                //_airport.AddFlight(newFlight);
-                OnAddFlightEventRaised(this, new FlightEventArgs(newFlight));
+                OnAddingFlightEventRaised(this, new FlightEventArgs(newFlight));
                 InputOutputHelper.PrintColorText($"\nFlight \"{newFlight.Number}\" was successfully added!", ConsoleColor.DarkCyan);
                 InputOutputHelper.PrintColorText(newFlight.ToString(), ConsoleColor.DarkCyan);
             }
-        }
-
-        private void OnAddFlightEventRaised(object sender, FlightEventArgs e)
-        {
-            var handler = AddFlightEventRaised;
-            if (handler != null)
-                handler(sender, e);
         }
 
         /// <summary>
@@ -216,11 +226,11 @@ namespace Airline
 
             Console.WriteLine("\nTo delete the flight first choose the flight number. Actual flights:");
             PrintFlights();
-            Flight flight = RealizeGetFlightByNumber();
-            if (flight != null)
+            Flight flightToDelete = GetFlightByNumber();
+            if (flightToDelete != null)
             {
-                Console.WriteLine("\n" + flight);
-                Console.Write($"\nYou want to remove the flight: {flight.Number}? (Y/N): ");
+                Console.WriteLine("\n" + flightToDelete);
+                Console.Write($"\nYou want to remove the flight: {flightToDelete.Number}? (Y/N): ");
                 string confirmation;
                 do
                 {
@@ -228,8 +238,8 @@ namespace Airline
                     switch (confirmation)
                     {
                         case "Y":
-                            _airport.RemoveFlight(flight);
-                            InputOutputHelper.PrintColorText($"\nFlight {flight.Number} was successfully removed!", ConsoleColor.DarkCyan);
+                            OnDeletingFlightEventRaised(this, new FlightEventArgs(flightToDelete));
+                            InputOutputHelper.PrintColorText($"\nFlight {flightToDelete.Number} was successfully removed!", ConsoleColor.DarkCyan);
                             break;
                         case "N":
                             InputOutputHelper.PrintColorText("\nFlight removing canceled!", ConsoleColor.DarkCyan);
@@ -253,7 +263,7 @@ namespace Airline
 
             Console.WriteLine("\nTo change the flight information first choose the flight number. Actual flights:");
             PrintFlights();
-            Flight actualFlight = RealizeGetFlightByNumber();
+            Flight actualFlight = GetFlightByNumber();
             if (actualFlight != null)
             {
                 Console.WriteLine("\nActual fligth information:");
@@ -264,7 +274,7 @@ namespace Airline
                 Flight updatedFlight = entityHelper.EditEntity<Flight>(actualFlight);
                 if (updatedFlight != null)
                 {
-                    _airport.EditFlight(actualFlight, updatedFlight);
+                    OnEditingFlightEventRaised(this, new EditingFlightEventArgs(actualFlight, updatedFlight));
                     InputOutputHelper.PrintColorText($"\nFlight \"{updatedFlight.Number}\" was successfully updated!", ConsoleColor.DarkCyan);
                     InputOutputHelper.PrintColorText(updatedFlight.ToString(), ConsoleColor.DarkCyan);
                 }

@@ -9,8 +9,9 @@ namespace AirportManager
 {
     public interface IAirportModel
     {
-        IEnumerable<Flight> Flights { get; }
-
         void AddFlight(Flight flight);
+        void DeleteFlight(Flight flight);
+        void EditFlight(Flight actualFlight, Flight updatedFlight);
+        IEnumerable<Flight> FilterFlights(Func<Flight, bool> predicate);
     }
 }

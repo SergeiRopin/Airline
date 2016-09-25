@@ -47,6 +47,8 @@
     <Compile Include="Flight\FlightStatus.cs" />
     <Compile Include="Flight\Gate.cs" />
     <Compile Include="Flight\Terminal.cs" />
+    <Compile Include="MVP\EditFlightEventArgs.cs" />
+    <Compile Include="MVP\FilterFlightsEventArgs.cs" />
     <Compile Include="MVP\IAirportModel.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="MVP\FlightEventArgs.cs" />

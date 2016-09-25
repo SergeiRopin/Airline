@@ -49,15 +49,13 @@ namespace AirportManager
         /// </summary>
         private IList<Flight> _flights;
 
-        public IEnumerable<Flight> Flights => _flights;
-
         public void AddFlight(Flight flight)
         {
             if (flight != null)
                 _flights.Add(flight);
         }
 
-        public void RemoveFlight(Flight flight)
+        public void DeleteFlight(Flight flight)
         {
             if (flight != null)
                 _flights.Remove(flight);

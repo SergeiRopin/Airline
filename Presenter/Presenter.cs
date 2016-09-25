@@ -23,12 +23,18 @@ namespace PresenterStorage
 
         private void Initialize()
         {
-            _view.AddFlightEventRaised += AddFlightEventHandler;
+            _view.AddingFlightEventRaised += AddingFlightEventHandler;
+            _view.DeletingFlightEventRaised += DeletingFlightEventHandler;
+            _view.EditingFlightEventRaised += EditingFlightEventHandler;
+            _view.FilteringFlightsEventRaised += FilteringFlightsEventHandler;
         }
 
-        private void AddFlightEventHandler(object sender, FlightEventArgs e)
-        {
-            _airport.AddFlight(e.Flight);
-        }
+        private void AddingFlightEventHandler(object sender, FlightEventArgs e) => _airport.AddFlight(e.Flight);
+
+        private void DeletingFlightEventHandler(object sender, FlightEventArgs e) => _airport.DeleteFlight(e.Flight);
+
+        private void EditingFlightEventHandler(object sender, EditingFlightEventArgs e) => _airport.EditFlight(e.ActualFlight, e.UpdatedFlight);
+
+        private IEnumerable<Flight> FilteringFlightsEventHandler(FilteringFlightsEventArgs e) => _airport.FilterFlights(e.Predicate);
     }
 }
