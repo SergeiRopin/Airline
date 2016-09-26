@@ -16,8 +16,8 @@ namespace PresenterStorage
         public Presenter(IView view)
         {
             _view = view;
-            _airport = Airport.Instance;
-            //_airport = AirportFactory.Create();
+            //_airport = Airport.Instance;
+            _airport = AirportFactory.Create();
             Initialize();
         }
 

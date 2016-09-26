@@ -8,7 +8,7 @@ namespace Airline
 {
     class MenuManager
     {
-        FlightsManager _flightsManager = FlightsManager.Instance;
+        FlightsManager _flightsManager = new FlightsManager();
         PassengersManager _passengersManager = new PassengersManager();
 
         /// <summary>

@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace AirportManager
 {
-    class AirportFactory
+    public class AirportFactory
     {
-        //public static IAirportModel Create => new Airport();
+        public static IAirportModel Create() => new Airport();
     }
 }

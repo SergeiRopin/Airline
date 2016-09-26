@@ -12,17 +12,16 @@ namespace Airline
     class Program
     {
         static MenuManager _menuManager = new MenuManager();
-        static Airport _airport = Airport.Instance;
         static bool _exit;
 
         static void Main(string[] args)
         {
             Console.WindowHeight = 50;
             Console.WindowWidth = 160;
-
-            //IView view = new FlightsManager();
-            IView view = FlightsManager.Instance;
-            var presenter = new Presenter(view);
+            
+            //Initialize view and presenter.
+            IView view = MvpManager.Instance;
+            Presenter presenter = new Presenter(view);
 
             while (!_exit)
             {

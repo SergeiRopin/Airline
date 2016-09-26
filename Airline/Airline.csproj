@@ -43,8 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FlightsManager.cs" />
-    <Compile Include="PassengersManager.cs" />
+    <Compile Include="ConsoleManagers\AirlineManager.cs" />
+    <Compile Include="ConsoleManagers\FlightsManager.cs" />
+    <Compile Include="MvpManager.cs" />
+    <Compile Include="ConsoleManagers\PassengersManager.cs" />
     <Compile Include="SetDateStrategy\BirthdayDate.cs" />
     <Compile Include="SetDateStrategy\SetDateHelper.cs" />
     <Compile Include="SetDateStrategy\FlightDate.cs" />
@@ -53,7 +55,7 @@
     <Compile Include="CreateEntityTemplateMethod\CreateEditEntityHelper.cs" />
     <Compile Include="CreateEntityTemplateMethod\TemplateMethod\EntityFactory.cs" />
     <Compile Include="InputOutputHelper.cs" />
-    <Compile Include="MenuManager.cs" />
+    <Compile Include="ConsoleManagers\MenuManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CreateEntityTemplateMethod\TemplateMethod\CreateEntityTemplate.cs" />

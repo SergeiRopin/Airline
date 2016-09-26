@@ -1,5 +1,6 @@
 ﻿using Airline.TemplateMethod;
 using AirportManager;
+using PresenterStorage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,21 +14,25 @@ namespace Airline
     /// </summary>
     class PassengersManager
     {
-        //private Airport _airport = Airport.Instance;
-        FlightsManager _flightsManager = FlightsManager.Instance;
-
-        private string _noMatchesMessage = "No matches found!";
-
+        MvpManager _manager = MvpManager.Instance;
+        AirlineManager _airlineManager = new AirlineManager();
+        
+        /// <summary>
+        /// Returns passengers from the selected flight by choosen predicate
+        /// </summary>
         public IEnumerable<Passenger> FilterPassengers(Flight flight, Func<Passenger, bool> predicate) =>
             flight.Passengers.Where(predicate);
 
+        /// <summary>
+        /// Print all passengers from the selected flight
+        /// </summary>
         public void PrintPassengersByFlightNumber(Flight flight)
         {
             FilterPassengers(flight, passenger => true)
                 .ToList()
                 .ForEach(passenger => Console.WriteLine($"Flight: {flight.Number}, " + passenger));
         }
-        
+
         /// <summary>
         /// Prints passengers matching the entered name (partial coincidence)
         /// </summary>
@@ -38,7 +43,7 @@ namespace Airline
 
             // Print matching passengers.
             int temp = 0;
-            _airport.FilterFlights(flight => true)
+            _manager.OnFilteringFlightsEventRaised(new FilteringFlightsEventArgs(flight => true))
                 .ToList()
                 .ForEach(flight => flight.Passengers
                 .ForEach(passenger =>
@@ -50,7 +55,7 @@ namespace Airline
                     }
                 }));
             if (temp == 0)
-                Console.WriteLine(_noMatchesMessage);
+                Console.WriteLine(_airlineManager.NoMatchesMessage);
         }
 
         /// <summary>
@@ -59,16 +64,14 @@ namespace Airline
         public void SearchPassengersByFlightNumber()
         {
             Console.WriteLine("\nActual flights:");
-            _flightsManager.PrintFlights();
+            _airlineManager.PrintFlights();
 
-            Console.Write("\nPlease enter a number of flight to view all passengers: ");
-            string flightNumber = Console.ReadLine();
+            Flight flight = _airlineManager.GetFlightByNumber();
             InputOutputHelper.PrintColorText("\nResults of the search: ", ConsoleColor.DarkCyan);
-            Flight flight = _airport.GetFlightByNumber(flightNumber);
 
             if (flight != null)
                 PrintPassengersByFlightNumber(flight);
-            else Console.WriteLine(_noMatchesMessage);
+            else Console.WriteLine(_airlineManager.NoMatchesMessage);
         }
 
         /// <summary>
@@ -81,7 +84,7 @@ namespace Airline
 
             // Print matching passengers.
             int temp = 0;
-            _airport.FilterFlights(flight => true)
+            _manager.OnFilteringFlightsEventRaised(new FilteringFlightsEventArgs(flight => true))
                 .ToList()
                 .ForEach(flight => flight.Passengers
                 .ForEach(passenger =>
@@ -93,7 +96,7 @@ namespace Airline
                     }
                 }));
             if (temp == 0)
-                Console.WriteLine(_noMatchesMessage);
+                Console.WriteLine(_airlineManager.NoMatchesMessage);
         }
 
         /// <summary>
@@ -121,8 +124,8 @@ namespace Airline
             InputOutputHelper.PrintColorText("\n******** ADD A NEW PASSENGER CONSOLE MENU ********", ConsoleColor.DarkCyan);
 
             Console.WriteLine("\nTo add a passenger first enter the flight number. Actual flights:");
-            _flightsManager.PrintFlights();
-            Flight flight = _flightsManager.GetFlightByNumber();
+            _airlineManager.PrintFlights();
+            Flight flight = _airlineManager.GetFlightByNumber();
             if (flight != null)
             {
                 InputOutputHelper.PrintColorText("\nFill an information about passenger:", ConsoleColor.DarkCyan);
@@ -136,7 +139,7 @@ namespace Airline
                     InputOutputHelper.PrintColorText(passenger.ToString(), ConsoleColor.DarkCyan);
                 }
             }
-            else Console.WriteLine($"\n{_noMatchesMessage}");
+            else Console.WriteLine($"\n{_airlineManager.NoMatchesMessage}");
         }
 
         /// <summary>
@@ -147,8 +150,8 @@ namespace Airline
             InputOutputHelper.PrintColorText("\n******** DELETE PASSENGER CONSOLE MENU ********", ConsoleColor.DarkCyan);
 
             Console.WriteLine("\nTo delete a passenger first enter the flight number and passenger passport. Actual flights:");
-            _flightsManager.PrintFlights();
-            Flight flight = _flightsManager.GetFlightByNumber();
+            _airlineManager.PrintFlights();
+            Flight flight = _airlineManager.GetFlightByNumber();
 
             Console.WriteLine("\nActual passengers:");
             PrintPassengersByFlightNumber(flight);
@@ -177,7 +180,7 @@ namespace Airline
                     }
                 } while (confirmation != "Y" & confirmation != "N");
             }
-            else Console.WriteLine($"\n{_noMatchesMessage}");
+            else Console.WriteLine($"\n{_airlineManager.NoMatchesMessage}");
         }
 
         /// <summary>
@@ -188,8 +191,8 @@ namespace Airline
             InputOutputHelper.PrintColorText("\n******** EDIT PASSENGER CONSOLE MENU ********", ConsoleColor.DarkCyan);
 
             Console.WriteLine("\nTo change the passenger information first enter the flight number and passenger passport. Actual flights:");
-            _flightsManager.PrintFlights();
-            Flight flight = _flightsManager.GetFlightByNumber();
+            _airlineManager.PrintFlights();
+            Flight flight = _airlineManager.GetFlightByNumber();
 
             Console.WriteLine("\nActual passengers:");
             PrintPassengersByFlightNumber(flight);
@@ -213,7 +216,7 @@ namespace Airline
                     InputOutputHelper.PrintColorText(updatedPassenger.ToString(), ConsoleColor.DarkCyan);
                 }
             }
-            else Console.WriteLine($"\n{_noMatchesMessage}");
+            else Console.WriteLine($"\n{_airlineManager.NoMatchesMessage}");
         }
     }
 }

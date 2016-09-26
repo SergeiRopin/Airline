@@ -12,7 +12,7 @@ namespace PresenterStorage
     {
         event EventHandler<FlightEventArgs> AddingFlightEventRaised;
         event EventHandler<FlightEventArgs> DeletingFlightEventRaised;
-        event EventHandler<EditingFlightEventArgs> EditingFlightEventRaised;
+        event EventHandler<EditingFlightEventArgs> EditingFlightEventRaised;        
         event Func<FilteringFlightsEventArgs, IEnumerable<Flight>> FilteringFlightsEventRaised;
     }
 }

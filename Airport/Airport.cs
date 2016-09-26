@@ -9,11 +9,11 @@ namespace AirportManager
 {
     public class Airport : IAirportModel
     {
-        readonly static Airport s_instance = new Airport();
+        //readonly static Airport s_instance = new Airport();
 
-        public static Airport Instance => s_instance;
+        //public static Airport Instance => s_instance;
 
-        private Airport()
+        public Airport()
         {
             _flights = new List<Flight>
             {
