@@ -9,7 +9,7 @@ namespace Airline.TemplateMethod
 {
     class EntityFactory
     {
-        public CreateEntityManager<IEntity> CreateEntityManager(Type type)
+        public CreateEntityManager<IEntity> Create(Type type)
         {
             CreateEntityManager<IEntity> createEntityManager = null;
 

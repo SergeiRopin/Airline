@@ -13,7 +13,7 @@ namespace Airline.TemplateMethod
         {
             EntityFactory entityFactory = new EntityFactory();
             IEntity entity = null;
-            var createEntityManager = entityFactory.CreateEntityManager(type);
+            var createEntityManager = entityFactory.Create(type);
             do
             {
                 try
@@ -39,7 +39,7 @@ namespace Airline.TemplateMethod
         {
             EntityFactory entityFactory = new EntityFactory();
             IEntity entity = null;
-            var createEntityManager = entityFactory.CreateEntityManager(type);
+            var createEntityManager = entityFactory.Create(type);
             do
             {
                 try
