@@ -13,7 +13,7 @@ namespace Airline
     class AirlineManager
     {
         MvpManager _manager = MvpManager.Instance;
-        public string NoMatchesMessage = "No matches found!";
+        public string NoMatchesMessage => "No matches found!";
 
         /// <summary>
         /// Prints all available flights

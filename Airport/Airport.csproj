@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Airport.cs" />
     <Compile Include="AirportFactory.cs" />
+    <Compile Include="Exceptions\NotUniqueFlightNumberException.cs" />
     <Compile Include="Flight\ArrivalDeparture.cs" />
     <Compile Include="Flight\Flight.cs" />
     <Compile Include="Flight\FlightStatus.cs" />

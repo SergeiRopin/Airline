@@ -1,6 +1,7 @@
 ﻿using Airline.SetDateStrategy;
 using Airline.TemplateMethod;
 using AirportManager;
+using Airport.Exceptions;
 using PresenterStorage;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace Airline
     {
         MvpManager _manager = MvpManager.Instance;
         AirlineManager _airlineManager = new AirlineManager();
-        
+
         /// <summary>
         /// Prints all available flights
         /// </summary>
@@ -26,7 +27,7 @@ namespace Airline
             InputOutputHelper.PrintColorText("\n******** VIEW FLIGHTS CONSOLE MENU ********", ConsoleColor.DarkCyan);
             _airlineManager.PrintFlights();
         }
-        
+
         /// <summary>
         /// Prints a flight matches with the entered number
         /// </summary>
@@ -151,9 +152,16 @@ namespace Airline
             Flight newFlight = entityHelper.CreateEntity<Flight>();
             if (newFlight != null)
             {
-                _manager.OnAddingFlightEventRaised(this, new FlightEventArgs(newFlight));
-                InputOutputHelper.PrintColorText($"\nFlight \"{newFlight.Number}\" was successfully added!", ConsoleColor.DarkCyan);
-                InputOutputHelper.PrintColorText(newFlight.ToString(), ConsoleColor.DarkCyan);
+                try
+                {
+                    _manager.OnAddingFlightEventRaised(this, new FlightEventArgs(newFlight));
+                    InputOutputHelper.PrintColorText($"\nFlight \"{newFlight.Number}\" was successfully added!", ConsoleColor.DarkCyan);
+                    InputOutputHelper.PrintColorText(newFlight.ToString(), ConsoleColor.DarkCyan);
+                }
+                catch (NotUniqueFlightNumberException e)
+                {
+                    InputOutputHelper.PrintColorText(e.Message, ConsoleColor.Red);
+                }
             }
         }
 
