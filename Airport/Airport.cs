@@ -75,13 +75,6 @@ namespace AirportManager
             }
         }
 
-        public Flight GetFlightByNumber(string flightNumber)
-        {
-            Flight flight = _flights.FirstOrDefault(x =>
-                String.Equals(x.Number.Replace(" ", string.Empty), flightNumber.Replace(" ", string.Empty), StringComparison.OrdinalIgnoreCase));
-            return flight;
-        }
-
         public IEnumerable<Flight> FilterFlights(Func<Flight, bool> predicate) => _flights.Where(predicate);
     }
 }
